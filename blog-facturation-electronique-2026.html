@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="La reforme de la facturation electronique 2026 expliquee : calendrier, obligations et comment anticiper avec MyFacture.">
+    <title>Facturation electronique 2026 : ce qu'il faut savoir | MyFacture Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --em: #3B82F6;
+            --em-dark: #2563EB;
+            --em-50: #eff6ff;
+            --black: #111827;
+            --g700: #374151;
+            --g500: #6b7280;
+            --g400: #9ca3af;
+            --g200: #e5e7eb;
+            --g100: #f3f4f6;
+            --g50: #f9fafb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--black);
+            background-color: var(--white);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1rem 2rem;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            font-size: 1.25rem;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--g700);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--em);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-o {
+            border: 1px solid var(--g200);
+            color: var(--g700);
+            background: transparent;
+        }
+
+        .btn-o:hover {
+            background: var(--g100);
+        }
+
+        .btn-em {
+            background: var(--em);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-em:hover {
+            background: var(--em-dark);
+        }
+
+        .nav-pill {
+            background: var(--em-50);
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--black);
+            border-radius: 1px;
+        }
+
+        /* Hero */
+        .hero {
+            padding-top: 140px;
+            padding-bottom: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--em-50) 0%, var(--white) 100%);
+            margin-top: 70px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--em-50);
+            color: var(--em);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--g500);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Main Content */
+        .content-wrapper {
+            max-width: 720px;
+            margin: 60px auto;
+            padding: 0 2rem;
+        }
+
+        .intro {
+            font-size: 1rem;
+            color: var(--g700);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            font-size: 0.9375rem;
+            color: var(--g700);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Checklist */
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            font-size: 0.9375rem;
+            color: var(--g700);
+            line-height: 1.6;
+        }
+
+        .checklist-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--em);
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .checklist-icon::after {
+            content: '✓';
+            color: var(--white);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Discover Also */
+        .discover-also {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--g200);
+        }
+
+        .discover-also h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 1.5rem;
+        }
+
+        .discover-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .discover-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--em);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .discover-links a:hover {
+            color: var(--em-dark);
+        }
+
+        .discover-links a::after {
+            content: '→';
+            margin-left: auto;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--g100);
+            padding: 4rem 2rem;
+            margin: 4rem 0 0 0;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            margin-top: 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--em);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        .cta-button:hover {
+            background: var(--em-dark);
+        }
+
+        .cta-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-links a {
+            color: var(--em);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .cta-links a:hover {
+            color: var(--em-dark);
+        }
+
+        /* Footer */
+                footer {
+            background: var(--white);
+            color: var(--g700);
+            padding: 32px 0;
+            border-top: 1px solid var(--g100);
+        }
+        
+        .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
+        .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
+        .footer-col a:hover { color: var(--g700); }
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
+        .footer-copy { font-size: 12px; color: var(--g400); }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .header-actions {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .content-wrapper {
+                padding: 0 1rem;
+            }
+
+            h2 {
+                font-size: 1rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.25rem;
+            }
+
+            .cta-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+            <nav class="nav-pill">
+                <a href="index.html">Accueil</a>
+            <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="faq.html">FAQ</a>
+                <a href="blog.html">Blog</a>
+            </nav>
+            <div class="header-actions">
+                <a href="#" class="btn btn-o">Se connecter</a>
+                <a href="#" class="btn btn-em">Commencer gratuitement</a>
+            </div>
+            <button class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="content-wrapper">
+            <span class="tag">Reforme 2026</span>
+            <h1>Facturation electronique 2026 : ce qu'il faut savoir</h1>
+            <p class="subtitle">La reforme de la facturation electronique 2026 expliquee : calendrier, obligations et comment anticiper avec MyFacture.</p>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <p class="intro">La reforme de la facturation electronique transforme progressivement les obligations des entreprises francaises. Cette evolution reglementaire a un impact sur tous les professionnels qui facturent, independamment de leur taille.</p>
+
+        <h2>Ce qui change en 2026</h2>
+        <p>Les entreprises devront progressivement recevoir puis emettre des factures electroniques conformes. A partir de septembre 2026, la reception des factures electroniques sera obligatoire pour tous les professionnels. L'emission sera ensuite etendue aux PME et micro-entreprises en 2027, ce qui signifie que tous les professionnels devront emettre des factures electroniques conformes a partir de cette date.</p>
+
+        <h2>Pourquoi anticiper</h2>
+        <p>Un logiciel de facturation doit evoluer pour rester compatible avec la reglementation. Attendre le dernier moment expose a des risques de non-conformite et peut creer des perturbations dans votre processus de facturation. En anticipant cette transition, vous vous assurez que votre systeme est pret et que vous restez en conformite avec la loi, sans interruption de service ou complications administratives.</p>
+
+        <h2>MyFacture et la reforme</h2>
+        <p>MyFacture evolue pour accompagner cette transition avec une solution simple et durable. La compatibilite facturation electronique est incluse dans toutes les offres, sans couts supplementaires. Notre plateforme s'adapte automatiquement aux changements reglementaires, vous permettant de continuer a facturer sereinement tout en respectant les obligations legales. Vous pouvez compter sur une evolutions continue de notre logiciel pour rester conforme aux normes en vigueur.</p>
+
+        <div class="discover-also">
+            <h3>Decouvrez aussi</h3>
+            <div class="discover-links">
+                <a href="blog-facturation-electronique-obligatoire.html">Facturation electronique obligatoire : FAQ</a>
+                <a href="blog-logiciel-facturation-auto-entrepreneur.html">Logiciel de facturation auto-entrepreneur</a>
+                <a href="blog-facture-conforme-france.html">Comment faire une facture conforme en France</a>
+                <a href="blog-modele-facture-auto-entrepreneur.html">Modele facture auto-entrepreneur</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <div class="cta-content">
+            <h2>Pret a simplifier votre facturation?</h2>
+            <a href="#" class="cta-button">Commencer gratuitement</a>
+            <div class="cta-links">
+                <a href="tarifs.html">Voir les tarifs</a>
+                <a href="fonctionnalites.html">Decouvrir les fonctionnalites</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Produit</h4>
+                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Ressources</h4>
+                <a href="blog.html">Blog</a>
+                <a href="comparatif-logiciels-facturation.html">Comparatifs</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="cgv.html">CGV</a>
+                <a href="confidentialite.html">Confidentialite</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

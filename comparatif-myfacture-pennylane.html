@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comparatif MyFacture vs Pennylane. Simplicite facturation contre comptabilite avancee.">
+    <title>MyFacture ou Pennylane : quelle solution choisir ? | Comparatif</title>
+    <style>
+        :root {
+            --em: #3B82F6;
+            --em-dark: #2563EB;
+            --em-50: #eff6ff;
+            --black: #111827;
+            --g700: #374151;
+            --g500: #6b7280;
+            --g400: #9ca3af;
+            --g200: #e5e7eb;
+            --g100: #f3f4f6;
+            --g50: #f9fafb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--g700);
+            background: var(--white);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            font-size: 16px;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        nav {
+            display: none;
+        }
+
+        nav.active {
+            display: flex;
+        }
+
+        .nav-pill {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--g200);
+            border-radius: 9999px;
+            display: flex;
+            gap: 0;
+            padding: 4px;
+        }
+
+        .nav-pill a {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: var(--g700);
+            font-size: 14px;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pill a:hover {
+            color: var(--em);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--black);
+            border-radius: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .header-actions .btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-o {
+            border: 1px solid var(--g200);
+            color: var(--g700);
+            background: var(--white);
+        }
+
+        .btn-o:hover {
+            border-color: var(--em);
+            color: var(--em);
+            background: var(--em-50);
+        }
+
+        .btn-em {
+            background: var(--em);
+            color: var(--white);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-em:hover {
+            background: var(--em-dark);
+        }
+
+        @media (max-width: 768px) {
+            .header-actions {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 16px;
+                gap: 8px;
+                border-bottom: 1px solid var(--g200);
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            .nav-pill {
+                flex-direction: column;
+                padding: 0;
+            }
+
+            .nav-pill a {
+                padding: 12px 16px;
+                border-radius: 8px;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 24px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--em-50) 0%, var(--white) 100%);
+        }
+
+        .hero-content {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--em);
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--g500);
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 80px 24px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+        }
+
+        /* Article Content */
+        article {
+            max-width: 720px;
+            margin: 60px auto;
+            padding: 0 24px;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: var(--g700);
+            line-height: 1.8;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 32px 0;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 13px;
+            }
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border: 1px solid var(--g100);
+            font-size: 14px;
+        }
+
+        th {
+            background: var(--g50);
+            font-weight: 600;
+            color: var(--g700);
+        }
+
+        th:nth-child(2) {
+            background: var(--em-50);
+            color: var(--em-dark);
+        }
+
+        tr:hover {
+            background: var(--g50);
+        }
+
+        tr:hover th:nth-child(2) {
+            background: var(--em-50);
+        }
+
+        /* Other Comparisons Section */
+        .other-comparisons {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--g200);
+        }
+
+        .comparisons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .comparison-card {
+            padding: 16px;
+            border: 1px solid var(--g200);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--g700);
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            border-color: var(--em);
+            background: var(--em-50);
+            color: var(--em-dark);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--g100);
+            padding: 60px 24px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .cta-content {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            margin-top: 0;
+            font-size: 28px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--em);
+            color: var(--white);
+            padding: 12px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 24px 0;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-size: 16px;
+        }
+
+        .cta-button:hover {
+            background: var(--em-dark);
+        }
+
+        .cta-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .cta-links a {
+            color: var(--em);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .cta-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+                footer {
+            background: var(--white);
+            color: var(--g700);
+            padding: 32px 0;
+            border-top: 1px solid var(--g100);
+        }
+        
+        .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
+        .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
+        .footer-col a:hover { color: var(--g700); }
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
+        .footer-copy { font-size: 12px; color: var(--g400); }
+
+        .footer-links a {
+            color: var(--g700);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--em);
+        }
+
+        .footer-text {
+            text-align: center;
+            color: var(--g500);
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+            <nav class="nav-pill">
+                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="faq.html">FAQ</a>
+                <a href="blog.html">Blog</a>
+            </nav>
+            <button class="hamburger" onclick="document.querySelector('nav').classList.toggle('active')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="header-actions">
+                <a href="#" class="btn btn-o">Se connecter</a>
+                <a href="#" class="btn btn-em">Commencer gratuitement</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="tag">Comparatif</span>
+            <h1>MyFacture ou Pennylane : quelle solution choisir ?</h1>
+            <p class="subtitle">Simplicite facturation contre comptabilite avancee.</p>
+        </div>
+    </section>
+
+    <!-- Article Content -->
+    <article>
+        <h2>Comparaison des fonctionnalites</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Fonctionnalite</th>
+                    <th>MyFacture</th>
+                    <th>Pennylane</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Devis / factures</td>
+                    <td>Oui</td>
+                    <td>Oui</td>
+                </tr>
+                <tr>
+                    <td>Paiement en ligne</td>
+                    <td>Oui</td>
+                    <td>Oui</td>
+                </tr>
+                <tr>
+                    <td>Multi-societe</td>
+                    <td>Oui</td>
+                    <td>Oui</td>
+                </tr>
+                <tr>
+                    <td>Gestion equipe</td>
+                    <td>Oui</td>
+                    <td>Oui</td>
+                </tr>
+                <tr>
+                    <td>Comptabilite poussee</td>
+                    <td>Non</td>
+                    <td>Tres developpee</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Pourquoi choisir MyFacture</h2>
+        <p>MyFacture excelle dans la gestion quotidienne et permet de rester simple sur la facturation. Si votre comptabilite est deja geree par un expert-comptable ou un logiciel dedie, MyFacture apporte une solution de facturation legere et reactif sans surcharge fonctionnelle. C'est ideal si vous privilégierez la clarte et la rapidite d'utilisation.</p>
+
+        <h2>Pourquoi choisir Pennylane</h2>
+        <p>Pennylane est la solution pour centraliser facturation et comptabilite dans un meme outil. Si vous avez besoin d'une integration comptable tres developpee avec automatisations avancees, Pennylane offre un spectre fonctionnel plus complet et sera plus adapte a une gestion comptable entierement automatisee.</p>
+
+        <h2>Conclusion</h2>
+        <p>Deux approches differentes selon que vous privilegiez la simplicite ou la completude comptable. Choisissez MyFacture si vous voulez facturer simplement et vite, ou optez pour Pennylane si vous souhaitez une solution tout-en-un avec comptabilite avancee integree.</p>
+
+        <div class="other-comparisons">
+            <h2>Autres comparatifs</h2>
+            <div class="comparisons-grid">
+                <a href="comparatif-myfacture-indy.html" class="comparison-card">vs Indy</a>
+                <a href="comparatif-myfacture-tiime.html" class="comparison-card">vs Tiime</a>
+                <a href="comparatif-myfacture-sellsy.html" class="comparison-card">vs Sellsy</a>
+                <a href="comparatif-myfacture-zervant.html" class="comparison-card">vs Zervant</a>
+                <a href="comparatif-logiciels-facturation.html" class="comparison-card">Guide complet</a>
+            </div>
+        </div>
+    </article>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Essayez MyFacture gratuitement pendant 1 mois</h2>
+            <button class="cta-button">Commencer gratuitement</button>
+            <div class="cta-links">
+                <a href="tarifs.html">Voir les tarifs</a>
+                <a href="fonctionnalites.html">Decouvrir les fonctionnalites</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Produit</h4>
+                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Ressources</h4>
+                <a href="blog.html">Blog</a>
+                <a href="comparatif-logiciels-facturation.html">Comparatifs</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="cgv.html">CGV</a>
+                <a href="confidentialite.html">Confidentialite</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

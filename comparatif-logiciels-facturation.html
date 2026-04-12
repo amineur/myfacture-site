@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comparatif MyFacture, Indy, Tiime, Pennylane, Sellsy, Zervant. Quel logiciel de facturation choisir en 2026 selon votre profil ?">
+    <title>Comparatif des meilleurs logiciels de facturation en 2026 | MyFacture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --em: #3B82F6;
+            --em-dark: #2563EB;
+            --em-50: #eff6ff;
+            --black: #111827;
+            --g700: #374151;
+            --g500: #6b7280;
+            --g400: #9ca3af;
+            --g200: #e5e7eb;
+            --g100: #f3f4f6;
+            --g50: #f9fafb;
+            --white: #ffffff;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid var(--g100);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 600;
+            font-size: 18px;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        nav {
+            display: none;
+        }
+
+        nav.active {
+            display: flex;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background-color: var(--white);
+            flex-direction: column;
+            border-bottom: 1px solid var(--g100);
+            padding: 20px;
+            gap: 10px;
+        }
+
+        .nav-pill {
+            display: inline-flex;
+            background-color: var(--g50);
+            border-radius: 24px;
+            padding: 8px 16px;
+            gap: 16px;
+            align-items: center;
+            border: 1px solid var(--g200);
+        }
+
+        .nav-pill a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-pill a:hover {
+            color: var(--em);
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background-color: var(--black);
+            border-radius: 1px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .header-actions .btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-o {
+            border: 1px solid var(--g200);
+            color: var(--g700);
+            background: var(--white);
+        }
+
+        .btn-o:hover {
+            border-color: var(--em);
+            color: var(--em);
+            background: var(--em-50);
+        }
+
+        .btn-em {
+            background: var(--em);
+            color: var(--white);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-em:hover {
+            background: var(--em-dark);
+        }
+
+        @media (min-width: 768px) {
+            nav {
+                display: flex !important;
+                position: static;
+                background-color: transparent;
+                border-bottom: none;
+                padding: 0;
+                flex-direction: row;
+            }
+
+            .hamburger {
+                display: none;
+            }
+        }
+
+        /* Main Content */
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .tag-pill {
+            display: inline-block;
+            background-color: var(--em-50);
+            color: var(--em-dark);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            color: var(--black);
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        p {
+            font-size: 15px;
+            color: var(--g700);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        /* Comparison Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            border: 1px solid var(--g100);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: var(--g50);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--black);
+            border-bottom: 1px solid var(--g100);
+        }
+
+        td {
+            padding: 14px 16px;
+            font-size: 14px;
+            color: var(--g700);
+            border-bottom: 1px solid var(--g100);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(2) {
+            background-color: var(--em-50);
+        }
+
+        /* Checklist */
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 24px 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--g700);
+        }
+
+        .checklist-item::before {
+            content: '✓';
+            color: var(--em);
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: -2px;
+        }
+
+        /* Comparison Details Section */
+        .comparison-details {
+            background-color: var(--g50);
+            border: 1px solid var(--g100);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .comparison-details h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        .comparison-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .comparison-link {
+            text-decoration: none;
+            color: var(--em);
+            font-weight: 500;
+            font-size: 14px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--g200);
+            transition: all 0.2s;
+        }
+
+        .comparison-link:hover {
+            color: var(--em-dark);
+            padding-left: 4px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--em) 0%, var(--em-dark) 100%);
+            border-radius: 12px;
+            padding: 40px 30px;
+            margin: 50px 0;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .cta-section h2 {
+            color: var(--white);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--white);
+            color: var(--em-dark);
+            padding: 12px 32px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 20px 10px 0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+            font-size: 13px;
+        }
+
+        .cta-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .cta-links a:hover {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+                footer {
+            background: var(--white);
+            color: var(--g700);
+            padding: 32px 0;
+            border-top: 1px solid var(--g100);
+        }
+        
+        .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
+        .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
+        .footer-col a:hover { color: var(--g700); }
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
+        .footer-copy { font-size: 12px; color: var(--g400); }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--g700);
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--em);
+        }
+
+        .footer-divider {
+            color: var(--g200);
+            margin: 0 6px;
+        }
+
+        /* Responsive */
+        @media (max-width: 767px) {
+            .header-actions {
+                display: none;
+            }
+
+            main {
+                padding: 40px 16px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            h2 {
+                font-size: 18px;
+                margin-top: 40px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 10px 12px;
+            }
+
+            .cta-section {
+                padding: 30px 20px;
+            }
+
+            .cta-section h2 {
+                font-size: 20px;
+            }
+
+            .cta-button {
+                padding: 10px 24px;
+                font-size: 13px;
+            }
+
+            .comparison-details {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="30" height="30" rx="7" fill="#3B82F6"/>
+                    <path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/>
+                    <path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/>
+                    <rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/>
+                    <rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/>
+                    <rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/>
+                    <path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                MyFacture
+            </a>
+            <nav id="nav-menu">
+                <div class="nav-pill">
+                    <a href="index.html">Accueil</a>
+            <a href="fonctionnalites.html">Fonctionnalites</a>
+                    <a href="tarifs.html">Tarifs</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </nav>
+            <button class="hamburger" id="hamburger-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="header-actions">
+                <a href="#" class="btn btn-o">Se connecter</a>
+                <a href="#" class="btn btn-em">Commencer gratuitement</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <span class="tag-pill">Comparatif 2026</span>
+        <h1>Comparatif des meilleurs logiciels de facturation en 2026</h1>
+
+        <p>Choisir un logiciel de facturation dépend de votre activité, de votre organisation et du niveau de simplicité recherché. En 2026, plusieurs solutions se distinguent selon les profils.</p>
+
+        <!-- Comparison Table -->
+        <h2>Les principales solutions du marché</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Solution</th>
+                    <th>Profil principal</th>
+                    <th>Particularité</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>MyFacture</strong></td>
+                    <td>Indépendants, TPE, PME</td>
+                    <td>Simplicité, multi-société, paiement intégré</td>
+                </tr>
+                <tr>
+                    <td>Indy</td>
+                    <td>Indépendants</td>
+                    <td>Facturation + comptabilité</td>
+                </tr>
+                <tr>
+                    <td>Tiime</td>
+                    <td>Freelances, TPE</td>
+                    <td>Simplicité d'accès</td>
+                </tr>
+                <tr>
+                    <td>Pennylane</td>
+                    <td>PME, cabinets</td>
+                    <td>Gestion comptable avancée</td>
+                </tr>
+                <tr>
+                    <td>Sellsy</td>
+                    <td>PME</td>
+                    <td>CRM + facturation</td>
+                </tr>
+                <tr>
+                    <td>Zervant</td>
+                    <td>Indépendants</td>
+                    <td>Offre historique simple</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- MyFacture Details -->
+        <h2>MyFacture : une approche simple et moderne</h2>
+        <p>MyFacture place la simplicité au cœur de son approche. L'interface intuitive permet de créer des devis et des factures en quelques clics, sans nécessiter de formation particulière.</p>
+        <div class="checklist">
+            <div class="checklist-item">Création rapide de devis et factures</div>
+            <div class="checklist-item">Paiement en ligne intégré</div>
+            <div class="checklist-item">Gestion clients centralisée</div>
+            <div class="checklist-item">Multi-utilisateurs et gestion des rôles</div>
+            <div class="checklist-item">Gestion multi-société</div>
+            <div class="checklist-item">Rapports avancés et tableaux de bord</div>
+            <div class="checklist-item">Export PDF et envoi email intégré</div>
+        </div>
+
+        <!-- Indy -->
+        <h2>Indy</h2>
+        <p>Indy séduit particulièrement les indépendants grâce à sa combinaison de facturation et d'automatisation comptable. La plateforme réduit considérablement le temps consacré aux tâches administratives.</p>
+        <p>Elle propose une intégration native avec les outils bancaires pour un rapprochement automatisé des opérations.</p>
+
+        <!-- Tiime -->
+        <h2>Tiime</h2>
+        <p>Tiime mise sur une prise en main rapide et une interface épurée. Idéale pour les freelances et petites structures qui recherchent une solution légère et efficace.</p>
+        <p>La plateforme offre les fonctionnalités essentielles sans complexité superflue.</p>
+
+        <!-- Pennylane -->
+        <h2>Pennylane</h2>
+        <p>Pennylane s'adresse aux PME et cabinets comptables qui cherchent à centraliser leur comptabilité et piloter leur financier. Les fonctionnalités avancées de rapprochement et de clôture simplifient les processus comptables.</p>
+        <p>C'est une solution pour les structures avec des besoins comptables et financiers sophistiqués.</p>
+
+        <!-- Sellsy -->
+        <h2>Sellsy</h2>
+        <p>Sellsy combine un CRM puissant avec des outils de gestion commerciale et de facturation. Idéale pour les PME qui souhaitent gérer l'ensemble de leur cycle de vie client en un seul endroit.</p>
+        <p>L'intégration native du CRM offre une vision 360° de la relation client.</p>
+
+        <!-- Zervant -->
+        <h2>Zervant</h2>
+        <p>Zervant est un acteur historique du marché français de la facturation. Elle convient aux indépendants et petites structures avec des besoins de facturation simples et directs.</p>
+        <p>C'est une solution éprouvée pour qui cherche l'essentiel sans surcharge fonctionnelle.</p>
+
+        <!-- Recommendation -->
+        <h2>Quel logiciel choisir selon votre besoin</h2>
+        <p><strong>Pour une approche simple et rapide :</strong> MyFacture offre une interface claire et une mise en route immédiate, idéale pour les indépendants et TPE.</p>
+        <p><strong>Pour une dimension comptable forte :</strong> Indy ou Pennylane sont plus adaptés si vous recherchez une automatisation comptable poussée et un pilotage financier avancé.</p>
+        <p><strong>Pour un CRM intégré :</strong> Sellsy convient si vous avez besoin de gérer la relation client et la facturation de façon unifiée.</p>
+
+        <!-- Facturation Electronique -->
+        <h2>Facturation électronique 2026</h2>
+        <p>L'évolution réglementaire vers la facturation électronique obligatoire en 2026 en France impose de choisir un outil capable d'évoluer rapidement. MyFacture s'inscrit dans cette logique avec des mises à jour régulières pour s'adapter aux normes Chorus X et aux exigences de conformité.</p>
+
+        <!-- Conclusion -->
+        <h2>Conclusion</h2>
+        <p>Le meilleur logiciel de facturation est celui qui correspond à votre usage quotidien. MyFacture privilégie une expérience claire, moderne et évolutive, adaptée aux besoins des indépendants, TPE et PME françaises. Avant de décider, testez la plateforme et vérifiez qu'elle répond à vos besoins spécifiques.</p>
+
+        <!-- Comparisons Details Section -->
+        <div class="comparison-details">
+            <h3>Comparatifs détaillés</h3>
+            <div class="comparison-links">
+                <a href="comparatif-myfacture-indy.html" class="comparison-link">MyFacture vs Indy</a>
+                <a href="comparatif-myfacture-tiime.html" class="comparison-link">MyFacture vs Tiime</a>
+                <a href="comparatif-myfacture-pennylane.html" class="comparison-link">MyFacture vs Pennylane</a>
+                <a href="comparatif-myfacture-sellsy.html" class="comparison-link">MyFacture vs Sellsy</a>
+                <a href="comparatif-myfacture-zervant.html" class="comparison-link">MyFacture vs Zervant</a>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>Essayez MyFacture gratuitement pendant 1 mois</h2>
+            <button class="cta-button" onclick="window.location.href='tarifs.html'">Commencer gratuitement</button>
+            <div class="cta-links">
+                <a href="tarifs.html">Voir tous les tarifs</a>
+                <a href="fonctionnalites.html">Découvrir les fonctionnalités</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Produit</h4>
+                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Ressources</h4>
+                <a href="blog.html">Blog</a>
+                <a href="comparatif-logiciels-facturation.html">Comparatifs</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="cgv.html">CGV</a>
+                <a href="confidentialite.html">Confidentialite</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        // Mobile menu toggle
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navMenu = document.getElementById('nav-menu');
+
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('#nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerBtn.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

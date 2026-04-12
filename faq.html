@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ — MyFacture, logiciel de devis et facturation</title>
+    <meta name="description" content="Retrouvez les reponses aux questions les plus frequentes sur MyFacture : essai gratuit, abonnements, paiement en ligne, conformite et prise en main.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --em: #3B82F6;
+            --em-dark: #2563EB;
+            --em-50: #eff6ff;
+            --em-100: #dbeafe;
+            --black: #111827;
+            --g900: #1f2937;
+            --g700: #374151;
+            --g500: #6b7280;
+            --g400: #9ca3af;
+            --g200: #e5e7eb;
+            --g100: #f3f4f6;
+            --g50: #f9fafb;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--black); background: var(--white);
+            line-height: 1.6; -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+        .tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 5px 14px; border-radius: 100px;
+            font-size: 13px; font-weight: 600;
+            color: var(--em-dark); background: var(--em-50);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 13px 26px; border-radius: 10px;
+            font-size: 15px; font-weight: 600; border: none;
+            cursor: pointer; transition: all 0.2s; text-decoration: none;
+        }
+        .btn-em { background: var(--em); color: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .btn-em:hover { background: var(--em-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
+        .btn-o { background: var(--white); color: var(--g700); border: 1.5px solid var(--g200); }
+        .btn-o:hover { border-color: var(--g400); background: var(--g50); }
+        .btn-lg { padding: 15px 32px; font-size: 16px; border-radius: 12px; }
+
+        /* HEADER */
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--g100);
+        }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; position: relative; }
+
+        .logo { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 700; color: var(--black); text-decoration: none; letter-spacing: -0.03em; font-family: 'DM Sans', sans-serif; }
+        .logo-icon { width: 30px; height: 30px; flex-shrink: 0; }
+
+        .nav {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 6px;
+            background: var(--g50); border-radius: 10px; padding: 4px;
+        }
+        .nav a {
+            font-size: 13px; font-weight: 500; color: var(--g500);
+            text-decoration: none; transition: all 0.2s;
+            padding: 7px 16px; border-radius: 8px;
+        }
+        .nav a:hover, .nav a.active { color: var(--black); background: var(--white); }
+
+        .header-actions { display: flex; gap: 8px; }
+        .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+
+        .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
+
+        /* HERO */
+        .hero { padding: 140px 0 40px; text-align: center; }
+
+        .hero-title {
+            font-size: clamp(32px, 4.5vw, 52px); font-weight: 900;
+            line-height: 1.08; letter-spacing: -0.04em;
+            max-width: 580px; margin: 16px auto;
+        }
+        .hero-title em { font-style: normal; color: var(--em); }
+
+        .hero-sub {
+            font-size: 17px; color: var(--g500);
+            max-width: 440px; margin: 0 auto;
+        }
+
+        /* FAQ */
+        .faq-section { padding: 32px 0 80px; }
+
+        .faqlist { max-width: 680px; margin: 0 auto; }
+
+        .faqitem {
+            border-bottom: 1px solid var(--g200);
+        }
+
+        .faqitem:first-child { border-top: 1px solid var(--g200); }
+
+        .faqq {
+            display: flex; align-items: center; justify-content: space-between;
+            width: 100%; background: none; border: none;
+            padding: 24px 0; cursor: pointer;
+            font-size: 16px; font-weight: 600; color: var(--black);
+            text-align: left; font-family: inherit; transition: color 0.2s;
+            gap: 16px;
+        }
+        .faqq:hover { color: var(--em-dark); }
+
+        .faqchev {
+            transition: transform 0.25s; flex-shrink: 0;
+            color: var(--g400); width: 20px; height: 20px;
+        }
+        .faqitem.open .faqchev { transform: rotate(180deg); color: var(--em); }
+
+        .faqa {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+        .faqitem.open .faqa { max-height: 200px; }
+
+        .faqa p {
+            padding-bottom: 24px; font-size: 15px;
+            color: var(--g500); line-height: 1.75;
+            max-width: 600px;
+        }
+
+        /* CONTACT CTA */
+        .contact-cta {
+            text-align: center; padding: 64px 0 0;
+            max-width: 680px; margin: 0 auto;
+        }
+
+        .contact-cta p {
+            font-size: 17px; color: var(--g500); margin-bottom: 16px;
+        }
+
+        /* MAIN CTA */
+        .cta {
+            text-align: center; padding: 80px 0;
+            background: var(--g50);
+        }
+
+        .cta h2 {
+            font-size: clamp(24px, 3vw, 36px); font-weight: 800;
+            letter-spacing: -0.03em; margin-bottom: 12px;
+            max-width: 500px; margin-left: auto; margin-right: auto;
+        }
+
+        .cta-note {
+            margin-top: 14px; font-size: 13px; color: var(--g400);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+
+        /* FOOTER */
+                .footer { padding: 32px 0; border-top: 1px solid var(--g100); }
+        .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
+        .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
+        .footer-col a:hover { color: var(--g700); }
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
+        .footer-copy { font-size: 12px; color: var(--g400); }
+
+        /* MOBILE NAV */
+        .mnav {
+            display: none; position: fixed; top: 64px; left: 0; right: 0;
+            background: rgba(255,255,255,0.97); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--g200);
+            padding: 16px 24px; z-index: 99; flex-direction: column; gap: 12px;
+        }
+        .mnav.open { display: flex; }
+        .mnav a { font-size: 16px; font-weight: 500; color: var(--g700); text-decoration: none; padding: 10px 0; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav { display: none; }
+            .header-actions { display: none; }
+            .mmenu { display: block; }
+                        .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+            .hero { padding: 120px 0 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="container header-inner">
+        <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+        <nav class="nav">
+            <a href="index.html">Accueil</a>
+            <a href="fonctionnalites.html">Fonctionnalites</a>
+            <a href="tarifs.html">Tarifs</a>
+            <a href="#" class="active">FAQ</a>
+            <a href="blog.html">Blog</a>
+        </nav>
+        <div class="header-actions">
+            <a href="#" class="btn btn-o">Se connecter</a>
+            <a href="#" class="btn btn-em">Commencer gratuitement</a>
+        </div>
+        <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+    </div>
+</header>
+
+<nav id="mn" class="mnav">
+    <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalites</a>
+    <a href="tarifs.html" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
+    <a href="#" onclick="this.parentElement.classList.remove('open')">FAQ</a>
+    <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <span class="tag">FAQ</span>
+        <h1 class="hero-title">Une question ?<br><em>On vous repond.</em></h1>
+        <p class="hero-sub">Tout ce que vous devez savoir pour bien demarrer avec MyFacture.</p>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+    <div class="container">
+        <div class="faqlist">
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">A qui s'adresse MyFacture ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>MyFacture s'adresse aux independants, freelances, auto-entrepreneurs, petites entreprises et societes qui souhaitent gerer simplement leurs devis, factures et paiements en ligne.</p></div>
+            </div>
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Puis-je essayer MyFacture gratuitement ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui, vous beneficiez d'un mois gratuit pour decouvrir toutes les fonctionnalites de MyFacture, sans engagement et sans carte bancaire.</p></div>
+            </div>
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Quelle est la difference entre les deux abonnements ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>L'offre Independant permet de gerer une societe avec un utilisateur. L'offre Business reprend toutes les fonctionnalites avec societes illimitees, utilisateurs illimites et gestion d'equipe.</p></div>
+            </div>
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Puis-je changer d'abonnement a tout moment ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui, vous pouvez passer d'une formule a l'autre a tout moment selon l'evolution de votre activite. Le changement est immediat.</p></div>
+            </div>
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Puis-je payer a l'annee ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui, l'abonnement annuel permet d'economiser 2 mois par rapport au paiement mensuel : 90&euro;/an pour Independant et 190&euro;/an pour Business.</p></div>
+            </div>
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Puis-je envoyer mes devis et factures depuis l'application ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui, MyFacture permet d'envoyer vos devis et factures directement depuis l'application avec des emails personnalisables, via Gmail OAuth ou votre propre SMTP.</p></div>
+            </div>
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Le paiement en ligne est-il disponible ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui, MyFacture integre Stripe pour permettre a vos clients de regler directement leurs factures en ligne. Le statut de paiement se met a jour automatiquement.</p></div>
+            </div>
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Mes documents sont-ils conformes aux obligations francaises ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui, MyFacture genere des documents conformes avec les mentions legales, TVA, SIRET, RCS, penalites de retard et exonerations applicables.</p></div>
+            </div>
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Est-ce complique a prendre en main ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Non, MyFacture a ete concu pour etre simple des la premiere utilisation. L'interface est intuitive et vous pouvez creer votre premiere facture en moins de 30 secondes.</p></div>
+            </div>
+
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">MyFacture est-il pret pour la facturation electronique ?<svg class="faqchev" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>MyFacture evolue pour accompagner la reforme francaise de facturation electronique et proposer une solution durable adaptee aux obligations 2026.</p></div>
+            </div>
+
+        </div>
+
+        <!-- CONTACT -->
+        <div class="contact-cta">
+            <p>Une autre question ?</p>
+            <a href="#" class="btn btn-o">Nous contacter</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <div class="container">
+        <h2>Pret a simplifier votre facturation ?</h2>
+        <a href="#" class="btn btn-em btn-lg" style="margin-top:8px">Commencer gratuitement &rarr;</a>
+        <p class="cta-note">
+            <svg width="14" height="14" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            1 mois gratuit &middot; Sans engagement
+        </p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Produit</h4>
+                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Ressources</h4>
+                <a href="blog.html">Blog</a>
+                <a href="comparatif-logiciels-facturation.html">Comparatifs</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="cgv.html">CGV</a>
+                <a href="confidentialite.html">Confidentialite</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+        </div>
+    </div>
+</footer>
+
+<script>
+function tfaq(b) {
+    const i = b.parentElement, o = i.classList.contains('open');
+    document.querySelectorAll('.faqitem').forEach(x => x.classList.remove('open'));
+    if (!o) i.classList.add('open');
+}
+</script>
+
+</body>
+</html>

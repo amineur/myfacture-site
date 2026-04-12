@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — MyFacture</title>
+    <meta name="description" content="Contactez l'equipe MyFacture. Nous repondons sous 48h jours ouvres. Formulaire de contact, email et telephone.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --em: #3B82F6; --em-dark: #2563EB; --em-50: #eff6ff; --em-100: #dbeafe; --em-200: #bfdbfe;
+            --black: #111827; --g900: #1f2937; --g700: #374151; --g500: #6b7280;
+            --g400: #9ca3af; --g200: #e5e7eb; --g100: #f3f4f6; --g50: #f9fafb; --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--black); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 13px 26px; border-radius: 10px; font-size: 15px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+        .btn-em { background: var(--em); color: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .btn-em:hover { background: var(--em-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
+        .btn-o { background: var(--white); color: var(--g700); border: 1.5px solid var(--g200); }
+        .btn-o:hover { border-color: var(--g400); background: var(--g50); }
+
+        .header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--g100); }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; position: relative; }
+        .logo { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 700; color: var(--black); text-decoration: none; letter-spacing: -0.03em; font-family: 'DM Sans', sans-serif; }
+        .logo-icon { width: 30px; height: 30px; flex-shrink: 0; }
+        .nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; background: var(--g50); border-radius: 10px; padding: 4px; }
+        .nav a { font-size: 13px; font-weight: 500; color: var(--g500); text-decoration: none; transition: all 0.2s; padding: 7px 16px; border-radius: 8px; }
+        .nav a:hover, .nav a.active { color: var(--black); background: var(--white); }
+        .header-actions { display: flex; gap: 8px; }
+        .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+        .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
+
+        /* HERO */
+        .hero { padding: 140px 0 40px; text-align: center; }
+        .hero-title { font-size: clamp(28px, 3.5vw, 42px); font-weight: 900; line-height: 1.12; letter-spacing: -0.04em; max-width: 500px; margin: 16px auto; }
+        .hero-title em { font-style: normal; color: var(--em); }
+        .hero-sub { font-size: 17px; color: var(--g500); max-width: 420px; margin: 0 auto; }
+
+        /* CONTACT SECTION */
+        .contact-section { padding: 0 0 80px; }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 840px; margin: 0 auto; }
+
+        /* INFO */
+        .contact-info { display: flex; flex-direction: column; gap: 28px; padding-top: 8px; }
+        .ci-item { display: flex; gap: 14px; align-items: flex-start; }
+        .ci-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: var(--em-50); color: var(--em);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .ci-label { font-size: 13px; font-weight: 600; color: var(--g400); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
+        .ci-value { font-size: 15px; color: var(--black); font-weight: 500; }
+        .ci-value a { color: var(--em); text-decoration: none; }
+        .ci-value a:hover { text-decoration: underline; }
+
+        .response-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 18px; border-radius: 10px;
+            background: var(--g50); border: 1px solid var(--g100);
+            font-size: 14px; color: var(--g700); margin-top: 8px;
+        }
+        .response-badge svg { color: var(--em); flex-shrink: 0; }
+
+        /* FORM */
+        .contact-form { display: flex; flex-direction: column; gap: 16px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 13px; font-weight: 600; color: var(--g700); }
+        .form-group input,
+        .form-group textarea {
+            padding: 12px 14px; border-radius: 10px;
+            border: 1.5px solid var(--g200); font-size: 15px;
+            font-family: inherit; color: var(--black);
+            background: var(--white); transition: all 0.2s;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus { border-color: var(--em); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder { color: var(--g400); }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+
+        .form-submit { margin-top: 4px; }
+        .form-submit .btn { width: 100%; padding: 14px; font-size: 15px; }
+
+        .form-note { font-size: 12px; color: var(--g400); text-align: center; margin-top: -4px; }
+
+        /* SUCCESS */
+        .form-success {
+            display: none; text-align: center; padding: 40px 24px;
+            border: 1.5px solid var(--em-200); border-radius: 14px;
+            background: var(--em-50);
+        }
+        .form-success.show { display: block; }
+        .form-success svg { color: var(--em); margin-bottom: 12px; }
+        .form-success h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+        .form-success p { font-size: 15px; color: var(--g500); }
+
+                .footer { padding: 32px 0; border-top: 1px solid var(--g100); }
+        .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
+        .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
+        .footer-col a:hover { color: var(--g700); }
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
+        .footer-copy { font-size: 12px; color: var(--g400); }
+
+        .mnav { display: none; position: fixed; top: 64px; left: 0; right: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(16px); border-bottom: 1px solid var(--g200); padding: 16px 24px; z-index: 99; flex-direction: column; gap: 12px; }
+        .mnav.open { display: flex; }
+        .mnav a { font-size: 16px; font-weight: 500; color: var(--g700); text-decoration: none; padding: 10px 0; }
+
+        @media (max-width: 768px) {
+            .nav { display: none; }
+            .header-actions { display: none; }
+            .mmenu { display: block; }
+                        .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+            .hero { padding: 120px 0 32px; }
+            .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container header-inner">
+        <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+        <nav class="nav">
+            <a href="index.html">Accueil</a>
+            <a href="fonctionnalites.html">Fonctionnalites</a>
+            <a href="tarifs.html">Tarifs</a>
+            <a href="faq.html">FAQ</a>
+            <a href="blog.html">Blog</a>
+        </nav>
+        <div class="header-actions">
+            <a href="#" class="btn btn-o">Se connecter</a>
+            <a href="#" class="btn btn-em">Commencer gratuitement</a>
+        </div>
+        <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+    </div>
+</header>
+<nav id="mn" class="mnav">
+    <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalites</a>
+    <a href="tarifs.html" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
+    <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
+    <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <h1 class="hero-title">Une question ?<br><em>Ecrivez-nous.</em></h1>
+        <p class="hero-sub">Remplissez le formulaire, nous reviendrons vers vous rapidement.</p>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section">
+    <div class="container">
+        <div style="max-width:520px;margin:0 auto;">
+
+            <div>
+                <form id="contactForm" class="contact-form" action="https://formsubmit.co/aminebenabla@gmail.com" method="POST">
+                    <input type="hidden" name="_subject" value="Nouveau message depuis MyFacture.fr">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="">
+                    <input type="text" name="_honey" style="display:none">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prenom">Prenom</label>
+                            <input type="text" id="prenom" name="prenom" placeholder="Votre prenom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nom">Nom</label>
+                            <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="votre@email.fr" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tel">Telephone <span style="font-weight:400;color:var(--g400)">(optionnel)</span></label>
+                        <input type="tel" id="tel" name="telephone" placeholder="06 00 00 00 00">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Comment pouvons-nous vous aider ?" required></textarea>
+                    </div>
+
+                    <div class="form-submit">
+                        <button type="submit" class="btn btn-em">Envoyer le message &rarr;</button>
+                    </div>
+                    <p class="form-note">Nous vous repondons sous 48h jours ouvres</p>
+                </form>
+
+                <div id="formSuccess" class="form-success">
+                    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <h3>Message envoye</h3>
+                    <p>Nous vous repondrons sous 48h jours ouvres.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Produit</h4>
+                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Ressources</h4>
+                <a href="blog.html">Blog</a>
+                <a href="comparatif-logiciels-facturation.html">Comparatifs</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="cgv.html">CGV</a>
+                <a href="confidentialite.html">Confidentialite</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+        </div>
+    </div>
+</footer>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var f = this;
+    var data = new FormData(f);
+    fetch(f.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
+    .then(function() {
+        f.style.display = 'none';
+        document.getElementById('formSuccess').classList.add('show');
+    })
+    .catch(function() {
+        f.style.display = 'none';
+        document.getElementById('formSuccess').classList.add('show');
+    });
+});
+</script>
+
+</body>
+</html>

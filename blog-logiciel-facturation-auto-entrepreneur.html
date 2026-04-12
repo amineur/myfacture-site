@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quel logiciel de facturation choisir en 2026 pour un auto-entrepreneur ? Criteres, comparatif et pourquoi MyFacture est adapte aux independants.">
+    <title>Logiciel de facturation pour auto-entrepreneur | MyFacture</title>
+    <style>
+        :root {
+            --em: #3B82F6;
+            --em-dark: #2563EB;
+            --em-50: #eff6ff;
+            --black: #111827;
+            --g700: #374151;
+            --g500: #6b7280;
+            --g400: #9ca3af;
+            --g200: #e5e7eb;
+            --g100: #f3f4f6;
+            --g50: #f9fafb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--black);
+            background-color: var(--white);
+        }
+
+        /* Header & Nav */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        nav {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-pill {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--g200);
+            border-radius: 24px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: var(--g700);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pill:hover {
+            background: var(--white);
+            color: var(--em);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--black);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-o {
+            border: 1px solid var(--g200);
+            color: var(--g700);
+            background: transparent;
+        }
+
+        .btn-o:hover {
+            background: var(--g100);
+        }
+
+        .btn-em {
+            background: var(--em);
+            color: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-em:hover {
+            background: var(--em-dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 140px;
+            padding-bottom: 60px;
+            padding-left: 24px;
+            padding-right: 24px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .tag-pill {
+            display: inline-block;
+            background: var(--em-50);
+            color: var(--em);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--black);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--g500);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Article Content */
+        .article-content {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+
+        .article-content p {
+            font-size: 15px;
+            color: var(--g700);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .article-content h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+            margin-top: 40px;
+            margin-bottom: 16px;
+        }
+
+        .check-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .check-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .check-icon {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            background: var(--em-50);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .check-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .check-text {
+            font-size: 15px;
+            color: var(--g700);
+            line-height: 1.8;
+        }
+
+        /* Decouvrez aussi */
+        .discover-section {
+            max-width: 720px;
+            margin: 60px auto 0;
+            padding: 0 24px 60px;
+        }
+
+        .discover-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 20px;
+        }
+
+        .discover-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .discover-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--em);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .discover-link:hover {
+            color: var(--em-dark);
+        }
+
+        .arrow {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--g50);
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 24px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--em);
+            color: var(--white);
+            padding: 12px 32px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: var(--em-dark);
+        }
+
+        .cta-sublinks {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .cta-sublink {
+            color: var(--g500);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .cta-sublink:hover {
+            color: var(--em);
+        }
+
+        @media (max-width: 768px) {
+            .header-actions {
+                display: none;
+            }
+        }
+
+        /* Footer */
+                footer {
+            background: var(--white);
+            color: var(--g700);
+            padding: 32px 0;
+            border-top: 1px solid var(--g100);
+        }
+        
+        .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
+        .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
+        .footer-col a:hover { color: var(--g700); }
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
+        .footer-copy { font-size: 12px; color: var(--g400); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+            <nav>
+                <a href="index.html" class="nav-pill">Accueil</a>
+                <a href="fonctionnalites.html" class="nav-pill">Fonctionnalites</a>
+                <a href="tarifs.html" class="nav-pill">Tarifs</a>
+                <a href="faq.html" class="nav-pill">FAQ</a>
+                <a href="blog.html" class="nav-pill">Blog</a>
+            </nav>
+            <div class="header-actions">
+                <a href="#" class="btn btn-o">Se connecter</a>
+                <a href="#" class="btn btn-em">Commencer gratuitement</a>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="tag-pill">Comparatif</div>
+        <h1>Logiciel de facturation pour auto-entrepreneur : lequel choisir en 2026 ?</h1>
+        <p class="hero-subtitle">Choisir un logiciel de facturation adapte devient essentiel pour les auto-entrepreneurs qui souhaitent gagner du temps et rester conformes.</p>
+    </section>
+
+    <article class="article-content">
+        <h2>Pourquoi utiliser un logiciel de facturation</h2>
+        <p>Un logiciel de facturation professionnalisé automatise vos operations et vous fait gagner un temps précieux. Voici les principaux bénéfices :</p>
+        <div class="check-list">
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Creer des devis et factures rapidement</div>
+            </div>
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Eviter les erreurs de saisie et de calcul</div>
+            </div>
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Suivre les paiements reçus et en attente</div>
+            </div>
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Respecter les obligations legales et fiscales</div>
+            </div>
+        </div>
+
+        <h2>Les criteres importants</h2>
+        <p>Avant de choisir un logiciel, posez-vous les bonnes questions. Voici les critères essentiels :</p>
+        <div class="check-list">
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Simplicite d'utilisation — l'interface doit être intuitive</div>
+            </div>
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Generation PDF professionnelle et personnalisable</div>
+            </div>
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Gestion TVA et conformite reglementaire</div>
+            </div>
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Integration paiement en ligne directement dans les factures</div>
+            </div>
+        </div>
+
+        <h2>MyFacture : une solution pensee pour les independants</h2>
+        <p>MyFacture a été spécialement conçu pour les auto-entrepreneurs et les freelances. Nous comprenons vos besoins et offrons une solution complète :</p>
+        <div class="check-list">
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Devis et factures illimites sans cout supplementaire</div>
+            </div>
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Paiement integre pour encaisser directement en ligne</div>
+            </div>
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">PDF conformes aux normes fiscales francaises</div>
+            </div>
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.5 10.5l2 2 5-5.5" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="check-text">Un mois gratuit sans engagement pour tester</div>
+            </div>
+        </div>
+    </article>
+
+    <section class="discover-section">
+        <h3 class="discover-title">Decouvrez aussi</h3>
+        <div class="discover-links">
+            <a href="comparatif-logiciels-facturation.html" class="discover-link">
+                <svg class="arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 12l5-4-5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Comparatif des meilleurs logiciels de facturation 2026
+            </a>
+            <a href="blog-modele-facture-auto-entrepreneur.html" class="discover-link">
+                <svg class="arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 12l5-4-5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Modele facture auto-entrepreneur : mentions obligatoires
+            </a>
+            <a href="blog-meilleur-logiciel-devis-facture.html" class="discover-link">
+                <svg class="arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 12l5-4-5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Quel est le meilleur logiciel de devis et facture en 2026 ?
+            </a>
+            <a href="blog-logiciel-facturation-petite-entreprise.html" class="discover-link">
+                <svg class="arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 12l5-4-5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Logiciel de facturation pour petite entreprise
+            </a>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">Pret a simplifier votre facturation?</h2>
+            <a href="#" class="cta-button">Commencer gratuitement</a>
+            <div class="cta-sublinks">
+                <a href="tarifs.html" class="cta-sublink">Voir les tarifs</a>
+                <a href="fonctionnalites.html" class="cta-sublink">Decouvrir les fonctionnalites</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Produit</h4>
+                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Ressources</h4>
+                <a href="blog.html">Blog</a>
+                <a href="comparatif-logiciels-facturation.html">Comparatifs</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="cgv.html">CGV</a>
+                <a href="confidentialite.html">Confidentialite</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

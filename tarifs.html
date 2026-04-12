@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFacture – Tarifs du logiciel de devis et facturation</title>
+    <meta name="description" content="Decouvrez les tarifs MyFacture : logiciel simple de devis et facturation pour independants et entreprises. 1 mois gratuit, sans engagement.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --em: #3B82F6;
+            --em-dark: #2563EB;
+            --em-50: #eff6ff;
+            --em-100: #dbeafe;
+            --em-200: #bfdbfe;
+            --black: #111827;
+            --g900: #1f2937;
+            --g700: #374151;
+            --g500: #6b7280;
+            --g400: #9ca3af;
+            --g200: #e5e7eb;
+            --g100: #f3f4f6;
+            --g50: #f9fafb;
+            --white: #ffffff;
+            --green: #059669;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--black); background: var(--white);
+            line-height: 1.6; -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+        .section { padding: 80px 0; }
+        .section-gray { background: var(--g50); }
+
+        .tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 5px 14px; border-radius: 100px;
+            font-size: 13px; font-weight: 600;
+            color: var(--em-dark); background: var(--em-50);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 13px 26px; border-radius: 10px;
+            font-size: 15px; font-weight: 600; border: none;
+            cursor: pointer; transition: all 0.2s; text-decoration: none;
+        }
+        .btn-em { background: var(--em); color: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .btn-em:hover { background: var(--em-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
+        .btn-o { background: var(--white); color: var(--g700); border: 1.5px solid var(--g200); }
+        .btn-o:hover { border-color: var(--g400); background: var(--g50); }
+        .btn-lg { padding: 15px 32px; font-size: 16px; border-radius: 12px; }
+
+        /* HEADER */
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--g100);
+        }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; position: relative; }
+
+        .logo { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 700; color: var(--black); text-decoration: none; letter-spacing: -0.03em; font-family: 'DM Sans', sans-serif; }
+        .logo-icon { width: 30px; height: 30px; flex-shrink: 0; }
+
+        .nav {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 6px;
+            background: var(--g50); border-radius: 10px; padding: 4px;
+        }
+        .nav a {
+            font-size: 13px; font-weight: 500; color: var(--g500);
+            text-decoration: none; transition: all 0.2s;
+            padding: 7px 16px; border-radius: 8px;
+        }
+        .nav a:hover, .nav a.active { color: var(--black); background: var(--white); }
+
+        .header-actions { display: flex; gap: 8px; }
+        .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+
+        .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
+
+        /* HERO */
+        .hero { padding: 140px 0 16px; text-align: center; }
+
+        .hero-title {
+            font-size: clamp(32px, 4.5vw, 52px); font-weight: 900;
+            line-height: 1.08; letter-spacing: -0.04em;
+            max-width: 640px; margin: 16px auto;
+        }
+
+        .hero-sub {
+            font-size: 17px; color: var(--g500);
+            max-width: 480px; margin: 0 auto 12px;
+        }
+
+        .hero-note {
+            font-size: 13px; color: var(--g400);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+
+        /* TOGGLE */
+        .toggle-wrap {
+            display: flex; align-items: center; justify-content: center;
+            gap: 14px; padding: 40px 0 8px;
+        }
+
+        .toggle-wrap span { font-size: 14px; font-weight: 500; color: var(--g400); transition: color 0.2s; }
+        .toggle-wrap span.on { color: var(--black); }
+
+        .tswitch {
+            width: 48px; height: 26px; background: var(--g200);
+            border-radius: 100px; cursor: pointer; position: relative;
+            transition: all 0.2s; border: none;
+        }
+        .tswitch.on { background: var(--em); }
+        .tswitch::after {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 20px; height: 20px; background: white; border-radius: 50%;
+            transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        .tswitch.on::after { transform: translateX(22px); }
+
+        .toggle-save {
+            font-size: 12px; font-weight: 700; color: var(--green);
+            background: #ecfdf5; padding: 4px 12px; border-radius: 100px;
+        }
+
+        .annual-hint {
+            text-align: center; font-size: 13px; color: var(--green);
+            font-weight: 500; margin-top: 8px; min-height: 20px;
+        }
+
+        /* PRICING CARDS */
+        .pricing-section { padding: 32px 0 80px; }
+
+        .pgrid {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 20px; max-width: 760px; margin: 0 auto;
+        }
+
+        .pcard {
+            padding: 40px 36px; border-radius: 20px;
+            border: 1.5px solid var(--g200); background: var(--white);
+            position: relative; transition: all 0.3s;
+        }
+
+        .pcard.pop {
+            border-color: var(--em-200);
+            box-shadow: 0 0 0 1px var(--em-100), 0 8px 32px rgba(37,99,235,0.06);
+        }
+
+        .ptag {
+            position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+            background: var(--em); color: white;
+            font-size: 12px; font-weight: 700;
+            padding: 4px 18px; border-radius: 100px;
+            letter-spacing: 0.01em;
+        }
+
+        .pname { font-size: 22px; font-weight: 800; margin-bottom: 2px; letter-spacing: -0.02em; }
+        .pdesc { font-size: 14px; color: var(--g500); margin-bottom: 24px; }
+
+        .pprice-wrap { margin-bottom: 6px; }
+        .pprice { display: flex; align-items: baseline; gap: 2px; }
+        .pprice b {
+            font-size: 52px; font-weight: 900; letter-spacing: -0.04em;
+            line-height: 1;
+        }
+        .pcard.pop .pprice b { color: var(--em-dark); }
+        .pprice span { font-size: 16px; color: var(--g500); font-weight: 500; }
+
+        .pprice-note { font-size: 13px; color: var(--g400); margin-bottom: 28px; }
+
+        .pfeats { list-style: none; margin-bottom: 32px; display: flex; flex-direction: column; gap: 11px; }
+        .pfeats li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--g700); line-height: 1.4; }
+        .pfeats li svg { flex-shrink: 0; color: var(--em); margin-top: 1px; }
+
+        .pcard .btn { width: 100%; padding: 14px; font-size: 15px; }
+
+        .pcard-sub { text-align: center; margin-top: 12px; font-size: 12px; color: var(--g400); }
+
+        .pcard-link {
+            display: block; text-align: center; margin-top: 16px;
+            font-size: 13px; font-weight: 500; color: var(--em);
+            text-decoration: none; transition: color 0.2s;
+        }
+        .pcard-link:hover { color: var(--em-dark); }
+
+        /* COMPARISON TABLE */
+        .compare { overflow-x: auto; }
+
+        .ctable {
+            width: 100%; max-width: 760px; margin: 0 auto;
+            border-collapse: collapse; font-size: 14px;
+        }
+
+        .ctable thead th {
+            padding: 14px 20px; text-align: left;
+            font-weight: 700; font-size: 15px;
+            border-bottom: 2px solid var(--g200);
+        }
+
+        .ctable thead th:first-child { color: var(--g500); font-weight: 500; }
+
+        .ctable tbody td {
+            padding: 12px 20px; border-bottom: 1px solid var(--g100);
+            color: var(--g700);
+        }
+
+        .ctable tbody td:first-child { color: var(--g500); }
+
+        .ctable .check { color: var(--em); }
+        .ctable .dash { color: var(--g300, #d1d5db); }
+
+        /* REASSURANCE */
+        .rea-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 16px; max-width: 760px; margin: 0 auto;
+        }
+
+        .rea-card {
+            text-align: center; padding: 32px 20px;
+            border-radius: 14px; background: var(--white);
+            border: 1px solid var(--g200);
+        }
+
+        .rea-icon { margin-bottom: 12px; color: var(--em); }
+
+        .rea-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .rea-card p { font-size: 13px; color: var(--g500); }
+
+        /* FAQ */
+        .faqlist { max-width: 640px; margin: 44px auto 0; }
+        .faqitem { border-bottom: 1px solid var(--g200); }
+
+        .faqq {
+            display: flex; align-items: center; justify-content: space-between;
+            width: 100%; background: none; border: none;
+            padding: 20px 0; cursor: pointer;
+            font-size: 15px; font-weight: 600; color: var(--black);
+            text-align: left; font-family: inherit; transition: color 0.2s;
+        }
+        .faqq:hover { color: var(--em-dark); }
+
+        .faqchev { transition: transform 0.2s; flex-shrink: 0; margin-left: 16px; color: var(--g400); }
+        .faqitem.open .faqchev { transform: rotate(180deg); color: var(--em); }
+
+        .faqa { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .faqitem.open .faqa { max-height: 180px; }
+        .faqa p { padding-bottom: 20px; font-size: 14px; color: var(--g500); line-height: 1.7; }
+
+        /* CTA */
+        .cta { text-align: center; padding: 80px 0; }
+        .cta h2 {
+            font-size: clamp(24px, 3vw, 36px); font-weight: 800;
+            letter-spacing: -0.03em; margin-bottom: 12px;
+            max-width: 540px; margin-left: auto; margin-right: auto;
+        }
+
+        .cta-note {
+            margin-top: 14px; font-size: 13px; color: var(--g400);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+
+        /* FOOTER */
+                .footer { padding: 32px 0; border-top: 1px solid var(--g100); }
+        .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
+        .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
+        .footer-col a:hover { color: var(--g700); }
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
+        .footer-copy { font-size: 12px; color: var(--g400); }
+
+        /* MOBILE NAV */
+        .mnav {
+            display: none; position: fixed; top: 64px; left: 0; right: 0;
+            background: rgba(255,255,255,0.97); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--g200);
+            padding: 16px 24px; z-index: 99; flex-direction: column; gap: 12px;
+        }
+        .mnav.open { display: flex; }
+        .mnav a { font-size: 16px; font-weight: 500; color: var(--g700); text-decoration: none; padding: 10px 0; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .section { padding: 56px 0; }
+            .nav { display: none; }
+            .header-actions { display: none; }
+            .mmenu { display: block; }
+            .pgrid { grid-template-columns: 1fr; max-width: 400px; }
+            .rea-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .ctable { font-size: 13px; }
+            .ctable thead th, .ctable tbody td { padding: 10px 12px; }
+                        .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+            .hero { padding: 120px 0 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="container header-inner">
+        <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+        <nav class="nav">
+            <a href="index.html">Accueil</a>
+            <a href="fonctionnalites.html">Fonctionnalites</a>
+            <a href="#" class="active">Tarifs</a>
+            <a href="faq.html">FAQ</a>
+            <a href="blog.html">Blog</a>
+        </nav>
+        <div class="header-actions">
+            <a href="#" class="btn btn-o">Se connecter</a>
+            <a href="#" class="btn btn-em">Commencer gratuitement</a>
+        </div>
+        <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+    </div>
+</header>
+
+<nav id="mn" class="mnav">
+    <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalites</a>
+    <a href="#" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
+    <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
+    <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
+</nav>
+
+<!-- 1. HERO -->
+<section class="hero">
+    <div class="container">
+        <span class="tag">Tarifs</span>
+        <h1 class="hero-title">Choisissez la formule adaptee a votre activite</h1>
+        <p class="hero-sub">MyFacture vous accompagne simplement, que vous soyez independant ou en croissance.</p>
+        <p class="hero-note">
+            <svg width="14" height="14" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            1 mois gratuit &middot; Sans engagement
+        </p>
+    </div>
+</section>
+
+<!-- 2. TOGGLE -->
+<div class="toggle-wrap">
+    <span class="on" id="ml">Mensuel</span>
+    <button class="tswitch" id="bt" onclick="toggleB()"></button>
+    <span id="yl">Annuel</span>
+    <span class="toggle-save">-2 mois offerts</span>
+</div>
+<p class="annual-hint" id="ah"></p>
+
+<!-- 3. PRICING CARDS -->
+<section class="pricing-section">
+    <div class="container">
+        <div class="pgrid">
+
+            <!-- INDEPENDANT -->
+            <div class="pcard">
+                <div class="pname">Independant</div>
+                <div class="pdesc">Pour demarrer simplement</div>
+                <div class="pprice-wrap">
+                    <div class="pprice"><b id="pi">9</b><span>&euro;/<span id="piPer">mois</span></span></div>
+                </div>
+                <div class="pprice-note">1 mois gratuit, sans engagement</div>
+                <ul class="pfeats">
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Devis illimites</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Factures illimitees</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Clients illimites</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Paiement en ligne avec Stripe</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>PDF professionnel</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Envoi email integre</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Tableau de bord simple</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>1 societe &middot; 1 utilisateur</li>
+                </ul>
+                <a href="#" class="btn btn-o">Commencer gratuitement</a>
+                <p class="pcard-sub">Sans engagement &middot; Resiliation a tout moment</p>
+                <a href="fonctionnalites.html" class="pcard-link">Voir toutes les fonctionnalites &rarr;</a>
+            </div>
+
+            <!-- BUSINESS -->
+            <div class="pcard pop">
+                <div class="ptag">Le plus choisi</div>
+                <div class="pname">Business</div>
+                <div class="pdesc">Pour aller plus loin sans limite</div>
+                <div class="pprice-wrap">
+                    <div class="pprice"><b id="pb">19</b><span>&euro;/<span id="pbPer">mois</span></span></div>
+                </div>
+                <div class="pprice-note">1 mois gratuit, sans engagement</div>
+                <ul class="pfeats">
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Toutes les fonctionnalites Independant</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Societes illimitees</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Utilisateurs illimites</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Gestion equipe &amp; roles</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Rapports avances</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Historique complet</li>
+                </ul>
+                <a href="#" class="btn btn-em">Commencer gratuitement</a>
+                <p class="pcard-sub">Sans engagement &middot; Resiliation a tout moment</p>
+                <a href="fonctionnalites.html" class="pcard-link">Voir toutes les fonctionnalites &rarr;</a>
+            </div>
+
+        </div>
+
+        <div style="text-align:center;margin-top:28px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:500;color:var(--g500);">
+            <svg width="18" height="18" fill="none" stroke="#3B82F6" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            Inclus dans toutes les offres : compatible reforme facturation electronique 2026
+        </div>
+
+    </div>
+</section>
+
+<!-- 4. COMPARISON TABLE -->
+<section class="section section-gray">
+    <div class="container">
+        <h2 style="text-align:center;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-0.03em;margin-bottom:36px;">Comparer les offres</h2>
+        <div class="compare">
+            <table class="ctable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Independant</th>
+                        <th>Business</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Devis illimites</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Factures illimitees</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Clients illimites</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Paiement en ligne Stripe</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>PDF professionnel</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Envoi email integre</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Tableau de bord</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Societes illimitees</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Utilisateurs illimites</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Gestion equipe &amp; roles</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Rapports avances</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Historique complet</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- 5. REASSURANCE -->
+<section class="section">
+    <div class="container">
+        <div class="rea-grid">
+            <div class="rea-card">
+                <div class="rea-icon"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg></div>
+                <h3>1 mois gratuit</h3>
+                <p>Testez toutes les fonctionnalites pendant 30 jours.</p>
+            </div>
+            <div class="rea-card">
+                <div class="rea-icon"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+                <h3>Sans engagement</h3>
+                <p>Resiliez a tout moment, en un clic.</p>
+            </div>
+            <div class="rea-card">
+                <div class="rea-icon"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4-4m-4 4l4 4"/></svg></div>
+                <h3>Changez d'offre</h3>
+                <p>Passez d'une formule a l'autre quand vous voulez.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 6. FAQ -->
+<section class="section section-gray" id="faq">
+    <div class="container">
+        <h2 style="text-align:center;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-0.03em;margin-bottom:0;">Questions frequentes</h2>
+        <div class="faqlist">
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Puis-je changer d'offre a tout moment ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui, vous pouvez passer de l'offre Independant a Business (ou inversement) a tout moment depuis votre espace. Le changement est immediat.</p></div>
+            </div>
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Que comprend le mois gratuit ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Le mois gratuit inclut l'ensemble des fonctionnalites de l'offre choisie, sans restriction. Aucune carte bancaire n'est requise pour commencer.</p></div>
+            </div>
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Puis-je payer a l'annee ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui. L'abonnement annuel vous fait economiser 2 mois : 90&euro;/an pour Independant et 190&euro;/an pour Business.</p></div>
+            </div>
+            <div class="faqitem">
+                <button class="faqq" onclick="tfaq(this)">Mon abonnement est-il sans engagement ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui, totalement. Vous pouvez resilier a tout moment depuis votre espace, sans frais ni justification.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7. CTA FINAL -->
+<section class="cta">
+    <div class="container">
+        <h2>Trouvez la formule qui vous correspond et commencez gratuitement</h2>
+        <a href="#" class="btn btn-em btn-lg" style="margin-top:8px">Commencer gratuitement &rarr;</a>
+        <p class="cta-note">
+            <svg width="14" height="14" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            1 mois gratuit &middot; Sans engagement
+        </p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Produit</h4>
+                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="tarifs.html">Tarifs</a>
+                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Ressources</h4>
+                <a href="blog.html">Blog</a>
+                <a href="comparatif-logiciels-facturation.html">Comparatifs</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="cgv.html">CGV</a>
+                <a href="confidentialite.html">Confidentialite</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+        </div>
+    </div>
+</footer>
+
+<script>
+let y = false;
+function toggleB() {
+    y = !y;
+    document.getElementById('bt').classList.toggle('on', y);
+    document.getElementById('ml').classList.toggle('on', !y);
+    document.getElementById('yl').classList.toggle('on', y);
+    document.getElementById('pi').textContent = y ? '108' : '9';
+    document.getElementById('pb').textContent = y ? '190' : '19';
+    document.getElementById('piPer').textContent = y ? 'an' : 'mois';
+    document.getElementById('pbPer').textContent = y ? 'an' : 'mois';
+    document.getElementById('ah').textContent = y ? '\u00c9conomisez 2 mois sur l\u2019offre Business avec l\u2019abonnement annuel' : '';
+}
+
+function tfaq(b) {
+    const i = b.parentElement, o = i.classList.contains('open');
+    document.querySelectorAll('.faqitem').forEach(x => x.classList.remove('open'));
+    if (!o) i.classList.add('open');
+}
+</script>
+
+</body>
+</html>
