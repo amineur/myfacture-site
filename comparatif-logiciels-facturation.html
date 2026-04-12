@@ -37,15 +37,54 @@
             line-height: 1.6;
         }
 
-        /* Header & Navigation */
-        header {
-            backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.8);
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+        /* HEADER */
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--g100);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
         }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; position: relative; }
+
+        .logo { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 700; color: var(--black); text-decoration: none; letter-spacing: -0.03em; font-family: 'DM Sans', sans-serif; }
+        .logo-icon { width: 30px; height: 30px; flex-shrink: 0; }
+
+        .nav {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 6px;
+            background: var(--g50); border-radius: 10px; padding: 4px;
+        }
+        .nav a {
+            font-size: 13px; font-weight: 500; color: var(--g500);
+            text-decoration: none; transition: all 0.2s;
+            padding: 7px 16px; border-radius: 8px;
+        }
+        .nav a:hover { color: var(--black); background: var(--white); }
+
+        .header-actions { display: flex; gap: 16px; align-items: center; }
+        .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+        .hdr-link { font-size: 13px; font-weight: 500; color: var(--g500); text-decoration: none; transition: color 0.2s; }
+        .hdr-link:hover { color: var(--black); }
+
+        .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
+
+                /* MOBILE NAV */
+        .mnav {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--white);
+            padding: 80px 32px 32px; z-index: 200; flex-direction: column; gap: 8px;
+        }
+        .mnav.open { display: flex; }
+        .mnav a { font-size: 18px; font-weight: 500; color: var(--black); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--g100); }
+        .mnav a:last-child { border-bottom: none; }
+        .mnav .mnav-close {
+            position: absolute; top: 18px; right: 20px;
+            background: none; border: none; cursor: pointer; padding: 8px; color: var(--black);
+        }
+
+
+        /* Header & Navigation */
 
         .header-content {
             max-width: 1200px;
@@ -55,26 +94,6 @@
             justify-content: space-between;
             align-items: center;
             height: 70px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--black);
-            font-weight: 600;
-            font-size: 18px;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-        }
-
-        nav {
-            display: none;
         }
 
         nav.active {
@@ -88,63 +107,6 @@
             border-bottom: 1px solid var(--g100);
             padding: 20px;
             gap: 10px;
-        }
-
-        .nav-pill {
-            display: inline-flex;
-            background-color: var(--g50);
-            border-radius: 24px;
-            padding: 8px 16px;
-            gap: 16px;
-            align-items: center;
-            border: 1px solid var(--g200);
-        }
-
-        .nav-pill a {
-            text-decoration: none;
-            color: var(--black);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .nav-pill a:hover {
-            color: var(--em);
-        }
-
-        .hamburger {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 8px;
-        }
-
-        .hamburger span {
-            width: 24px;
-            height: 2px;
-            background-color: var(--black);
-            border-radius: 1px;
-            transition: all 0.3s;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(8px, -8px);
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
         }
 
         .header-actions .btn {
@@ -181,18 +143,6 @@
         }
 
         @media (min-width: 768px) {
-            nav {
-                display: flex !important;
-                position: static;
-                background-color: transparent;
-                border-bottom: none;
-                padding: 0;
-                flex-direction: row;
-            }
-
-            .hamburger {
-                display: none;
-            }
         }
 
         /* Main Content */
@@ -401,8 +351,8 @@
         .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
         .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
         .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
-        .footer-col a:hover { color: var(--g700); }
+        .footer-col a { display: block; font-size: 13px; color: var(--g700); text-decoration: none; margin-bottom: 4px; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--g400); }
         .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
         .footer-copy { font-size: 12px; color: var(--g400); }
 
@@ -424,9 +374,6 @@
 
         /* Responsive */
         @media (max-width: 767px) {
-            .header-actions {
-                display: none;
-            }
 
             main {
                 padding: 40px 16px;
@@ -465,45 +412,45 @@
             .comparison-details {
                 padding: 20px;
             }
+
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <div class="header-content">
-            <a href="index.html" class="logo">
-                <svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="30" height="30" rx="7" fill="#3B82F6"/>
-                    <path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/>
-                    <path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/>
-                    <rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/>
-                    <rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/>
-                    <rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/>
-                    <path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                </svg>
-                MyFacture
-            </a>
-            <nav id="nav-menu">
-                <div class="nav-pill">
-                    <a href="index.html">Accueil</a>
-            <a href="fonctionnalites.html">Fonctionnalites</a>
-                    <a href="tarifs.html">Tarifs</a>
-                    <a href="#faq">FAQ</a>
-                    <a href="blog.html">Blog</a>
-                </div>
-            </nav>
-            <button class="hamburger" id="hamburger-btn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="header-actions">
-                <a href="#" class="btn btn-o">Se connecter</a>
-                <a href="#" class="btn btn-em">Commencer gratuitement</a>
-            </div>
+    <!-- HEADER -->
+<header class="header">
+    <div class="container header-inner">
+        <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+        <nav class="nav">
+            <a href="index.html">Accueil</a>
+            <a href="fonctionnalites.html">Fonctionnalités</a>
+            <a href="tarifs.html">Tarifs</a>
+            <a href="faq.html">FAQ</a>
+            <a href="blog.html">Blog</a>
+        </nav>
+        <div class="header-actions">
+            <a href="#" class="hdr-link">Se connecter</a>
+            <a href="#" class="btn btn-em">S'inscrire</a>
         </div>
-    </header>
+        <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+    </div>
+</header>
+
+<nav id="mn" class="mnav">
+    <button class="mnav-close" onclick="document.getElementById('mn').classList.remove('open')" aria-label="Fermer">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l16 16M22 6L6 22"/></svg>
+    </button>
+    <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalités</a>
+    <a href="tarifs.html" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
+    <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
+    <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
+    <a href="#" style="color:var(--em);font-weight:600;border-bottom:none;margin-top:16px;">Essai gratuit &rarr;</a>
+</nav>
 
     <!-- Main Content -->
     <main>
@@ -581,7 +528,7 @@
 
         <!-- Pennylane -->
         <h2>Pennylane</h2>
-        <p>Pennylane s'adresse aux PME et cabinets comptables qui cherchent à centraliser leur comptabilité et piloter leur financier. Les fonctionnalités avancées de rapprochement et de clôture simplifient les processus comptables.</p>
+        <p>Pennylane s'adresse aux PME et cabinets comptables qui cherchent à centralisé leur comptabilité et piloter leur financier. Les fonctionnalités avancées de rapprochement et de clôture simplifiées les processus comptables.</p>
         <p>C'est une solution pour les structures avec des besoins comptables et financiers sophistiqués.</p>
 
         <!-- Sellsy -->
@@ -637,13 +584,13 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
-                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+                <p>Le logiciel simple de devis et facturation pour indépendants et PME.</p>
             </div>
             <div class="footer-col">
                 <h4>Produit</h4>
-                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="fonctionnalites.html">Fonctionnalités</a>
                 <a href="tarifs.html">Tarifs</a>
-                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+                <a href="facturation-electronique.html">Facturation électronique 2026</a>
             </div>
             <div class="footer-col">
                 <h4>Ressources</h4>
@@ -653,35 +600,17 @@
             </div>
             <div class="footer-col">
                 <h4>Legal</h4>
-                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="mentions-legales.html">Mentions légales</a>
                 <a href="cgv.html">CGV</a>
-                <a href="confidentialite.html">Confidentialite</a>
+                <a href="confidentialite.html">Confidentialité</a>
                 <a href="contact.html">Contact</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits réservés.</div>
         </div>
     </div>
 </footer>
 
-    <script>
-        // Mobile menu toggle
-        const hamburgerBtn = document.getElementById('hamburger-btn');
-        const navMenu = document.getElementById('nav-menu');
-
-        hamburgerBtn.addEventListener('click', () => {
-            hamburgerBtn.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-
-        // Close menu when a link is clicked
-        document.querySelectorAll('#nav-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburgerBtn.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
-    </script>
 </body>
 </html>

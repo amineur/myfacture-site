@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyFacture – Tarifs du logiciel de devis et facturation</title>
-    <meta name="description" content="Decouvrez les tarifs MyFacture : logiciel simple de devis et facturation pour independants et entreprises. 1 mois gratuit, sans engagement.">
+    <meta name="description" content="Découvrez les tarifs MyFacture : logiciel simple de devis et facturation pour indépendants et entreprises. 1 mois gratuit, sans engagement.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@700;800&display=swap" rel="stylesheet">
@@ -83,8 +83,10 @@
         }
         .nav a:hover, .nav a.active { color: var(--black); background: var(--white); }
 
-        .header-actions { display: flex; gap: 8px; }
+        .header-actions { display: flex; gap: 16px; align-items: center; }
         .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+        .hdr-link { font-size: 13px; font-weight: 500; color: var(--g500); text-decoration: none; transition: color 0.2s; }
+        .hdr-link:hover { color: var(--black); }
 
         .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
 
@@ -276,20 +278,24 @@
         .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
         .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
         .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
-        .footer-col a:hover { color: var(--g700); }
+        .footer-col a { display: block; font-size: 13px; color: var(--g700); text-decoration: none; margin-bottom: 4px; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--g400); }
         .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
         .footer-copy { font-size: 12px; color: var(--g400); }
 
-        /* MOBILE NAV */
+                /* MOBILE NAV */
         .mnav {
-            display: none; position: fixed; top: 64px; left: 0; right: 0;
-            background: rgba(255,255,255,0.97); backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--g200);
-            padding: 16px 24px; z-index: 99; flex-direction: column; gap: 12px;
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--white);
+            padding: 80px 32px 32px; z-index: 200; flex-direction: column; gap: 8px;
         }
         .mnav.open { display: flex; }
-        .mnav a { font-size: 16px; font-weight: 500; color: var(--g700); text-decoration: none; padding: 10px 0; }
+        .mnav a { font-size: 18px; font-weight: 500; color: var(--black); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--g100); }
+        .mnav a:last-child { border-bottom: none; }
+        .mnav .mnav-close {
+            position: absolute; top: 18px; right: 20px;
+            background: none; border: none; cursor: pointer; padding: 8px; color: var(--black);
+        }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
@@ -301,7 +307,7 @@
             .rea-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
             .ctable { font-size: 13px; }
             .ctable thead th, .ctable tbody td { padding: 10px 12px; }
-                        .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+                        .footer-grid { grid-template-columns: 1fr; gap: 32px; }
             .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
             .hero { padding: 120px 0 12px; }
         }
@@ -315,14 +321,14 @@
         <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
         <nav class="nav">
             <a href="index.html">Accueil</a>
-            <a href="fonctionnalites.html">Fonctionnalites</a>
+            <a href="fonctionnalites.html">Fonctionnalités</a>
             <a href="#" class="active">Tarifs</a>
             <a href="faq.html">FAQ</a>
             <a href="blog.html">Blog</a>
         </nav>
         <div class="header-actions">
-            <a href="#" class="btn btn-o">Se connecter</a>
-            <a href="#" class="btn btn-em">Commencer gratuitement</a>
+            <a href="#" class="hdr-link">Se connecter</a>
+            <a href="#" class="btn btn-em">S'inscrire</a>
         </div>
         <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -331,19 +337,23 @@
 </header>
 
 <nav id="mn" class="mnav">
+    <button class="mnav-close" onclick="document.getElementById('mn').classList.remove('open')" aria-label="Fermer">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l16 16M22 6L6 22"/></svg>
+    </button>
     <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
-    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalites</a>
-    <a href="#" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalités</a>
+    <a href="tarifs.html" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
     <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
     <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
+    <a href="#" style="color:var(--em);font-weight:600;border-bottom:none;margin-top:16px;">Essai gratuit &rarr;</a>
 </nav>
 
 <!-- 1. HERO -->
 <section class="hero">
     <div class="container">
         <span class="tag">Tarifs</span>
-        <h1 class="hero-title">Choisissez la formule adaptee a votre activite</h1>
-        <p class="hero-sub">MyFacture vous accompagne simplement, que vous soyez independant ou en croissance.</p>
+        <h1 class="hero-title">Choisissez la formule adaptee a votre activité</h1>
+        <p class="hero-sub">MyFacture vous accompagne simplement, que vous soyez indépendant ou en croissance.</p>
         <p class="hero-note">
             <svg width="14" height="14" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
             1 mois gratuit &middot; Sans engagement
@@ -370,22 +380,22 @@
                 <div class="pname">Independant</div>
                 <div class="pdesc">Pour demarrer simplement</div>
                 <div class="pprice-wrap">
-                    <div class="pprice"><b id="pi">9</b><span>&euro;/<span id="piPer">mois</span></span></div>
+                    <div class="pprice"><b id="pi">10</b><span>&euro;/<span id="piPer">mois</span></span></div>
                 </div>
                 <div class="pprice-note">1 mois gratuit, sans engagement</div>
                 <ul class="pfeats">
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Devis illimites</li>
-                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Factures illimitees</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Factures illimitées</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Clients illimites</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Paiement en ligne avec Stripe</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>PDF professionnel</li>
-                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Envoi email integre</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Envoi email intégré</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Tableau de bord simple</li>
-                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>1 societe &middot; 1 utilisateur</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>1 société &middot; 1 utilisateur</li>
                 </ul>
                 <a href="#" class="btn btn-o">Commencer gratuitement</a>
                 <p class="pcard-sub">Sans engagement &middot; Resiliation a tout moment</p>
-                <a href="fonctionnalites.html" class="pcard-link">Voir toutes les fonctionnalites &rarr;</a>
+                <a href="fonctionnalites.html" class="pcard-link">Voir toutes les fonctionnalités &rarr;</a>
             </div>
 
             <!-- BUSINESS -->
@@ -398,8 +408,8 @@
                 </div>
                 <div class="pprice-note">1 mois gratuit, sans engagement</div>
                 <ul class="pfeats">
-                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Toutes les fonctionnalites Independant</li>
-                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Societes illimitees</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Toutes les fonctionnalités Independant</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Societes illimitées</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Utilisateurs illimites</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Gestion equipe &amp; roles</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Rapports avances</li>
@@ -407,14 +417,14 @@
                 </ul>
                 <a href="#" class="btn btn-em">Commencer gratuitement</a>
                 <p class="pcard-sub">Sans engagement &middot; Resiliation a tout moment</p>
-                <a href="fonctionnalites.html" class="pcard-link">Voir toutes les fonctionnalites &rarr;</a>
+                <a href="fonctionnalites.html" class="pcard-link">Voir toutes les fonctionnalités &rarr;</a>
             </div>
 
         </div>
 
         <div style="text-align:center;margin-top:28px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:500;color:var(--g500);">
             <svg width="18" height="18" fill="none" stroke="#3B82F6" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            Inclus dans toutes les offres : compatible reforme facturation electronique 2026
+            Inclus dans toutes les offres : compatible réforme facturation électronique 2026
         </div>
 
     </div>
@@ -435,13 +445,13 @@
                 </thead>
                 <tbody>
                     <tr><td>Devis illimites</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
-                    <tr><td>Factures illimitees</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Factures illimitées</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
                     <tr><td>Clients illimites</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
                     <tr><td>Paiement en ligne Stripe</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
                     <tr><td>PDF professionnel</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
-                    <tr><td>Envoi email integre</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Envoi email intégré</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
                     <tr><td>Tableau de bord</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
-                    <tr><td>Societes illimitees</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+                    <tr><td>Societes illimitées</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
                     <tr><td>Utilisateurs illimites</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
                     <tr><td>Gestion equipe &amp; roles</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
                     <tr><td>Rapports avances</td><td class="dash">&mdash;</td><td class="check"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></td></tr>
@@ -459,7 +469,7 @@
             <div class="rea-card">
                 <div class="rea-icon"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg></div>
                 <h3>1 mois gratuit</h3>
-                <p>Testez toutes les fonctionnalites pendant 30 jours.</p>
+                <p>Testez toutes les fonctionnalités pendant 30 jours.</p>
             </div>
             <div class="rea-card">
                 <div class="rea-icon"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
@@ -478,7 +488,7 @@
 <!-- 6. FAQ -->
 <section class="section section-gray" id="faq">
     <div class="container">
-        <h2 style="text-align:center;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-0.03em;margin-bottom:0;">Questions frequentes</h2>
+        <h2 style="text-align:center;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-0.03em;margin-bottom:0;">Questions fréquentes</h2>
         <div class="faqlist">
             <div class="faqitem">
                 <button class="faqq" onclick="tfaq(this)">Puis-je changer d'offre a tout moment ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
@@ -486,11 +496,11 @@
             </div>
             <div class="faqitem">
                 <button class="faqq" onclick="tfaq(this)">Que comprend le mois gratuit ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
-                <div class="faqa"><p>Le mois gratuit inclut l'ensemble des fonctionnalites de l'offre choisie, sans restriction. Aucune carte bancaire n'est requise pour commencer.</p></div>
+                <div class="faqa"><p>Le mois gratuit inclut l'ensemble des fonctionnalités de l'offre choisie, sans restriction. Aucune carte bancaire n'est requise pour commencer.</p></div>
             </div>
             <div class="faqitem">
                 <button class="faqq" onclick="tfaq(this)">Puis-je payer a l'annee ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
-                <div class="faqa"><p>Oui. L'abonnement annuel vous fait economiser 2 mois : 90&euro;/an pour Independant et 190&euro;/an pour Business.</p></div>
+                <div class="faqa"><p>Oui. L'abonnement annuel Business passe à 15&euro;/mois (facturé 180&euro;/an au lieu de 228&euro;). L'offre Indépendant reste à 10&euro;/mois sans réduction.</p></div>
             </div>
             <div class="faqitem">
                 <button class="faqq" onclick="tfaq(this)">Mon abonnement est-il sans engagement ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
@@ -518,13 +528,13 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
-                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+                <p>Le logiciel simple de devis et facturation pour indépendants et PME.</p>
             </div>
             <div class="footer-col">
                 <h4>Produit</h4>
-                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="fonctionnalites.html">Fonctionnalités</a>
                 <a href="tarifs.html">Tarifs</a>
-                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+                <a href="facturation-electronique.html">Facturation électronique 2026</a>
             </div>
             <div class="footer-col">
                 <h4>Ressources</h4>
@@ -536,12 +546,12 @@
                 <h4>Legal</h4>
                 <a href="mentions-legales.html">Mentions legales</a>
                 <a href="cgv.html">CGV</a>
-                <a href="confidentialite.html">Confidentialite</a>
+                <a href="confidentialite.html">Confidentialité</a>
                 <a href="contact.html">Contact</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits réservés.</div>
         </div>
     </div>
 </footer>
@@ -553,11 +563,11 @@ function toggleB() {
     document.getElementById('bt').classList.toggle('on', y);
     document.getElementById('ml').classList.toggle('on', !y);
     document.getElementById('yl').classList.toggle('on', y);
-    document.getElementById('pi').textContent = y ? '108' : '9';
-    document.getElementById('pb').textContent = y ? '190' : '19';
-    document.getElementById('piPer').textContent = y ? 'an' : 'mois';
-    document.getElementById('pbPer').textContent = y ? 'an' : 'mois';
-    document.getElementById('ah').textContent = y ? '\u00c9conomisez 2 mois sur l\u2019offre Business avec l\u2019abonnement annuel' : '';
+    document.getElementById('pi').textContent = '10';
+    document.getElementById('pb').textContent = y ? '15' : '19';
+    document.getElementById('piPer').textContent = 'mois';
+    document.getElementById('pbPer').textContent = 'mois';
+    document.getElementById('ah').textContent = y ? 'Factur\u00e9 180\u20ac/an au lieu de 228\u20ac' : '';
 }
 
 function tfaq(b) {

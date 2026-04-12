@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facturation electronique 2026 : comment MyFacture vous accompagne</title>
-    <meta name="description" content="La reforme de la facturation electronique arrive en 2026. Decouvrez comment MyFacture vous prepare a cette obligation legale avec une solution simple, conforme et pensee pour les independants et PME.">
+    <title>Facturation électronique 2026 : comment MyFacture vous accompagne</title>
+    <meta name="description" content="La réforme de la facturation électronique arrive en 2026. Decouvrez comment MyFacture vous préparé a cette obligation legale avec une solution simple, conforme et pensée pour les indépendants et PME.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@700;800&display=swap" rel="stylesheet">
@@ -80,8 +80,10 @@
         }
         .nav a:hover, .nav a.active { color: var(--black); background: var(--white); }
 
-        .header-actions { display: flex; gap: 8px; }
+        .header-actions { display: flex; gap: 16px; align-items: center; }
         .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+        .hdr-link { font-size: 13px; font-weight: 500; color: var(--g500); text-decoration: none; transition: color 0.2s; }
+        .hdr-link:hover { color: var(--black); }
 
         .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
 
@@ -207,27 +209,31 @@
         .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
         .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
         .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
-        .footer-col a:hover { color: var(--g700); }
+        .footer-col a { display: block; font-size: 13px; color: var(--g700); text-decoration: none; margin-bottom: 4px; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--g400); }
         .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
         .footer-copy { font-size: 12px; color: var(--g400); }
 
-        /* MOBILE NAV */
+                /* MOBILE NAV */
         .mnav {
-            display: none; position: fixed; top: 64px; left: 0; right: 0;
-            background: rgba(255,255,255,0.97); backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--g200);
-            padding: 16px 24px; z-index: 99; flex-direction: column; gap: 12px;
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--white);
+            padding: 80px 32px 32px; z-index: 200; flex-direction: column; gap: 8px;
         }
         .mnav.open { display: flex; }
-        .mnav a { font-size: 16px; font-weight: 500; color: var(--g700); text-decoration: none; padding: 10px 0; }
+        .mnav a { font-size: 18px; font-weight: 500; color: var(--black); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--g100); }
+        .mnav a:last-child { border-bottom: none; }
+        .mnav .mnav-close {
+            position: absolute; top: 18px; right: 20px;
+            background: none; border: none; cursor: pointer; padding: 8px; color: var(--black);
+        }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .nav { display: none; }
             .header-actions { display: none; }
             .mmenu { display: block; }
-                        .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+                        .footer-grid { grid-template-columns: 1fr; gap: 32px; }
             .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
             .hero { padding: 120px 0 40px; }
             .tl-item { flex-direction: column; gap: 8px; }
@@ -244,14 +250,14 @@
         <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
         <nav class="nav">
             <a href="index.html">Accueil</a>
-            <a href="fonctionnalites.html">Fonctionnalites</a>
+            <a href="fonctionnalites.html">Fonctionnalités</a>
             <a href="tarifs.html">Tarifs</a>
             <a href="faq.html">FAQ</a>
             <a href="blog.html">Blog</a>
         </nav>
         <div class="header-actions">
-            <a href="#" class="btn btn-o">Se connecter</a>
-            <a href="#" class="btn btn-em">Commencer gratuitement</a>
+            <a href="#" class="hdr-link">Se connecter</a>
+            <a href="#" class="btn btn-em">S'inscrire</a>
         </div>
         <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -260,19 +266,23 @@
 </header>
 
 <nav id="mn" class="mnav">
+    <button class="mnav-close" onclick="document.getElementById('mn').classList.remove('open')" aria-label="Fermer">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l16 16M22 6L6 22"/></svg>
+    </button>
     <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
-    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalites</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalités</a>
     <a href="tarifs.html" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
     <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
     <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
+    <a href="#" style="color:var(--em);font-weight:600;border-bottom:none;margin-top:16px;">Essai gratuit &rarr;</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
     <div class="container">
-        <span class="tag">Reforme 2026</span>
-        <h1 class="hero-title">Facturation electronique 2026<br><em>MyFacture vous accompagne</em></h1>
-        <p class="hero-sub">La reforme de la facturation electronique entre progressivement en vigueur en France. Decouvrez ce qui change pour vous et comment MyFacture vous prepare des aujourd'hui.</p>
+        <span class="tag">Réforme 2026</span>
+        <h1 class="hero-title">Facturation électronique 2026<br><em>MyFacture vous accompagne</em></h1>
+        <p class="hero-sub">La réforme de la facturation électronique entre progressivement en vigueur en France. Decouvrez ce qui change pour vous et comment MyFacture vous préparé des aujourd'hui.</p>
     </div>
 </section>
 
@@ -281,39 +291,39 @@
     <div class="container">
         <div class="content-inner">
 
-            <h2>Qu'est-ce que la facturation electronique ?</h2>
-            <p>La facturation electronique (ou e-invoicing) consiste a emettre, transmettre et recevoir des factures dans un format structure et dematerialise. Contrairement a une simple facture PDF envoyee par e-mail, la facture electronique transite par une <strong>plateforme de dematerialisation partenaire (PDP)</strong> ou le <strong>portail public de facturation (PPF)</strong> mis en place par l'administration fiscale.</p>
-            <p>Cette reforme vise a moderniser les echanges entre entreprises, lutter contre la fraude a la TVA et simplifier les obligations declaratives. Elle concerne toutes les entreprises assujetties a la TVA en France, quelle que soit leur taille.</p>
+            <h2>Qu'est-ce que la facturation électronique ?</h2>
+            <p>La facturation électronique (ou e-invoicing) consiste a émettre, transmettre et recevoir des factures dans un format structure et dematerialise. Contrairement a une simple facture PDF envoyee par e-mail, la facture électronique transite par une <strong>plateforme de dématérialisation partenaire (PDP)</strong> ou le <strong>portail public de facturation (PPF)</strong> mis en place par l'administration fiscale.</p>
+            <p>Cette réforme vise a moderniser les echanges entre entreprises, lutter contre la fraude à la TVA et simplifiér les obligations declaratives. Elle concerne toutes les entreprises assujetties à la TVA en France, quelle que soit leur taille.</p>
 
-            <h2>Le calendrier de la reforme</h2>
-            <p>Le deploiement de la facturation electronique se fait par etapes selon la taille de l'entreprise :</p>
+            <h2>Le calendrier de la réforme</h2>
+            <p>Le deploiement de la facturation électronique se fait par étapes selon la taille de l'entreprise :</p>
 
             <div class="timeline">
                 <div class="tl-item">
                     <div class="tl-date">1er sept. 2026</div>
                     <div class="tl-content">
                         <h3>Reception obligatoire pour tous</h3>
-                        <p>Toutes les entreprises doivent etre en mesure de recevoir des factures electroniques. L'obligation d'emission s'applique aux grandes entreprises et ETI.</p>
+                        <p>Toutes les entreprises doivent être en mesure de recevoir des factures électroniques. L'obligation d'émission s'applique aux grandes entreprises et ETI.</p>
                     </div>
                 </div>
                 <div class="tl-item">
                     <div class="tl-date">1er sept. 2027</div>
                     <div class="tl-content">
-                        <h3>Emission pour PME et micro-entreprises</h3>
-                        <p>Les PME et micro-entreprises devront a leur tour emettre leurs factures au format electronique via une PDP ou le PPF.</p>
+                        <h3>Émission pour PME et micro-entreprises</h3>
+                        <p>Les PME et micro-entreprises devront à leur tour émettre leurs factures au format électronique via une PDP ou le PPF.</p>
                     </div>
                 </div>
             </div>
 
             <div class="highlight">
-                <p><strong>Pourquoi anticiper ?</strong> Meme si votre echeance est en 2027, la reception sera obligatoire des septembre 2026. Preparer votre outil de facturation des maintenant vous evitera la precipitation et les risques de non-conformite.</p>
+                <p><strong>Pourquoi anticiper ?</strong> Même si votre échéance est en 2027, la reception sera obligatoire des septembre 2026. Préparér votre outil de facturation des maintenant vous eviterà la precipitation et les risques de non-conformité.</p>
             </div>
 
             <h2>Qui est concerne ?</h2>
-            <p>La reforme s'applique a toutes les transactions entre entreprises assujetties a la TVA etablies en France (B2B domestique). Cela inclut les independants, les auto-entrepreneurs, les freelances, les TPE, les PME et les grandes entreprises. Les transactions avec des particuliers (B2C) sont soumises a une obligation de e-reporting, mais pas de e-invoicing.</p>
+            <p>La réforme s'applique à toutes les transactions entre entreprises assujetties à la TVA etablies en France (B2B domestique). Cela inclut les indépendants, les auto-entrepreneurs, les freelances, les TPE, les PME et les grandes entreprises. Les transactions avec des particuliers (B2C) sont soumises a une obligation de e-reporting, mais pas de e-invoicing.</p>
 
-            <h2>Comment MyFacture vous prepare</h2>
-            <p>MyFacture evolue pour integrer les exigences de la facturation electronique directement dans votre workflow quotidien, sans complexite supplementaire.</p>
+            <h2>Comment MyFacture vous préparé</h2>
+            <p>MyFacture evolue pour intégrér les exigences de la facturation électronique directement dans votre workflow quotidien, sans complexité supplementaire.</p>
 
             <div class="checklist">
                 <div class="check-item">
@@ -322,27 +332,27 @@
                 </div>
                 <div class="check-item">
                     <div class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <span><strong>Mentions legales a jour</strong> — SIRET, TVA intracommunautaire, RCS, penalites de retard : toutes les mentions obligatoires sont gerees automatiquement.</span>
+                    <span><strong>Mentions légales a jour</strong> — SIRET, TVA intracommunautaire, RCS, pénalités de retard : toutes les mentions obligatoires sont gérées automatiquement.</span>
                 </div>
                 <div class="check-item">
                     <div class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <span><strong>Se connecter PDP / PPF</strong> — MyFacture se prepare a l'integration avec les plateformes de dematerialisation pour transmettre vos factures en toute conformite.</span>
+                    <span><strong>Se connecter PDP / PPF</strong> — MyFacture se préparé à l'intégration avec les plateformes de dématérialisation pour transmettre vos factures en toute conformité.</span>
                 </div>
                 <div class="check-item">
                     <div class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <span><strong>E-reporting integre</strong> — Pour les transactions B2C ou internationales, MyFacture prevoit la transmission automatique des donnees a l'administration fiscale.</span>
+                    <span><strong>E-reporting intégré</strong> — Pour les transactions B2C ou internationales, MyFacture prevoit la transmission automatique des données à l'administration fiscale.</span>
                 </div>
                 <div class="check-item">
                     <div class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <span><strong>Aucune action requise de votre part</strong> — Les mises a jour liees a la reforme seront deployees automatiquement dans votre compte MyFacture.</span>
+                    <span><strong>Aucune action requise de votre part</strong> — Les mises a jour liees à la réforme seront deployees automatiquement dans votre compte MyFacture.</span>
                 </div>
             </div>
 
             <h2>Pourquoi choisir MyFacture pour la transition</h2>
-            <p>Plutot que de changer d'outil a la derniere minute, adoptez des maintenant une solution qui <strong>anticipe la reforme</strong>. Avec MyFacture, vous facturez aujourd'hui avec un outil simple et moderne, et vous serez pret le jour ou l'obligation entrera en vigueur — sans migration, sans surcharge, sans surprise.</p>
+            <p>Plutôt que de changer d'outil à la derniere minute, adoptez des maintenant une solution qui <strong>anticipe la réforme</strong>. Avec MyFacture, vous facturez aujourd'hui avec un outil simple et moderne, et vous serez pret le jour ou l'obligation entrera en vigueur — sans migration, sans surcharge, sans surprise.</p>
 
             <div class="highlight">
-                <p><strong>Inclus dans toutes les offres.</strong> La compatibilite facturation electronique 2026 est integree a tous les abonnements MyFacture, sans supplement. Independant ou Business, vous serez conforme.</p>
+                <p><strong>Inclus dans toutes les offres.</strong> La compatibilite facturation électronique 2026 est intégrée a tous les abonnements MyFacture, sans supplement. Indépendant ou Business, vous serez conforme.</p>
             </div>
 
         </div>
@@ -352,7 +362,7 @@
 <!-- CTA -->
 <section class="cta">
     <div class="container">
-        <h2>Preparez-vous sereinement a la facturation electronique</h2>
+        <h2>Préparéz-vous sereinement à la facturation électronique</h2>
         <p class="sub">Commencez a facturer avec MyFacture aujourd'hui et soyez pret pour 2026, sans effort supplementaire.</p>
         <a href="#" class="btn btn-em btn-lg">Commencer gratuitement &rarr;</a>
         <p class="cta-note">
@@ -368,13 +378,13 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
-                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+                <p>Le logiciel simple de devis et facturation pour indépendants et PME.</p>
             </div>
             <div class="footer-col">
                 <h4>Produit</h4>
-                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="fonctionnalites.html">Fonctionnalités</a>
                 <a href="tarifs.html">Tarifs</a>
-                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+                <a href="facturation-electronique.html">Facturation électronique 2026</a>
             </div>
             <div class="footer-col">
                 <h4>Ressources</h4>
@@ -384,14 +394,14 @@
             </div>
             <div class="footer-col">
                 <h4>Legal</h4>
-                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="mentions-legales.html">Mentions légales</a>
                 <a href="cgv.html">CGV</a>
-                <a href="confidentialite.html">Confidentialite</a>
+                <a href="confidentialite.html">Confidentialité</a>
                 <a href="contact.html">Contact</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits réservés.</div>
         </div>
     </div>
 </footer>

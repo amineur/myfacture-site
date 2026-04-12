@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facturation electronique obligatoire : quelles obligations en 2026 ?</title>
-    <meta name="description" content="Facturation electronique obligatoire en 2026 : qui est concerne, quel calendrier et comment anticiper. Guide complet pour les entreprises francaises.">
+    <title>Facturation électronique obligatoire : quelles obligations en 2026 ?</title>
+    <meta name="description" content="Facturation électronique obligatoire en 2026 : qui est concerne, quel calendrier et comment anticiper. Guide complet pour les entreprises francaises.">
     <style>
         :root {
             --em: #3B82F6;
@@ -33,86 +33,50 @@
             line-height: 1.6;
         }
 
-        /* Header */
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+        /* HEADER */
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--g100);
         }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; position: relative; }
 
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .logo { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 700; color: var(--black); text-decoration: none; letter-spacing: -0.03em; font-family: 'DM Sans', sans-serif; }
+        .logo-icon { width: 30px; height: 30px; flex-shrink: 0; }
+
+        .nav {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 6px;
+            background: var(--g50); border-radius: 10px; padding: 4px;
         }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 700;
-            font-size: 18px;
-            color: var(--black);
+        .nav a {
+            font-size: 13px; font-weight: 500; color: var(--g500);
+            text-decoration: none; transition: all 0.2s;
+            padding: 7px 16px; border-radius: 8px;
         }
+        .nav a:hover { color: var(--black); background: var(--white); }
 
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-        }
+        .header-actions { display: flex; gap: 16px; align-items: center; }
+        .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+        .hdr-link { font-size: 13px; font-weight: 500; color: var(--g500); text-decoration: none; transition: color 0.2s; }
+        .hdr-link:hover { color: var(--black); }
 
-        nav {
-            display: flex;
-            justify-content: center;
+        .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
+
+                /* MOBILE NAV */
+        .mnav {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: var(--white);
-            border: 1px solid var(--g200);
-            border-radius: 24px;
-            padding: 8px;
+            padding: 80px 32px 32px; z-index: 200; flex-direction: column; gap: 8px;
         }
-
-        nav a {
-            padding: 8px 16px;
-            margin: 0 4px;
-            text-decoration: none;
-            color: var(--g700);
-            font-size: 14px;
-            border-radius: 20px;
-            transition: all 0.2s ease;
-        }
-
-        nav a:hover {
-            background: var(--em-50);
-            color: var(--em);
-        }
-
-        .hamburger {
-            display: none;
-            width: 24px;
-            height: 24px;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            width: 100%;
-            height: 2px;
-            background: var(--black);
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
+        .mnav.open { display: flex; }
+        .mnav a { font-size: 18px; font-weight: 500; color: var(--black); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--g100); }
+        .mnav a:last-child { border-bottom: none; }
+        .mnav .mnav-close {
+            position: absolute; top: 18px; right: 20px;
+            background: none; border: none; cursor: pointer; padding: 8px; color: var(--black);
         }
 
         .btn {
@@ -243,7 +207,7 @@
             line-height: 1.6;
         }
 
-        /* Decouvrez aussi */
+        /* Découvrez aussi */
         .related-articles {
             max-width: 720px;
             margin: 60px auto 40px;
@@ -354,70 +318,86 @@
         .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
         .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
         .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
-        .footer-col a:hover { color: var(--g700); }
+        .footer-col a { display: block; font-size: 13px; color: var(--g700); text-decoration: none; margin-bottom: 4px; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--g400); }
         .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
         .footer-copy { font-size: 12px; color: var(--g400); }
 
         @media (max-width: 768px) {
-            .header-actions {
-                display: none;
-            }
+            .nav { display: none; }
+            .header-actions { display: none; }
+            .mmenu { display: block; }
+            .hero { padding-top: 80px; padding-bottom: 32px; }
+            .hero h1, h1 { font-size: 28px !important; line-height: 1.2; }
+            .hero p, .subtitle { font-size: 15px !important; }
+
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <div class="header-container">
-            <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
-            <nav>
-                <a href="index.html">Accueil</a>
-            <a href="fonctionnalites.html">Fonctionnalites</a>
-                <a href="tarifs.html">Tarifs</a>
-                <a href="faq.html">FAQ</a>
-                <a href="blog.html">Blog</a>
-            </nav>
-            <div class="header-actions">
-                <a href="#" class="btn btn-o">Se connecter</a>
-                <a href="#" class="btn btn-em">Commencer gratuitement</a>
-            </div>
-            <button class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+    <!-- HEADER -->
+<header class="header">
+    <div class="container header-inner">
+        <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
+        <nav class="nav">
+            <a href="index.html">Accueil</a>
+            <a href="fonctionnalites.html">Fonctionnalités</a>
+            <a href="tarifs.html">Tarifs</a>
+            <a href="faq.html">FAQ</a>
+            <a href="blog.html">Blog</a>
+        </nav>
+        <div class="header-actions">
+            <a href="#" class="hdr-link">Se connecter</a>
+            <a href="#" class="btn btn-em">S'inscrire</a>
         </div>
-    </header>
+        <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+    </div>
+</header>
+
+<nav id="mn" class="mnav">
+    <button class="mnav-close" onclick="document.getElementById('mn').classList.remove('open')" aria-label="Fermer">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l16 16M22 6L6 22"/></svg>
+    </button>
+    <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalités</a>
+    <a href="tarifs.html" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
+    <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
+    <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
+    <a href="#" style="color:var(--em);font-weight:600;border-bottom:none;margin-top:16px;">Essai gratuit &rarr;</a>
+</nav>
 
     <!-- Hero Section -->
     <section class="hero">
-        <span class="hero-tag">Reforme 2026</span>
-        <h1>Facturation electronique obligatoire : quelles obligations en 2026 ?</h1>
-        <p>La reforme de la facturation electronique devient une priorite pour toutes les entreprises.</p>
+        <span class="hero-tag">Réforme 2026</span>
+        <h1>Facturation électronique obligatoire : quelles obligations en 2026 ?</h1>
+        <p>La réforme de la facturation électronique devient une priorite pour toutes les entreprises.</p>
     </section>
 
     <!-- Article Content -->
     <article class="article-content">
         <h2>Qui est concerne</h2>
-        <p>Les entreprises soumises a la TVA devront progressivement s'adapter. Cela inclut les independants, auto-entrepreneurs, TPE, PME et grandes entreprises pour les transactions B2B domestiques.</p>
+        <p>Les entreprises soumises a la TVA devront progressivement s'adapter. Cela inclut les indépendants, auto-entrepreneurs, TPE, PME et grandes entreprises pour les transactions B2B domestiques.</p>
 
         <h2>Pourquoi anticiper maintenant</h2>
-        <p>Les logiciels utilises aujourd'hui doivent deja evoluer. La reception sera obligatoire des septembre 2026 et l'emission suivra en 2027 pour les PME.</p>
+        <p>Les logiciels utilises aujourd'hui doivent déjà evoluer. La reception sera obligatoire des septembre 2026 et l'emission suivra en 2027 pour les PME.</p>
 
-        <h2>MyFacture se prepare a cette evolution</h2>
+        <h2>MyFacture se préparé a cette évolution</h2>
         <p>MyFacture accompagne les professionnels avec une solution pensee pour durer. La compatibilite est incluse dans toutes les offres, sans supplement.</p>
     </article>
 
-    <!-- Decouvrez aussi -->
+    <!-- Découvrez aussi -->
     <section class="related-articles">
-        <h3>Decouvrez aussi</h3>
+        <h3>Découvrez aussi</h3>
         <ul class="related-list">
             <li><a href="blog-facturation-electronique-2026.html">
                 <svg class="arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3 8h10M11 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                Facturation electronique 2026
+                Facturation électronique 2026
             </a></li>
             <li><a href="blog-facture-conforme-france.html">
                 <svg class="arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -437,11 +417,11 @@
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="cta-content">
-            <h2>Pret a simplifier votre facturation ?</h2>
+            <h2>Pret a simplifiér votre facturation ?</h2>
             <button class="cta-button">Commencer gratuitement</button>
             <div class="cta-links">
                 <a href="tarifs.html">Voir les tarifs</a>
-                <a href="fonctionnalites.html">Decouvrir les fonctionnalites</a>
+                <a href="fonctionnalites.html">Decouvrir les fonctionnalités</a>
             </div>
         </div>
     </section>
@@ -452,13 +432,13 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
-                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+                <p>Le logiciel simple de devis et facturation pour indépendants et PME.</p>
             </div>
             <div class="footer-col">
                 <h4>Produit</h4>
-                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="fonctionnalites.html">Fonctionnalités</a>
                 <a href="tarifs.html">Tarifs</a>
-                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+                <a href="facturation-electronique.html">Facturation électronique 2026</a>
             </div>
             <div class="footer-col">
                 <h4>Ressources</h4>
@@ -468,14 +448,14 @@
             </div>
             <div class="footer-col">
                 <h4>Legal</h4>
-                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="mentions-legales.html">Mentions légales</a>
                 <a href="cgv.html">CGV</a>
-                <a href="confidentialite.html">Confidentialite</a>
+                <a href="confidentialite.html">Confidentialité</a>
                 <a href="contact.html">Contact</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits réservés.</div>
         </div>
     </div>
 </footer>

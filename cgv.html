@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conditions Generales de Vente — MyFacture</title>
-    <meta name="description" content="Conditions Generales de Vente de MyFacture. Abonnements, paiement, resiliation, responsabilite et droit applicable.">
+    <title>Conditions Générales de Vente — MyFacture</title>
+    <meta name="description" content="Conditions Générales de Vente de MyFacture. Abonnements, paiement, résiliation, responsabilité et droit applicable.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@700;800&display=swap" rel="stylesheet">
@@ -31,8 +31,10 @@
         .nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; background: var(--g50); border-radius: 10px; padding: 4px; }
         .nav a { font-size: 13px; font-weight: 500; color: var(--g500); text-decoration: none; transition: all 0.2s; padding: 7px 16px; border-radius: 8px; }
         .nav a:hover, .nav a.active { color: var(--black); background: var(--white); }
-        .header-actions { display: flex; gap: 8px; }
+        .header-actions { display: flex; gap: 16px; align-items: center; }
         .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+        .hdr-link { font-size: 13px; font-weight: 500; color: var(--g500); text-decoration: none; transition: color 0.2s; }
+        .hdr-link:hover { color: var(--black); }
         .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
 
         .hero { padding: 140px 0 40px; text-align: center; }
@@ -53,20 +55,30 @@
         .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
         .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
         .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
-        .footer-col a:hover { color: var(--g700); }
+        .footer-col a { display: block; font-size: 13px; color: var(--g700); text-decoration: none; margin-bottom: 4px; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--g400); }
         .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
         .footer-copy { font-size: 12px; color: var(--g400); }
 
-        .mnav { display: none; position: fixed; top: 64px; left: 0; right: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(16px); border-bottom: 1px solid var(--g200); padding: 16px 24px; z-index: 99; flex-direction: column; gap: 12px; }
+                /* MOBILE NAV */
+        .mnav {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--white);
+            padding: 80px 32px 32px; z-index: 200; flex-direction: column; gap: 8px;
+        }
         .mnav.open { display: flex; }
-        .mnav a { font-size: 16px; font-weight: 500; color: var(--g700); text-decoration: none; padding: 10px 0; }
+        .mnav a { font-size: 18px; font-weight: 500; color: var(--black); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--g100); }
+        .mnav a:last-child { border-bottom: none; }
+        .mnav .mnav-close {
+            position: absolute; top: 18px; right: 20px;
+            background: none; border: none; cursor: pointer; padding: 8px; color: var(--black);
+        }
 
         @media (max-width: 768px) {
             .nav { display: none; }
             .header-actions { display: none; }
             .mmenu { display: block; }
-                        .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+                        .footer-grid { grid-template-columns: 1fr; gap: 32px; }
             .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
             .hero { padding: 120px 0 32px; }
         }
@@ -79,14 +91,14 @@
         <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
         <nav class="nav">
             <a href="index.html">Accueil</a>
-            <a href="fonctionnalites.html">Fonctionnalites</a>
+            <a href="fonctionnalites.html">Fonctionnalités</a>
             <a href="tarifs.html">Tarifs</a>
             <a href="faq.html">FAQ</a>
             <a href="blog.html">Blog</a>
         </nav>
         <div class="header-actions">
-            <a href="#" class="btn btn-o">Se connecter</a>
-            <a href="#" class="btn btn-em">Commencer gratuitement</a>
+            <a href="#" class="hdr-link">Se connecter</a>
+            <a href="#" class="btn btn-em">S'inscrire</a>
         </div>
         <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -94,16 +106,20 @@
     </div>
 </header>
 <nav id="mn" class="mnav">
+    <button class="mnav-close" onclick="document.getElementById('mn').classList.remove('open')" aria-label="Fermer">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l16 16M22 6L6 22"/></svg>
+    </button>
     <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
-    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalites</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalités</a>
     <a href="tarifs.html" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
     <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
     <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
+    <a href="#" style="color:var(--em);font-weight:600;border-bottom:none;margin-top:16px;">Essai gratuit &rarr;</a>
 </nav>
 
 <section class="hero">
     <div class="container">
-        <h1 class="hero-title">Conditions Generales de Vente</h1>
+        <h1 class="hero-title">Conditions Générales de Vente</h1>
     </div>
 </section>
 
@@ -112,57 +128,57 @@
         <div class="legal-inner">
 
             <h2>1. Objet</h2>
-            <p>Les presentes Conditions Generales de Vente ont pour objet de definir les conditions dans lesquelles MyFacture met a disposition un service en ligne de gestion de devis, facturation, paiement et suivi administratif accessible par abonnement.</p>
+            <p>Les présentés Conditions Générales de Vente ont pour objet de définir les conditions dans lesquelles MyFacture met à disposition un service en ligne de gestion de devis, facturation, paiement et suivi administratif accessible par abonnement.</p>
 
             <h2>2. Presentation du service</h2>
-            <p>MyFacture est une solution SaaS permettant notamment la creation et l'edition de devis et factures, la gestion des clients, le paiement en ligne, l'envoi de documents par email, le suivi d'activite et la gestion multi-societe selon la formule souscrite.</p>
-            <p>Les fonctionnalites accessibles dependent de l'abonnement choisi.</p>
+            <p>MyFacture est une solution SaaS permettant notamment la création et l'édition de devis et factures, la gestion des clients, le paiement en ligne, l'envoi de documents par email, le suivi d'activité et la gestion multi-société selon la formule souscrite.</p>
+            <p>Les fonctionnalités accessibles dépendent de l'abonnement choisi.</p>
 
             <h2>3. Abonnements</h2>
             <p>Deux formules sont proposees :</p>
             <div class="legal-info">
-                <p><strong>Offre Independant</strong> — 1 societe, 1 utilisateur</p>
-                <p><strong>Offre Business</strong> — societes illimitees, utilisateurs illimites</p>
+                <p><strong>Offre Indépendant</strong> — 1 société, 1 utilisateur</p>
+                <p><strong>Offre Business</strong> — sociétés illimitées, utilisateurs illimités</p>
             </div>
             <p>Les tarifs applicables sont ceux affiches sur le site au moment de la souscription.</p>
 
-            <h2>4. Periode d'essai gratuite</h2>
-            <p>Tout nouvel utilisateur beneficie d'un mois gratuit permettant de decouvrir les fonctionnalites de MyFacture sans engagement.</p>
-            <p>A l'issue de cette periode, l'abonnement devient payant si l'utilisateur choisit de poursuivre l'utilisation du service.</p>
+            <h2>4. Période d'essai gratuite</h2>
+            <p>Tout nouvel utilisateur bénéficie d'un mois gratuit permettant de découvrir les fonctionnalités de MyFacture sans engagement.</p>
+            <p>A l'issue de cette période, l'abonnement devient payant si l'utilisateur choisit de poursuivre l'utilisation du service.</p>
 
             <h2>5. Paiement</h2>
-            <p>Le paiement des abonnements s'effectue en ligne via Stripe. L'utilisateur peut choisir un paiement mensuel ou un paiement annuel. L'abonnement annuel beneficie d'un avantage tarifaire.</p>
+            <p>Le paiement des abonnements s'effectué en ligne vià Stripe. L'utilisateur peut choisir un paiement mensuel ou un paiement annuel. L'abonnement annuel bénéficie d'un avantage tarifaire.</p>
 
             <h2>6. Renouvellement</h2>
-            <p>Les abonnements sont renouveles automatiquement a leur echeance, sauf resiliation avant la date de renouvellement.</p>
+            <p>Les abonnements sont renouvelés automatiquement à leur échéance, sauf résiliation avant la date de renouvellement.</p>
 
-            <h2>7. Resiliation</h2>
-            <p>L'utilisateur peut resilier son abonnement a tout moment depuis son espace personnel. La resiliation prend effet a la fin de la periode deja payee. Aucun remboursement partiel n'est effectue pour une periode en cours.</p>
+            <h2>7. Résiliation</h2>
+            <p>L'utilisateur peut résilier son abonnement à tout moment depuis son espace personnel. La résiliation prend effet à la fin de la période déjà payée. Aucun remboursement partiel n'est effectué pour une période en cours.</p>
 
-            <h2>8. Acces au service</h2>
-            <p>MyFacture s'efforce d'assurer un acces continu au service. Des interruptions temporaires peuvent intervenir notamment pour maintenance, mise a jour ou evolution technique.</p>
+            <h2>8. Accès au service</h2>
+            <p>MyFacture s'efforce d'assurer un accès continu au service. Des interruptions temporaires peuvent intervenir notamment pour maintenance, mise a jour ou évolution technique.</p>
 
-            <h2>9. Responsabilite</h2>
-            <p>MyFacture met a disposition un outil de gestion. L'utilisateur reste seul responsable des informations saisies, des documents generes et de ses obligations fiscales, comptables et legales. MyFacture ne remplace pas un expert-comptable ou un conseil juridique.</p>
+            <h2>9. Responsabilité</h2>
+            <p>MyFacture met à disposition un outil de gestion. L'utilisateur reste seul responsable des informations saisies, des documents générés et de ses obligations fiscales, comptables et légales. MyFacture ne remplace pas un expert-comptable ou un conseil juridique.</p>
 
             <h2>10. Paiement en ligne</h2>
-            <p>Les paiements realises par les clients de l'utilisateur via Stripe sont soumis aux conditions propres a Stripe. MyFacture ne conserve aucune donnee bancaire.</p>
+            <p>Les paiements réalisés par les clients de l'utilisateur vià Stripe sont soumis aux conditions propres à Stripe. MyFacture ne conserve aucune donnée bancaire.</p>
 
-            <h2>11. Donnees utilisateur</h2>
-            <p>Les donnees saisies dans MyFacture restent la propriete exclusive de l'utilisateur. MyFacture met en oeuvre des mesures raisonnables de securite afin de proteger les donnees.</p>
+            <h2>11. Données utilisateur</h2>
+            <p>Les données saisies dans MyFacture restent la propriété exclusive de l'utilisateur. MyFacture met en œuvre des mesures raisonnables de sécurité afin de protéger les données.</p>
 
-            <h2>12. Evolution du service</h2>
-            <p>MyFacture peut faire evoluer ses fonctionnalites afin d'ameliorer le service propose.</p>
+            <h2>12. Évolution du service</h2>
+            <p>MyFacture peut faire évoluer ses fonctionnalités afin d'améliorer le service propose.</p>
 
             <h2>13. Modification des tarifs</h2>
-            <p>Les tarifs peuvent etre modifies a tout moment. Toute modification est communiquee avant son application.</p>
+            <p>Les tarifs peuvent être modifiés à tout moment. Toute modification est communiquée avant son application.</p>
 
             <h2>14. Droit applicable</h2>
-            <p>Les presentes Conditions Generales de Vente sont soumises au droit francais. Tout litige releve des juridictions francaises competentes.</p>
+            <p>Les présentés Conditions Générales de Vente sont soumises au droit français. Tout litige releve des juridictions françaises competentes.</p>
 
-            <h2>15. Coordonnees de l'editeur</h2>
+            <h2>15. Coordonnées de l'éditeur</h2>
             <div class="legal-info">
-                <p><strong>Societe :</strong> UrbanGlobal</p>
+                <p><strong>Société :</strong> UrbanGlobal</p>
                 <p><strong>Adresse :</strong> 92 rue des Chantiers, 78000 Versailles</p>
                 <p><strong>Email :</strong> <a href="mailto:support@myfacture.fr">support@myfacture.fr</a></p>
                 <p><strong>SIRET :</strong> 87831724700012</p>
@@ -177,13 +193,13 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
-                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+                <p>Le logiciel simple de devis et facturation pour indépendants et PME.</p>
             </div>
             <div class="footer-col">
                 <h4>Produit</h4>
-                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="fonctionnalites.html">Fonctionnalités</a>
                 <a href="tarifs.html">Tarifs</a>
-                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+                <a href="facturation-electronique.html">Facturation électronique 2026</a>
             </div>
             <div class="footer-col">
                 <h4>Ressources</h4>
@@ -193,14 +209,14 @@
             </div>
             <div class="footer-col">
                 <h4>Legal</h4>
-                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="mentions-legales.html">Mentions légales</a>
                 <a href="cgv.html">CGV</a>
-                <a href="confidentialite.html">Confidentialite</a>
+                <a href="confidentialite.html">Confidentialité</a>
                 <a href="contact.html">Contact</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits réservés.</div>
         </div>
     </div>
 </footer>

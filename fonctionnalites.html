@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fonctionnalites — MyFacture</title>
-    <meta name="description" content="Decouvrez toutes les fonctionnalites de MyFacture : facturation, devis, paiement en ligne, PDF, gestion clients et plus.">
+    <title>Fonctionnalités — MyFacture</title>
+    <meta name="description" content="Découvrez toutes les fonctionnalités de MyFacture : facturation, devis, paiement en ligne, PDF, gestion clients et plus.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@700;800&display=swap" rel="stylesheet">
@@ -81,8 +81,10 @@
         }
         .nav a:hover, .nav a.active { color: var(--black); background: var(--white); }
 
-        .header-actions { display: flex; gap: 8px; }
+        .header-actions { display: flex; gap: 16px; align-items: center; }
         .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+        .hdr-link { font-size: 13px; font-weight: 500; color: var(--g500); text-decoration: none; transition: color 0.2s; }
+        .hdr-link:hover { color: var(--black); }
 
         .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
 
@@ -125,10 +127,6 @@
 
         .feat-text { }
 
-        .feat-num {
-            font-size: 13px; font-weight: 700; color: var(--em);
-            margin-bottom: 8px; letter-spacing: 0.02em;
-        }
 
         .feat-title {
             font-size: clamp(22px, 3vw, 30px); font-weight: 800;
@@ -180,20 +178,24 @@
         .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
         .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
         .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
-        .footer-col a:hover { color: var(--g700); }
+        .footer-col a { display: block; font-size: 13px; color: var(--g700); text-decoration: none; margin-bottom: 4px; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--g400); }
         .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
         .footer-copy { font-size: 12px; color: var(--g400); }
 
-        /* MOBILE NAV */
+                /* MOBILE NAV */
         .mnav {
-            display: none; position: fixed; top: 64px; left: 0; right: 0;
-            background: rgba(255,255,255,0.97); backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--g200);
-            padding: 16px 24px; z-index: 99; flex-direction: column; gap: 12px;
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--white);
+            padding: 80px 32px 32px; z-index: 200; flex-direction: column; gap: 8px;
         }
         .mnav.open { display: flex; }
-        .mnav a { font-size: 16px; font-weight: 500; color: var(--g700); text-decoration: none; padding: 10px 0; }
+        .mnav a { font-size: 18px; font-weight: 500; color: var(--black); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--g100); }
+        .mnav a:last-child { border-bottom: none; }
+        .mnav .mnav-close {
+            position: absolute; top: 18px; right: 20px;
+            background: none; border: none; cursor: pointer; padding: 8px; color: var(--black);
+        }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
@@ -203,7 +205,7 @@
             .feat-inner { grid-template-columns: 1fr; gap: 32px; }
             .feat:nth-child(even) .feat-inner { direction: ltr; }
             .feat-visual { width: 100%; }
-            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
             .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
         }
     </style>
@@ -216,14 +218,14 @@
         <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
         <nav class="nav">
             <a href="index.html">Accueil</a>
-            <a href="#" class="active">Fonctionnalites</a>
+            <a href="#" class="active">Fonctionnalités</a>
             <a href="tarifs.html">Tarifs</a>
             <a href="faq.html">FAQ</a>
             <a href="blog.html">Blog</a>
         </nav>
         <div class="header-actions">
-            <a href="#" class="btn btn-o">Se connecter</a>
-            <a href="#" class="btn btn-em">Commencer gratuitement</a>
+            <a href="#" class="hdr-link">Se connecter</a>
+            <a href="#" class="btn btn-em">S'inscrire</a>
         </div>
         <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -232,19 +234,23 @@
 </header>
 
 <nav id="mn" class="mnav">
+    <button class="mnav-close" onclick="document.getElementById('mn').classList.remove('open')" aria-label="Fermer">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l16 16M22 6L6 22"/></svg>
+    </button>
     <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
-    <a href="#" onclick="this.parentElement.classList.remove('open')">Fonctionnalites</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalités</a>
     <a href="tarifs.html" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
     <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
     <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
+    <a href="#" style="color:var(--em);font-weight:600;border-bottom:none;margin-top:16px;">Essai gratuit &rarr;</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
     <div class="container">
-        <span class="tag">Fonctionnalites</span>
+        <span class="tag">Fonctionnalités</span>
         <h1 class="hero-title">Tout ce dont vous avez <em>besoin</em></h1>
-        <p class="hero-sub">14 fonctionnalites pensees pour simplifier votre quotidien d'independant.</p>
+        <p class="hero-sub">Des fonctionnalités pensées pour simplifier votre quotidien d'indépendant.</p>
     </div>
 </section>
 
@@ -253,11 +259,10 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">01</div>
                 <h2 class="feat-title">Facturez simplement avec toutes les options essentielles</h2>
                 <ul class="feat-list">
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Creation et edition de factures</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Numerotation automatique personnalisable</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Création et édition de factures</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Numérotation automatique personnalisable</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Acomptes et paiements partiels</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Remises et TVA par ligne</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Statuts, verrouillage et conditions de paiement</li>
@@ -275,11 +280,10 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">02</div>
-                <h2 class="feat-title">Creez vos devis et transformez-les en facture en un clic</h2>
+                <h2 class="feat-title">Créez vos devis et transformez-les en facture en un clic</h2>
                 <ul class="feat-list">
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Creation de devis rapide</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Date de validite</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Création de devis rapide</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Date de validité</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Statuts devis</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Conversion devis → facture</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Suivi simple</li>
@@ -297,12 +301,11 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">03</div>
                 <h2 class="feat-title">Recevez vos paiements plus rapidement</h2>
                 <ul class="feat-list">
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Se connecter avec Stripe</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Lien de paiement integre</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Mise a jour automatique du statut</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Lien de paiement intégré</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Mise à jour automatique du statut</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Synchronisation paiement</li>
                 </ul>
             </div>
@@ -318,13 +321,12 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">04</div>
-                <h2 class="feat-title">Des documents professionnels prets a envoyer</h2>
+                <h2 class="feat-title">Des documents professionnels prêts à envoyer</h2>
                 <ul class="feat-list">
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>PDF au design epure</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>PDF au design épuré</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Logo configurable</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Colonnes personnalisables</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>CGV integrees et bon pour accord</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>CGV intégrées et bon pour accord</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Filigrane automatique</li>
                 </ul>
             </div>
@@ -340,13 +342,12 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">05</div>
-                <h2 class="feat-title">Vos clients organises automatiquement</h2>
+                <h2 class="feat-title">Vos clients organisés automatiquement</h2>
                 <ul class="feat-list">
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Fiche client entreprise / particulier</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Recherche SIRET automatique</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Auto-remplissage officiel</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Detection doublons</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Détection doublons</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Historique client complet</li>
                 </ul>
             </div>
@@ -362,12 +363,11 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">06</div>
-                <h2 class="feat-title">Preparez vos devis et factures encore plus vite</h2>
+                <h2 class="feat-title">Préparez vos devis et factures encore plus vite</h2>
                 <ul class="feat-list">
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Fiches produit detaillees</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>TVA par defaut et unite</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Selection rapide</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Fiches produit détaillées</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>TVA par défaut et unité</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Sélection rapide</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Suivi des ventes</li>
                 </ul>
             </div>
@@ -383,14 +383,13 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">07</div>
                 <h2 class="feat-title">Envoyez vos documents sans quitter MyFacture</h2>
                 <ul class="feat-list">
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Envoi depuis l'application</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Templates personnalisables</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Gmail OAuth et SMTP personnalise</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Gmail OAuth et SMTP personnalisé</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Historique des emails</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Envoi programme</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Envoi programmé</li>
                 </ul>
             </div>
             <div class="feat-visual">
@@ -405,13 +404,12 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">08</div>
-                <h2 class="feat-title">Suivez votre activite en un coup d'oeil</h2>
+                <h2 class="feat-title">Suivez votre activité en un coup d'œil</h2>
                 <ul class="feat-list">
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Chiffre d'affaires en temps reel</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Chiffre d'affaires en temps réel</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Paiements en attente</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Devis et clients actifs</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Graphiques d'activite</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Graphiques d'activité</li>
                 </ul>
             </div>
             <div class="feat-visual">
@@ -426,13 +424,12 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">09</div>
                 <h2 class="feat-title">Analysez vos performances facilement</h2>
                 <ul class="feat-list">
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Evolution des ventes</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Évolution des ventes</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Top clients et top produits</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Meilleurs mois</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Filtres par periode</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Filtres par période</li>
                 </ul>
             </div>
             <div class="feat-visual">
@@ -447,12 +444,11 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">10</div>
-                <h2 class="feat-title">Pense pour les structures qui grandissent</h2>
+                <h2 class="feat-title">Pensé pour les structures qui grandissent</h2>
                 <ul class="feat-list">
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Plusieurs societes</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Basculement instantane</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Roles utilisateurs et gestion equipe</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Plusieurs sociétés</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Basculement instantané</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Rôles utilisateurs et gestion équipe</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Invitations membres</li>
                 </ul>
             </div>
@@ -468,13 +464,12 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">11</div>
-                <h2 class="feat-title">Gardez le controle sur toutes les actions</h2>
+                <h2 class="feat-title">Gardez le contrôle sur toutes les actions</h2>
                 <ul class="feat-list">
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Journal complet</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Suivi des modifications</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Filtrage par utilisateur</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Horodatage precis</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Horodatage précis</li>
                 </ul>
             </div>
             <div class="feat-visual">
@@ -484,20 +479,19 @@
     </div>
 </section>
 
-<!-- 12. CONFORMITE & FACTURATION ELECTRONIQUE -->
+<!-- 12. CONFORMITÉ & FACTURATION ÉLECTRONIQUE -->
 <section class="feat">
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">12</div>
-                <h2 class="feat-title">Facturation electronique &amp; conformite francaise</h2>
+                <h2 class="feat-title">Facturation électronique &amp; conformité française</h2>
                 <ul class="feat-list">
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Compatible avec la reforme francaise 2026</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Transmission simplifiee</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Conformite future assuree</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Solution evolutive</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Mentions legales, TVA intra, RCS, article 293 B</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Penalites de retard integrees</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Compatible avec la réforme française 2026</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Transmission simplifiée</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Conformité future assurée</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Solution évolutive</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Mentions légales, TVA intra, RCS, article 293 B</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Pénalités de retard intégrées</li>
                 </ul>
             </div>
             <div class="feat-visual">
@@ -512,13 +506,12 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">13</div>
-                <h2 class="feat-title">Commencez rapidement avec vos donnees existantes</h2>
+                <h2 class="feat-title">Commencez rapidement avec vos données existantes</h2>
                 <ul class="feat-list">
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Import CSV</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Validation colonnes</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Detection doublons</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Assistant creation societe</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Détection doublons</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Assistant création société</li>
                 </ul>
             </div>
             <div class="feat-visual">
@@ -533,13 +526,12 @@
     <div class="container">
         <div class="feat-inner">
             <div class="feat-text">
-                <div class="feat-num">14</div>
                 <h2 class="feat-title">Travaillez partout, sur tous vos appareils</h2>
                 <ul class="feat-list">
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Mobile</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Tablette</li>
                     <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Desktop</li>
-                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Navigation optimisee</li>
+                    <li><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Navigation optimisée</li>
                 </ul>
             </div>
             <div class="feat-visual">
@@ -552,7 +544,7 @@
 <!-- CTA -->
 <section class="cta">
     <div class="container">
-        <h2>Toutes les fonctionnalites pour gerer votre activite sans complexite</h2>
+        <h2>Toutes les fonctionnalités pour gérer votre activité sans complexité</h2>
         <p></p>
         <a href="#" class="btn btn-em btn-lg">Commencer gratuitement &rarr;</a>
         <p class="cta-note">
@@ -572,9 +564,9 @@
             </div>
             <div class="footer-col">
                 <h4>Produit</h4>
-                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="fonctionnalites.html">Fonctionnalités</a>
                 <a href="tarifs.html">Tarifs</a>
-                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+                <a href="facturation-electronique.html">Facturation électronique 2026</a>
             </div>
             <div class="footer-col">
                 <h4>Ressources</h4>
@@ -584,9 +576,9 @@
             </div>
             <div class="footer-col">
                 <h4>Legal</h4>
-                <a href="mentions-legales.html">Mentions legales</a>
+                <a href="mentions-legales.html">Mentions légales</a>
                 <a href="cgv.html">CGV</a>
-                <a href="confidentialite.html">Confidentialite</a>
+                <a href="confidentialite.html">Confidentialité</a>
                 <a href="contact.html">Contact</a>
             </div>
         </div>

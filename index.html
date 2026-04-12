@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyFacture — Facturation simple et rapide</title>
-    <meta name="description" content="Creez, envoyez et suivez vos factures en quelques clics. Solution francaise conforme.">
+    <meta name="description" content="Créez, envoyez et suivez vos factures en quelques clics. Solution francaise conforme.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@700;800&display=swap" rel="stylesheet">
@@ -103,8 +103,10 @@
         }
         .nav a:hover { color: var(--black); background: var(--white); }
 
-        .header-actions { display: flex; gap: 8px; }
+        .header-actions { display: flex; gap: 16px; align-items: center; }
         .header-actions .btn { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+        .hdr-link { font-size: 13px; font-weight: 500; color: var(--g500); text-decoration: none; transition: color 0.2s; }
+        .hdr-link:hover { color: var(--black); }
 
         .mmenu { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--black); }
 
@@ -209,7 +211,8 @@
         .pprice b { font-size: 44px; font-weight: 900; letter-spacing: -0.04em; }
         .pcard.pop .pprice b { color: var(--em-dark); }
         .pprice span { font-size: 15px; color: var(--g500); }
-        .pannual { font-size: 13px; color: var(--g400); margin-bottom: 20px; min-height: 18px; }
+        .pannual { font-size: 13px; color: var(--g400); margin-bottom: 20px; }
+        .pannual:empty { display: none; }
 
         .pfeats { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px; }
         .pfeats li { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--g700); }
@@ -290,12 +293,12 @@
         .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
         .footer-brand p { font-size: 13px; color: var(--g400); line-height: 1.7; margin-top: 12px; }
         .footer-col h4 { font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 10px; }
+        .footer-col a { display: block; font-size: 13px; color: var(--g400); text-decoration: none; margin-bottom: 4px; }
         .footer-col a:hover { color: var(--g700); }
         .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--g100); }
         .footer-copy { font-size: 12px; color: var(--g400); }
 
-        /* TRUST BLOCKS (expert-comptable + securite) */
+        /* TRUST BLOCKS (expert-comptable + sécurité) */
         .trust-blocks { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 800px; margin: 0 auto; }
         .trust-block { background: var(--g50); border: 1px solid var(--g100); border-radius: 14px; padding: 32px; text-align: center; }
         .trust-block-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--em-50); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--em); }
@@ -304,13 +307,17 @@
 
         /* MOBILE NAV */
         .mnav {
-            display: none; position: fixed; top: 64px; left: 0; right: 0;
-            background: rgba(255,255,255,0.97); backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--g200);
-            padding: 16px 24px; z-index: 99; flex-direction: column; gap: 12px;
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--white);
+            padding: 80px 32px 32px; z-index: 200; flex-direction: column; gap: 8px;
         }
         .mnav.open { display: flex; }
-        .mnav a { font-size: 16px; font-weight: 500; color: var(--g700); text-decoration: none; padding: 10px 0; }
+        .mnav a { font-size: 18px; font-weight: 500; color: var(--black); text-decoration: none; padding: 14px 0; border-bottom: 1px solid var(--g100); }
+        .mnav a:last-child { border-bottom: none; }
+        .mnav .mnav-close {
+            position: absolute; top: 18px; right: 20px;
+            background: none; border: none; cursor: pointer; padding: 8px; color: var(--black);
+        }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
@@ -324,7 +331,7 @@
             .cgrid { grid-template-columns: 1fr; }
             .einv { padding: 36px 20px; }
             .trust-blocks { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
             .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
             .hero { padding: 120px 0 40px; }
         }
@@ -345,14 +352,14 @@
         <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
         <nav class="nav">
             <a href="index.html">Accueil</a>
-            <a href="fonctionnalites.html">Fonctionnalites</a>
+            <a href="fonctionnalites.html">Fonctionnalités</a>
             <a href="tarifs.html">Tarifs</a>
             <a href="faq.html">FAQ</a>
             <a href="blog.html">Blog</a>
         </nav>
         <div class="header-actions">
-            <a href="#" class="btn btn-o">Se connecter</a>
-            <a href="#" class="btn btn-em">Commencer gratuitement</a>
+            <a href="#" class="hdr-link">Se connecter</a>
+            <a href="#" class="btn btn-em">S'inscrire</a>
         </div>
         <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -361,26 +368,25 @@
 </header>
 
 <nav id="mn" class="mnav">
+    <button class="mnav-close" onclick="document.getElementById('mn').classList.remove('open')" aria-label="Fermer">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l16 16M22 6L6 22"/></svg>
+    </button>
     <a href="index.html" onclick="this.parentElement.classList.remove('open')">Accueil</a>
-    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalites</a>
+    <a href="fonctionnalites.html" onclick="this.parentElement.classList.remove('open')">Fonctionnalités</a>
     <a href="tarifs.html" onclick="this.parentElement.classList.remove('open')">Tarifs</a>
     <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
     <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
-    <a href="#" style="color:var(--em);font-weight:600;">Essai gratuit &rarr;</a>
+    <a href="#" style="color:var(--em);font-weight:600;border-bottom:none;margin-top:16px;">Essai gratuit &rarr;</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
     <div class="container">
-        <span class="tag">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            30 jours offerts
-        </span>
-        <h1 class="hero-title">Facturez en<br><em>toute simplicite</em></h1>
-        <p class="hero-sub">Le logiciel simple de devis et facturation, pret pour la facturation electronique 2026.</p>
+        <h1 class="hero-title">Facturez en<br><em>toute simplicité</em></h1>
+        <p class="hero-sub">Le logiciel simple de devis et facturation, prêt pour la facturation électronique 2026.</p>
         <div class="hero-actions">
             <a href="#" class="btn btn-em btn-lg">Commencer gratuitement &rarr;</a>
-            <a href="fonctionnalites.html" class="btn btn-o btn-lg">Decouvrir</a>
+
         </div>
         <p class="hero-note">
             <svg width="14" height="14" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
@@ -394,8 +400,8 @@
     <div class="container">
         <div class="trust-row">
             <div class="trust-i"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Devis &amp; factures illimites</div>
-            <div class="trust-i"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>Paiement en ligne integre</div>
-            <div class="trust-i"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>Pret pour la facturation electronique 2026</div>
+            <div class="trust-i"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>Paiement en ligne intégré</div>
+            <div class="trust-i"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>Pret pour la facturation électronique 2026</div>
         </div>
     </div>
 </section>
@@ -410,19 +416,19 @@
 </section>
 
 <!-- FEATURES -->
-<section class="section section-gray" id="fonctionnalites">
+<section class="section section-gray" id="fonctionnalités">
     <div class="container">
-        <div style="text-align:center"><span class="tag">Fonctionnalites</span></div>
+        <div style="text-align:center"><span class="tag">Fonctionnalités</span></div>
         <h2 class="stitle">Tout ce qu'il faut.<br>Rien de superflu.</h2>
         <p class="ssub">Les outils essentiels pour votre facturation.</p>
         <div class="fgrid">
             <div class="fcard">
                 <div class="ficon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
-                <div><h3>Factures &amp; Devis</h3><p>Documents professionnels en quelques clics. Numerotation auto, TVA, remises.</p></div>
+                <div><h3>Factures &amp; Devis</h3><p>Documents professionnels en quelques clics. Numérotation auto, TVA, remises.</p></div>
             </div>
             <div class="fcard">
                 <div class="ficon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
-                <div><h3>Gestion Clients</h3><p>Base centralisee avec historique et stats de chiffre d'affaires.</p></div>
+                <div><h3>Gestion Clients</h3><p>Base centralisée avec historique et stats de chiffre d'affaires.</p></div>
             </div>
             <div class="fcard">
                 <div class="ficon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
@@ -430,7 +436,7 @@
             </div>
             <div class="fcard">
                 <div class="ficon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
-                <div><h3>Catalogue Produits</h3><p>Gerez produits et services. Insertion rapide dans vos documents.</p></div>
+                <div><h3>Catalogue Produits</h3><p>Gérez produits et services. Insertion rapide dans vos documents.</p></div>
             </div>
             <div class="fcard">
                 <div class="ficon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
@@ -449,7 +455,7 @@
     <div class="container">
         <div style="text-align:center"><span class="tag">Tarifs</span></div>
         <h2 class="stitle">Simple et transparent</h2>
-        <p class="ssub">Deux formules. Pas de frais caches. 30 jours offerts.</p>
+        <p class="ssub">Deux formules. Pas de frais cachés. 30 jours offerts.</p>
 
         <div class="ptoggle">
             <span class="on" id="ml">Mensuel</span>
@@ -461,7 +467,7 @@
         <div class="pgrid">
             <div class="pcard">
                 <div class="pname">Indes</div>
-                <div class="pdesc">1 compte &middot; 1 societe</div>
+                <div class="pdesc">1 compte &middot; 1 société</div>
                 <div class="pprice"><b id="pi">10</b><span>&euro;/mois</span></div>
                 <div class="pannual" id="ai"></div>
                 <ul class="pfeats">
@@ -477,12 +483,12 @@
             <div class="pcard pop">
                 <div class="ptag">Populaire</div>
                 <div class="pname">Business</div>
-                <div class="pdesc">Comptes &amp; societes illimites</div>
+                <div class="pdesc">Comptes &amp; sociétés illimites</div>
                 <div class="pprice"><b id="pb">19</b><span>&euro;/mois</span></div>
                 <div class="pannual" id="ab"></div>
                 <ul class="pfeats">
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Tout le plan Indes</li>
-                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Societes illimitees</li>
+                    <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Societes illimitées</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Multi-utilisateurs</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Gestion des roles</li>
                     <li><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Support prioritaire</li>
@@ -498,7 +504,7 @@
 <section class="section section-gray">
     <div class="container">
         <h2 class="stitle">Pourquoi MyFacture ?</h2>
-        <p class="ssub">Concu par des independants, pour des independants.</p>
+        <p class="ssub">Concu par des indépendants, pour des indépendants.</p>
         <div class="wgrid">
             <div class="wcard"><b>30s</b><strong>Creer une facture</strong><span>Rapide et intuitif</span></div>
             <div class="wcard"><b>100%</b><strong>Conforme</strong><span>Legislation francaise</span></div>
@@ -536,8 +542,8 @@
     <div class="container">
         <div class="einv">
             <span class="tag">Reforme 2026</span>
-            <h2>Facturation electronique : soyez pret.</h2>
-            <p>Des septembre 2026, toutes les entreprises devront emettre des factures electroniques. MyFacture vous prepare.</p>
+            <h2>Facturation électronique : soyez pret.</h2>
+            <p>Des septembre 2026, toutes les entreprises devront émettre des factures électroniques. MyFacture vous prépare.</p>
             <a href="facturation-electronique.html" class="btn btn-em btn-lg">En savoir plus &rarr;</a>
         </div>
     </div>
@@ -547,19 +553,19 @@
 <section class="section" id="faq">
     <div class="container">
         <div style="text-align:center"><span class="tag">FAQ</span></div>
-        <h2 class="stitle">Questions frequentes</h2>
+        <h2 class="stitle">Questions fréquentes</h2>
         <div class="faqlist">
             <div class="faqitem">
-                <button class="faqq" onclick="tfaq(this)">MyFacture est conforme a la legislation ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
-                <div class="faqa"><p>Oui. Numerotation sequentielle, mentions obligatoires, archivage et facturation electronique conforme a la reforme 2026.</p></div>
+                <button class="faqq" onclick="tfaq(this)">MyFacture est conforme a la législation ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
+                <div class="faqa"><p>Oui. Numérotation séquentielle, mentions obligatoires, archivage et facturation électronique conforme a la réforme 2026.</p></div>
             </div>
             <div class="faqitem">
                 <button class="faqq" onclick="tfaq(this)">Puis-je essayer gratuitement ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
-                <div class="faqa"><p>Chaque inscription beneficie de 30 jours d'essai gratuit, sans carte bancaire. Toutes les fonctionnalites sont accessibles.</p></div>
+                <div class="faqa"><p>Chaque inscription bénéficie de 30 jours d'essai gratuit, sans carte bancaire. Toutes les fonctionnalités sont accessibles.</p></div>
             </div>
             <div class="faqitem">
                 <button class="faqq" onclick="tfaq(this)">Difference entre Indes et Business ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
-                <div class="faqa"><p>Indes : 1 freelance, 1 societe. Business : plusieurs societes, multi-utilisateurs avec gestion des roles.</p></div>
+                <div class="faqa"><p>Indes : 1 freelance, 1 société. Business : plusieurs sociétés, multi-utilisateurs avec gestion des roles.</p></div>
             </div>
             <div class="faqitem">
                 <button class="faqq" onclick="tfaq(this)">Puis-je changer de plan ou resilier ?<svg class="faqchev" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg></button>
@@ -574,21 +580,21 @@
     <div class="container">
         <div style="text-align:center"><span class="tag">Confiance</span></div>
         <h2 class="stitle">Fiable et securise</h2>
-        <p class="ssub">Vos donnees sont protegees, votre comptable est integre.</p>
+        <p class="ssub">Vos données sont protégées, votre comptable est intégré.</p>
         <div class="trust-blocks" style="margin-top:40px">
             <div class="trust-block">
                 <div class="trust-block-icon">
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
                 </div>
                 <h3>Compatible avec votre expert-comptable</h3>
-                <p>Exportez vos donnees en un clic. Formats compatibles avec tous les logiciels comptables du marche.</p>
+                <p>Exportez vos données en un clic. Formats compatibles avec tous les logiciels comptables du marche.</p>
             </div>
             <div class="trust-block">
                 <div class="trust-block-icon">
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
-                <h3>Vos donnees protegees</h3>
-                <p>Hebergement securise, chiffrement des donnees, sauvegardes automatiques. Conforme RGPD.</p>
+                <h3>Vos données protégées</h3>
+                <p>Hebergement securise, chiffrement des données, sauvegardes automatiques. Conforme RGPD.</p>
             </div>
         </div>
     </div>
@@ -613,13 +619,13 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="7" fill="#3B82F6"/><path d="M8 8.5h10.5a1.5 1.5 0 011.5 1.5v11a1.5 1.5 0 01-1.5 1.5H11.5a1.5 1.5 0 01-1.5-1.5V12L8 8.5z" fill="white" fill-opacity="0.9"/><path d="M10 8.5V12h4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><rect x="13" y="14.5" width="5" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="17" width="4" height="1" rx="0.5" fill="#3B82F6" opacity="0.5"/><rect x="13" y="19.5" width="3" height="1" rx="0.5" fill="#3B82F6" opacity="0.35"/><path d="M9.5 15l1.2 1.2 2.3-2.7" stroke="#3B82F6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>MyFacture</a>
-                <p>Le logiciel simple de devis et facturation pour independants et PME.</p>
+                <p>Le logiciel simple de devis et facturation pour indépendants et PME.</p>
             </div>
             <div class="footer-col">
                 <h4>Produit</h4>
-                <a href="fonctionnalites.html">Fonctionnalites</a>
+                <a href="fonctionnalites.html">Fonctionnalités</a>
                 <a href="tarifs.html">Tarifs</a>
-                <a href="facturation-electronique.html">Facturation electronique 2026</a>
+                <a href="facturation-electronique.html">Facturation électronique 2026</a>
             </div>
             <div class="footer-col">
                 <h4>Ressources</h4>
@@ -631,12 +637,12 @@
                 <h4>Legal</h4>
                 <a href="mentions-legales.html">Mentions legales</a>
                 <a href="cgv.html">CGV</a>
-                <a href="confidentialite.html">Confidentialite</a>
+                <a href="confidentialite.html">Confidentialité</a>
                 <a href="contact.html">Contact</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits reserves.</div>
+            <div class="footer-copy">&copy; 2026 MyFacture. Tous droits réservés.</div>
         </div>
     </div>
 </footer>
