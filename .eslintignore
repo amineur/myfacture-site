@@ -1,0 +1,6 @@
+scripts/
+*.js
+migrations/
+node_modules/
+.next/
+.vercel/

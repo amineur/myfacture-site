@@ -142,8 +142,8 @@
             <a href="blog.html" class="active">Blog</a>
         </nav>
         <div class="header-actions">
-            <a href="https://app.myfacture.fr/login" class="hdr-link">Se connecter</a>
-            <a href="https://app.myfacture.fr/onboarding" class="btn btn-em">S'inscrire</a>
+            <a href="/login" class="hdr-link">Se connecter</a>
+            <a href="/login?mode=signup" class="btn btn-em">S'inscrire</a>
         </div>
         <button class="mmenu" onclick="document.getElementById('mn').classList.toggle('open')" aria-label="Menu">
             <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -160,8 +160,8 @@
     <a href="faq.html" onclick="this.parentElement.classList.remove('open')">FAQ</a>
     <a href="blog.html" onclick="this.parentElement.classList.remove('open')">Blog</a>
     <div class="mnav-btns">
-        <a href="https://app.myfacture.fr/login" class="mnav-link">Se connecter</a>
-        <a href="https://app.myfacture.fr/onboarding" class="btn btn-em">S'inscrire</a>
+        <a href="/login" class="mnav-link">Se connecter</a>
+        <a href="/login?mode=signup" class="btn btn-em">S'inscrire</a>
     </div>
 </nav>
 
@@ -326,7 +326,7 @@
 <section class="cta">
     <div class="container">
         <h2>Essayez MyFacture gratuitement pendant 1 mois</h2>
-        <a href="#" class="btn btn-em btn-lg" style="margin-top:8px">Commencer gratuitement &rarr;</a>
+        <a href="/login?mode=signup" class="btn btn-em btn-lg" style="margin-top:8px">Commencer gratuitement &rarr;</a>
         <p class="cta-note">
             <svg width="14" height="14" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
             Sans engagement &middot; Aucune carte bancaire requise

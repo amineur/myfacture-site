@@ -1,0 +1,291 @@
+"use client";
+
+import { use, useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Wallet, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useCompanies } from "@/components/providers/companies-provider";
+import { useInvoices } from "@/hooks/use-invoices";
+import { useDebts } from "@/hooks/use-debts";
+import { format, parseISO } from "date-fns";
+import { fr } from "date-fns/locale";
+
+export default function MonthlyPaymentDetailPage({ params }: { params: Promise<{ monthId: string }> }) {
+    const router = useRouter();
+    const { monthId } = use(params);
+    const decodedMonth = decodeURIComponent(monthId); // e.g. "janvier 2026"
+
+    const { companies } = useCompanies();
+    const activeCompany = companies[0];
+    const { invoices } = useInvoices(activeCompany?.id);
+    const { debts } = useDebts(activeCompany?.id);
+
+    // State for snapshot
+    const [snapshot, setSnapshot] = useState<any>(null);
+    const [isLoadingSnapshot, setIsLoadingSnapshot] = useState(false);
+
+    // 1. Invoices DUE this month (Charges Courantes)
+    const monthInvoices = invoices.filter(inv => {
+        if (!inv.due_date) return false;
+        const date = parseISO(inv.due_date);
+        const monthKey = format(date, 'MMMM yyyy', { locale: fr });
+        return monthKey === decodedMonth;
+    });
+
+    // 2. Invoices PAID this month (for Dette Courante calculation)
+    const paidThisMonthInvoices = invoices.filter(inv => {
+        if (!inv.payment_date) return false;
+        const date = parseISO(inv.payment_date);
+        const monthKey = format(date, 'MMMM yyyy', { locale: fr });
+        return monthKey === decodedMonth;
+    });
+
+    // Calculate invoice stats
+    const paidInvoices = monthInvoices.filter(inv => inv.status === 'PAID');
+    const unpaidInvoices = monthInvoices.filter(inv => ['PENDING', 'OPEN', 'LATE'].includes(inv.status));
+
+    const paidCharges = paidInvoices.reduce((sum, inv) => sum + (inv.amount_ttc || 0), 0);
+    const unpaidCharges = unpaidInvoices.reduce((sum, inv) => sum + (inv.amount_ttc || 0), 0);
+
+    // HISTORICAL DEBT BALANCE CALCULATION
+    // Goal: Show the actual debt balance at the END of this specific month
+    // Logic:
+    // 1. Start with current total debt balance (today's snapshot)
+    // 2. Add back all payments made AFTER this month (reverse them)
+    // 3. Result = balance as it was at the end of this month
+
+    const activeDebts = debts.filter(d => d.status === 'ACTIVE');
+
+    // Calculate TOTAL debt balance using EXACT logic from debts-view.tsx
+    const processedSuppliers = new Set<string>();
+    const currentTotalDebtBalance = activeDebts.reduce((acc, d) => {
+        const scheduleRemaining = d.remaining_amount || 0;
+
+        let currentRemaining = 0;
+        const supplierId = d.supplier?.id;
+        if (supplierId && !processedSuppliers.has(supplierId)) {
+            processedSuppliers.add(supplierId);
+            const isStructured = (d.monthly_amount || 0) > 0;
+            const fixedDebt = !isStructured ? (d.remaining_amount || 0) : 0;
+            currentRemaining = ((d.current_debt?.total_amount || 0) - (d.current_debt?.paid_amount || 0)) + fixedDebt;
+        }
+
+        return acc + scheduleRemaining + currentRemaining;
+    }, 0);
+
+    // Parse the target month to get its end date
+    const [monthName, yearStr] = decodedMonth.split(' ');
+    const monthIndex = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+        'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+        .indexOf(monthName.toLowerCase());
+    const year = parseInt(yearStr);
+    const monthEndDate = new Date(year, monthIndex + 1, 0); // Last day of the month
+    const today = new Date();
+
+    // Check if this is the current month
+    const isCurrentMonth = today.getFullYear() === year && today.getMonth() === monthIndex;
+
+    // Fetch snapshot for PAST months
+    useEffect(() => {
+        if (!isCurrentMonth && activeCompany?.id) {
+            setIsLoadingSnapshot(true);
+            fetch(`/api/snapshots/create?company_id=${activeCompany.id}&month_key=${encodeURIComponent(decodedMonth)}`)
+                .then(res => res.json())
+                .then(data => {
+                    setSnapshot(data.snapshot);
+                    setIsLoadingSnapshot(false);
+                })
+                .catch(err => {
+                    console.error('Error fetching snapshot:', err);
+                    setIsLoadingSnapshot(false);
+                });
+        }
+    }, [isCurrentMonth, activeCompany?.id, decodedMonth]);
+
+    let historicalDebtBalance = currentTotalDebtBalance;
+
+    if (isCurrentMonth) {
+        // For CURRENT month: use dynamic calculation (subtract payments made this month)
+        const paymentsThisMonth = invoices.filter(inv => {
+            if (!inv.payment_date) return false;
+            const paymentDate = parseISO(inv.payment_date);
+            const paymentMonthKey = format(paymentDate, 'MMMM yyyy', { locale: fr });
+            return paymentMonthKey === decodedMonth;
+        }).reduce((sum, inv) => sum + (inv.amount_ttc || 0), 0);
+
+        historicalDebtBalance = currentTotalDebtBalance - paymentsThisMonth;
+    } else if (snapshot) {
+        // For PAST months: use snapshot if available
+        historicalDebtBalance = snapshot.total_debt_balance;
+    } else {
+        // Fallback: use old calculation method if no snapshot exists
+        const paymentsAfterMonth = invoices.filter(inv => {
+            if (!inv.payment_date) return false;
+            const paymentDate = parseISO(inv.payment_date);
+            return paymentDate > monthEndDate;
+        }).reduce((sum, inv) => sum + (inv.amount_ttc || 0), 0);
+
+        const monthsAfter = Math.max(0,
+            (today.getFullYear() - year) * 12 + (today.getMonth() - monthIndex)
+        );
+        const structuralPaymentsAfter = activeDebts
+            .filter(d => (d.monthly_amount || 0) > 0)
+            .reduce((sum, d) => sum + ((d.monthly_amount || 0) * monthsAfter), 0);
+
+        historicalDebtBalance = currentTotalDebtBalance + paymentsAfterMonth + structuralPaymentsAfter;
+    }
+
+    const monthlyDebtPayment = activeDebts.reduce((sum, d) => sum + (d.monthly_amount || 0), 0);
+
+    // Split logic: Échéancier (With Schedule) vs Courante (No Schedule/Overdue)
+    // Échéancier = Debts with specific monthly plan (monthly_amount > 0)
+    const structuralDebts = activeDebts.filter(d => (d.monthly_amount || 0) > 0);
+    const nonCurrentDebtPaid = structuralDebts.reduce((sum, d) => sum + (d.monthly_amount || 0), 0);
+
+    // Dette Courante Logic: Sum of invoices Paid This Month BUT Due in a DIFFERENT month
+    const currentDebtPaid = paidThisMonthInvoices.reduce((sum, inv) => {
+        if (!inv.due_date) return sum + (inv.amount_ttc || 0);
+
+        const dueDate = parseISO(inv.due_date);
+        const dueMonthKey = format(dueDate, 'MMMM yyyy', { locale: fr });
+
+        // Exclude if it was due this month (that's a Charge Courante, not a Debt Payment)
+        if (dueMonthKey === decodedMonth) {
+            return sum;
+        }
+        return sum + (inv.amount_ttc || 0);
+    }, 0);
+
+    // Total Amortis = Structurel + Courant
+    const totalAmortized = nonCurrentDebtPaid + currentDebtPaid;
+
+    const data = {
+        title: decodedMonth.charAt(0).toUpperCase() + decodedMonth.slice(1),
+        spent: paidCharges + totalAmortized,
+        debtBalance: historicalDebtBalance,
+        tracking: {
+            paidCharges,
+            unpaidCharges,
+        },
+        debtProgress: {
+            paidTotal: totalAmortized,
+            currentDebtPaid: currentDebtPaid,
+            nonCurrentDebtPaid: nonCurrentDebtPaid,
+        }
+    };
+
+    return (
+        <main className="min-h-screen bg-gray-50 flex flex-col pb-10 animate-in slide-in-from-right duration-500 ease-out">
+            {/* Header - White & Clean */}
+            <header className="px-6 pt-6 pb-2 bg-white sticky top-0 z-10 border-b border-gray-50">
+                <div className="flex items-center gap-4 mb-2">
+                    <Button variant="ghost" size="icon" onClick={() => router.back()} className="-ml-3 h-10 w-10 rounded-full hover:bg-gray-100 text-gray-900 transition-colors">
+                        <ArrowLeft className="h-5 w-5" />
+                    </Button>
+                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">{data.title}</h1>
+                </div>
+            </header>
+
+            <div className="flex-1 px-6 pt-6 space-y-6">
+
+                {/* 1. KEY FIGURES: TOTAL SPENT + GLOBAL BALANCE */}
+                <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-500 border border-slate-800/50">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2">
+                                <div className="h-1.5 w-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.5)]"></div>
+                                <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider">Total réglé</p>
+                            </div>
+                            <p className="text-3xl font-bold text-white tracking-tight">{data.spent.toLocaleString('fr-FR')}€</p>
+                            <p className="text-[10px] text-slate-400 font-medium">Ce mois</p>
+                        </div>
+
+                        <div className="relative">
+                            <div className="absolute left-0 top-1 bottom-1 w-px bg-slate-700/50"></div>
+                            <div className="pl-5 space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></div>
+                                    <p className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider">Solde</p>
+                                </div>
+                                <p className="text-2xl font-bold text-slate-200 tracking-tight">{historicalDebtBalance.toLocaleString('fr-FR')}€</p>
+                                <p className="text-[10px] text-slate-500 font-medium capitalize">
+                                    {monthEndDate < today
+                                        ? `Au ${format(monthEndDate, 'dd MMM', { locale: fr })}`
+                                        : `Au ${format(today, 'dd MMM', { locale: fr })}`
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. OPERATIONAL EXPENSES (Charges) - Visual Progress */}
+                <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 space-y-4 animate-in fade-in slide-in-from-bottom-3 duration-500 delay-75">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="h-10 w-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <Wallet className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-gray-900 leading-tight">Charges Courantes</h3>
+                            <p className="text-xs text-gray-400 font-medium">Loyer, abonnements, services...</p>
+                        </div>
+                    </div>
+
+                    {/* Progress Bar Visual */}
+                    <div className="space-y-2">
+                        <div className="flex justify-between text-sm font-medium">
+                            <span className="text-emerald-700">{Math.round((data.tracking.paidCharges / (data.tracking.paidCharges + data.tracking.unpaidCharges || 1)) * 100)}% Payé</span>
+                            <span className="text-gray-400">Total: {(data.tracking.paidCharges + data.tracking.unpaidCharges).toLocaleString('fr-FR')}€</span>
+                        </div>
+                        <div className="h-3 w-full bg-gray-100 rounded-full overflow-hidden">
+                            <div
+                                className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out"
+                                style={{ width: `${(data.tracking.paidCharges / (data.tracking.paidCharges + data.tracking.unpaidCharges || 1)) * 100}%` }}
+                            />
+                        </div>
+                        <div className="flex justify-between items-center pt-1">
+                            <div className="flex flex-col">
+                                <span className="text-2xl font-bold text-gray-900">{data.tracking.paidCharges.toLocaleString('fr-FR')}€</span>
+                                <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wide">Déjà réglé</span>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-sm font-bold text-red-500">{data.tracking.unpaidCharges.toLocaleString('fr-FR')}€</span>
+                                <p className="text-[10px] text-gray-400">Reste à payer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 3. DEBT REPAYMENT (Dettes) - Split View */}
+                <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                            <TrendingUp className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-gray-900 leading-tight">Remboursement Dettes</h3>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-sm font-bold text-blue-600">{data.debtProgress.paidTotal.toLocaleString('fr-FR')}€</span>
+                                <span className="text-xs text-gray-400">amortis ce mois</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100/50">
+                            <p className="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wide">Dette Courante</p>
+                            <p className="text-lg font-bold text-gray-900">{data.debtProgress.currentDebtPaid.toLocaleString('fr-FR')}€</p>
+                        </div>
+                        <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100/50">
+                            <p className="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wide">Échéancier</p>
+                            <p className="text-lg font-bold text-gray-900">{data.debtProgress.nonCurrentDebtPaid.toLocaleString('fr-FR')}€</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </main>
+    );
+}

@@ -1,0 +1,4 @@
+Date;Label;Amount;Category;Reference;Bank Name
+01/01/2025;Virement Client X;1500.00;Chiffre d'affaires;VIR-2025-001;Qonto
+05/01/2025;Abonnement Logiciel;-29.99;Logiciel & SaaS;INV-12345;Qonto
+10/01/2025;Restaurant;-45.50;Repas & Réception;;Crédit Mutuelle

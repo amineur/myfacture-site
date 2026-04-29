@@ -1,0 +1,72 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Next.js build output (will be built fresh)
+.next
+out
+
+# Environment files (injected via docker-compose env vars)
+.env
+.env.local
+.env.development
+.env.production
+.env.example
+
+# Git
+.git
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker files (not needed inside image)
+docker-compose.yml
+
+# Old one-off Supabase scripts at root level
+check_*.js
+delete_*.js
+debug_*.js
+verify_supabase_write.js
+apply_migration*.js
+test_*.js
+create_bucket.js
+create_import_logs_table.js
+create_table_direct.js
+patch_rpc.js
+exploit_migration.js
+test_rls.js
+disable_rls_script.js
+reset-passwords.js
+backfill_ht.js
+check_env.js
+check_table_exists.js
+check_last_import.js
+check_all_recent.js
+check_import_logs.js
+check_import_history.js
+check_invoice_payments.js
+check_status_values.js
+check_recent_imports.js
+check_supplier_iban.js
+check_ibans.js
+check_bank_raw.js
+check_statuses.js
+check_duplicates.js
+check_last_pdf_url.js
+check_ref_47367.js
+check_top_suppliers.js
+delete_last_import.js
+delete_invoice.js
+delete_remaining_tests.js
+delete_test_invoices.js
+delete_auto_suppliers.js
+delete_nyny.js
+delete_towercast.js
+delete_towercast_v2.js
+debug_winmedia.js
+debug_qonto_balance.js
+patch_rpc.js
+audit_schema.js
+create_*.js

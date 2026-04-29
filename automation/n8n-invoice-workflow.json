@@ -1,0 +1,131 @@
+{
+  "name": "Import Factures via Email",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "format": "resolved"
+      },
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_CREDENTIALS_ID",
+          "name": "Gmail Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "messages": {
+          "values": [
+            {
+              "content": "=Tu es un assistant comptable. Analyse cet email et ses métadonnées pour extraire les informations de facturation au format JSON strict.\n\nContenu de l'email :  {{$node[\"Gmail Trigger\"].json[\"snippet\"]}}\nSujet : {{$node[\"Gmail Trigger\"].json[\"subject\"]}}\nDate : {{$node[\"Gmail Trigger\"].json[\"date\"]}}\nExpéditeur : {{$node[\"Gmail Trigger\"].json[\"from\"]}}\n\n------- \nSORTIE JSON ATTENDUE (Uniquement le JSON, pas de markdown) :\n{\n  \"company_handle\": \"@urban.hit\",\n  \"supplier_name\": \"...\",\n  \"amount_ttc\": 0.00,\n  \"reference\": \"...\",\n  \"issued_date\": \"YYYY-MM-DD\",\n  \"pdf_url\": \"\"\n}\n\nNote : Si le fournisseur est inconnu, utilise le nom de l'expéditeur. Si la date est floue, utilise la date du mail."
+            }
+          ]
+        }
+      },
+      "name": "Extraire Données (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIALS_ID",
+          "name": "OpenAI Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://dashboard.urban-hit.fr/api/automation/invoice",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "headerAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "company_handle",
+              "value": "={{$node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"].match(/company_handle/)[0] ? JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).company_handle : '@urban.hit'}}"
+            },
+            {
+              "name": "supplier_name",
+              "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).supplier_name}}"
+            },
+            {
+              "name": "amount_ttc",
+              "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).amount_ttc}}"
+            },
+            {
+              "name": "reference",
+              "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).reference}}"
+            },
+            {
+              "name": "issued_date",
+              "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).issued_date}}"
+            },
+            {
+              "name": "pdf_base64",
+              "value": "={{$node[\"Télécharger PDF\"].binary.data.toString('base64')}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Envoyer vers Dashboard",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        900,
+        300
+      ],
+      "credentials": {
+        "headerAuth": {
+          "id": "YOUR_HEADER_AUTH_ID",
+          "name": "Header Auth"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extraire Données (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire Données (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Envoyer vers Dashboard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

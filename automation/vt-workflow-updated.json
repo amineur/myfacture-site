@@ -1,0 +1,282 @@
+[
+  {
+    "id": "YbutUiyE152xaYDx",
+    "name": "VT Consult - Import Historique Factures",
+    "active": true,
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "vt-consult-import",
+          "options": {}
+        },
+        "id": "webhook-trigger",
+        "name": "Webhook Trigger",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          -450,
+          448
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "84698c43-358a-4a97-8fe7-4496cfa149f0",
+        "name": "Démarrer",
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          -256,
+          448
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "returnAll": true,
+          "simple": false,
+          "filters": {
+            "q": "from:(sknidler@wanadoo.fr OR sylvain.knidler@vtconsult.fr) has:attachment filename:pdf"
+          },
+          "options": {
+            "downloadAttachments": true
+          }
+        },
+        "id": "9a6dd603-1d54-4738-9f84-8853e894a80d",
+        "name": "Récupérer Emails VT Consult",
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.1,
+        "position": [
+          -64,
+          448
+        ],
+        "webhookId": "5101f769-8bb3-4665-b5cd-f2b4f271732f",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "AUcQb13ek6zi1CQS",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "loose"
+            },
+            "conditions": [
+              {
+                "id": "cond-has-pdf",
+                "leftValue": "={{ Object.values($binary || {}).some(b => (b.mimeType || '').toLowerCase().includes('pdf') || (b.fileName || '').toLowerCase().endsWith('.pdf')) }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "16a3fb73-8f7a-41b6-9fd7-1801ff461342",
+        "name": "A un PDF ?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          160,
+          448
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "binaryPropertyName": "={{ Object.keys($binary || {}).find(k => ($binary[k].mimeType || '').toLowerCase().includes('pdf') || ($binary[k].fileName || '').toLowerCase().endsWith('.pdf')) || 'attachment_1' }}",
+          "options": {
+            "joinPages": false
+          }
+        },
+        "id": "9081af7d-e3b7-4ecd-be03-1d9d324e12b0",
+        "name": "Extraire texte PDF",
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          384,
+          368
+        ]
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "// ============================================================\n// EXTRACTION FACTURE PAR REGEX - Urban Hit (Batch VT Consult)\n// ============================================================\n\n// Assurer que le texte est bien une chaîne de caractères\nconst text = String($json.text || $json.content || $json.data || '');\n\n// Récupérer le binaire PDF depuis le noeud Gmail\nconst gmailItem = $item(0).$node['Récupérer Emails VT Consult'];\nconst binData = (gmailItem && gmailItem.binary) ? gmailItem.binary : {};\nconst binaryKeys = Object.keys(binData);\n\nconst pdfKey = binaryKeys.find(k => {\n  const b = binData[k];\n  return (b.mimeType || '').toLowerCase().includes('pdf') || (b.fileName || '').toLowerCase().endsWith('.pdf');\n}) || binaryKeys[0];\n\nconst pdf_base64 = pdfKey ? (binData[pdfKey].data || null) : null;\n\n// ---- Helpers ----\n\nfunction extract(patterns, str) {\n  if (typeof str !== 'string') return null;\n  for (const p of patterns) {\n    const m = str.match(p);\n    if (m && m[1]) return m[1].trim();\n  }\n  return null;\n}\n\nfunction parseAmount(s) {\n  if (typeof s !== 'string') return null;\n  let cleaned = s.replace(/[€$\\s\\u00a0\\u202f]/g, '');\n  if (/^[\\d.]+,\\d{2}$/.test(cleaned)) {\n    cleaned = cleaned.replace(/\\./g, '').replace(',', '.');\n  } else if (/^[\\d,]+\\.\\d{2}$/.test(cleaned)) {\n    cleaned = cleaned.replace(/,/g, '');\n  } else {\n    cleaned = cleaned.replace(/[,\\.]/g, (m, offset, str) => {\n      return offset === str.lastIndexOf(m) ? '.' : '';\n    });\n  }\n  const n = parseFloat(cleaned);\n  return isNaN(n) ? null : Math.round(n * 100) / 100;\n}\n\nfunction parseDate(s) {\n  if (typeof s !== 'string') return null;\n  s = s.trim();\n  const months = {\n    'janvier':'01','février':'02','fevrier':'02','mars':'03','avril':'04',\n    'mai':'05','juin':'06','juillet':'07','août':'08','aout':'08',\n    'septembre':'09','octobre':'10','novembre':'11','décembre':'12','decembre':'12',\n    'jan':'01','fév':'02','fev':'02','mar':'03','avr':'04',\n    'jun':'06','jul':'07','sep':'09','oct':'10','nov':'11','déc':'12','dec':'12'\n  };\n  const fr = s.match(/(\\d{1,2})\\s+([a-zéûôêàùïîè]+)\\.?\\s+(\\d{4})/i);\n  if (fr) {\n    const m = months[fr[2].toLowerCase()];\n    if (m) return `${fr[3]}-${m}-${fr[1].padStart(2,'0')}`;\n  }\n  const num = s.match(/(\\d{1,2})[\\/.\\-](\\d{1,2})[\\/.\\-](\\d{4})/);\n  if (num) return `${num[3]}-${num[2].padStart(2,'0')}-${num[1].padStart(2,'0')}`;\n  const iso = s.match(/(\\d{4})-(\\d{2})-(\\d{2})/);\n  if (iso) return iso[0];\n  return null;\n}\n\n// ---- Extraction ----\n\n// Fournisseur = VT Consult (connu)\nconst supplier_name = 'VT Consult';\n\nconst reference = extract([\n  /(?:facture\\s*n[°o°]?\\.?|n[°o°]\\.?\\s*(?:de\\s*)?facture|invoice\\s*(?:no?\\.?|number|#|n[°o°]?\\.?)|numéro\\s*(?:de\\s*facture)?|réf(?:érence)?\\s*(?:facture)?)\\s*[:\\s#]*([A-Z0-9][A-Z0-9\\-\\/_. ]{1,30})/i,\n  /N[°o°]\\s*[:#\\s]*([A-Z0-9][A-Z0-9\\-\\/_. ]{1,25})/i,\n  /([A-Z]{1,5}[-_]\\d{4,12})/,\n  /\\b(\\d{4}[-_][A-Z0-9]{3,}|[A-Z]{2,5}\\d{4,})/,\n], text);\n\nconst issued_date_raw = extract([\n  /(?:date\\s*(?:de\\s*(?:la\\s*)?)?facture|date\\s*d[''`]?émission|date\\s*de\\s*facturation|émis\\s*(?:le|:)|facturé\\s*le|date\\s*de\\s*création|date\\s*facture)\\s*[:\\s]*([^\\n]{5,35})/i,\n  /(?:^|\\b)(?:le|date)\\s*[:\\s]*(\\d{1,2}[\\s\\/\\.\\-][\\w]{2,10}[\\s\\/\\.\\-]\\d{4})/im,\n], text);\n\nconst due_date_raw = extract([\n  /(?:date\\s*(?:d[''`])?échéance|échéance|date\\s*limite\\s*(?:de\\s*)?paiement|payable\\s*(?:le|avant\\s*le)|règlement\\s*(?:le|au)|à\\s*payer\\s*(?:le|avant\\s*le))\\s*[:\\s]*([^\\n]{5,35})/i,\n], text);\n\nconst today = new Date().toISOString().split('T')[0];\nconst issued_date = parseDate(issued_date_raw) || today;\nconst due_date = parseDate(due_date_raw) || issued_date;\n\nconst amount_ht_raw = extract([\n  /(?:total\\s*HT|montant\\s*(?:total\\s*)?HT|sous[\\s\\-]?total\\s*HT|net\\s*(?:avant\\s*)?(?:TVA|taxes?)|total\\s*hors\\s*(?:TVA|taxes?))\\s*[:\\s]*([\\d\\s\\u00a0\\u202f.,]+(?:\\s*€|\\s*EUR)?)/i,\n  /HT\\s*[:\\s]([\\d\\s\\u00a0.,]+(?:\\s*€|\\s*EUR)?)/i,\n], text);\n\nconst amount_ttc_raw = extract([\n  /(?:total\\s*(?:général\\s*)?TTC|net\\s*à\\s*payer|montant\\s*(?:total\\s*)?(?:à\\s*)?(?:payer|régler|dû)|total\\s*(?:à\\s*)?(?:payer|régler)|total\\s*(?:facture|final))\\s*[:\\s]*([\\d\\s\\u00a0\\u202f.,]+(?:\\s*€|\\s*EUR)?)/i,\n  /TTC\\s*[:\\s]([\\d\\s\\u00a0.,]+(?:\\s*€|\\s*EUR)?)/i,\n  /(?:net\\s*à\\s*payer|à\\s*payer\\s*:)\\s*([\\d\\s\\u00a0.,]+(?:\\s*€|\\s*EUR)?)/i,\n], text);\n\nconst amount_ht = parseAmount(amount_ht_raw);\nconst amount_ttc = parseAmount(amount_ttc_raw);\n\nconst subject = (gmailItem.json && gmailItem.json.subject) || 'Sans sujet';\n\nreturn {\n  json: {\n    company_handle: '@urban.hit',\n    supplier_name,\n    reference: reference ? reference.replace(/\\s+$/, '') : null,\n    issued_date,\n    due_date,\n    amount_ht,\n    amount_ttc: amount_ttc || 0,\n    pdf_base64,\n    status: 'PENDING',\n    _debug: {\n      email_subject: subject,\n      pdf_text_preview: text.substring(0, 300)\n    }\n  }\n};"
+        },
+        "id": "bfce7bfb-8884-4c43-9844-f612393d7706",
+        "name": "Extraction Regex Facture",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          608,
+          368
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://dashboard.urban-hit.fr/api/automation/invoice",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-automation-key",
+                "value": "yK3W9d7xzqrEMdKgEsw9166tvL4417F6DPmb1CRnB+w="
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{  JSON.stringify({ company_handle: '@urban.hit', supplier_name: $json.supplier_name, reference: $json.reference || null, issued_date: $json.issued_date, due_date: $json.due_date, amount_ht: $json.amount_ht || null, amount_ttc: $json.amount_ttc || 0, status: 'PENDING' })  }}",
+          "options": {}
+        },
+        "id": "5fb1f7f8-9b21-495f-b2c3-1d19054bd12e",
+        "name": "Envoyer vers Dashboard",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          832,
+          368
+        ]
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "// Garde uniquement le premier binaire PDF, supprime les autres (PNG, images, etc.)\nconst bin = $input.item.binary || {};\nconst allKeys = Object.keys(bin);\nconst pdfKey = allKeys.find(k => {\n  const b = bin[k];\n  return (b.mimeType || '').toLowerCase().includes('pdf') || (b.fileName || '').toLowerCase().endsWith('.pdf');\n});\n\nif (!pdfKey) {\n  return [];\n}\n\nreturn {\n  json: $input.item.json,\n  binary: { pdf: bin[pdfKey] }\n};"
+        },
+        "id": "a2f9c432-d4c6-4327-99fa-8343a2ae8137",
+        "name": "Isoler PDF",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          384,
+          576
+        ]
+      },
+      {
+        "parameters": {
+          "inputDataFieldName": "pdf",
+          "name": "={{ $binary.pdf?.fileName || 'vtconsult_' + new Date().toISOString().split('T')[0] + '.pdf' }}",
+          "driveId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "My Drive"
+          },
+          "folderId": "1f2Sp9oMlQIdlNnQV4dJPIwNIbqABVxQo",
+          "options": {}
+        },
+        "id": "0e09a456-eb65-4eb5-93f1-a1550fc85890",
+        "name": "Upload PDF → Google Drive",
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3,
+        "position": [
+          608,
+          576
+        ],
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "dV3yRmiGAtU1prHE",
+            "name": "Google Drive account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook Trigger": {
+        "main": [
+          [
+            {
+              "node": "Récupérer Emails VT Consult",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Démarrer": {
+        "main": [
+          [
+            {
+              "node": "Récupérer Emails VT Consult",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Récupérer Emails VT Consult": {
+        "main": [
+          [
+            {
+              "node": "A un PDF ?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "A un PDF ?": {
+        "main": [
+          [
+            {
+              "node": "Extraire texte PDF",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Isoler PDF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Isoler PDF": {
+        "main": [
+          [
+            {
+              "node": "Upload PDF → Google Drive",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extraire texte PDF": {
+        "main": [
+          [
+            {
+              "node": "Extraction Regex Facture",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extraction Regex Facture": {
+        "main": [
+          [
+            {
+              "node": "Envoyer vers Dashboard",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "binaryMode": "separate"
+    }
+  }
+]

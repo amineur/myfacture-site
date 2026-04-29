@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html><body>
+<h2>Upload Screenshots</h2>
+<input type="file" id="fileInput" accept="image/*">
+<button onclick="upload()">Save</button>
+<div id="status"></div>
+<script>
+function upload() {
+    document.getElementById('status').textContent = 'File selected: ' + document.getElementById('fileInput').files[0]?.name;
+}
+</script>
+</body></html>

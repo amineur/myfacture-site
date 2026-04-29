@@ -1,0 +1,337 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum user_role {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum member_status {
+  ACTIVE
+  INVITED
+}
+
+enum invoice_status {
+  PENDING
+  OPEN
+  PAID
+  LATE
+}
+
+enum debt_status {
+  ACTIVE
+  PAID
+  DEFAULT
+  CANCELLED
+}
+
+enum transaction_side {
+  DEBIT
+  CREDIT
+}
+
+enum transaction_status {
+  RAW
+  MATCHED
+  IGNORED
+}
+
+model users {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email         String   @unique
+  password_hash String
+  first_name    String?
+  last_name     String?
+  avatar_url    String?
+  job_title     String?
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  owned_companies  companies[]        @relation("CompanyOwner")
+  company_members  company_members[]
+  ai_conversations ai_conversations[]
+}
+
+model companies {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String
+  handle     String   @unique
+  address    String?
+  owner_id   String?  @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  owner             users?                   @relation("CompanyOwner", fields: [owner_id], references: [id])
+  members           company_members[]
+  suppliers         suppliers[]
+  invoices          invoices[]
+  debts             debts[]
+  bank_accounts     bank_accounts[]
+  current_debts     current_debts[]
+  monthly_snapshots monthly_debt_snapshots[]
+  qonto_credentials qonto_credentials[]
+  import_logs       import_logs[]
+  bank_transactions bank_transactions[]
+  ai_conversations  ai_conversations[]
+  payments          payments[]
+  transaction_mapping_rules transaction_mapping_rules[]
+}
+
+model company_members {
+  id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id String        @db.Uuid
+  user_id    String        @db.Uuid
+  role       user_role     @default(MEMBER)
+  status     member_status @default(ACTIVE)
+  created_at DateTime      @default(now()) @db.Timestamptz(6)
+
+  company companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  user    users     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([company_id, user_id])
+  @@index([company_id, user_id, role])
+}
+
+model suppliers {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id   String   @db.Uuid
+  name         String
+  category     String?
+  email        String?
+  website      String?
+  phone        String?
+  contact_name String?
+  iban         String?
+  bic          String?
+  logo_url     String?
+  metadata     Json?
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+
+  company                companies                @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  invoices               invoices[]
+  debts                  debts[]
+  current_debts          current_debts[]
+  supplier_bank_accounts supplier_bank_accounts[]
+  payments               payments[]
+  bank_transactions      bank_transactions[]
+  transaction_mapping_rules transaction_mapping_rules[]
+}
+
+model supplier_bank_accounts {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id  String   @db.Uuid
+  supplier_id String   @db.Uuid
+  iban        String
+  bic         String?
+  label       String?
+  is_default  Boolean  @default(false)
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  supplier suppliers @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+}
+
+model invoices {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id   String         @db.Uuid
+  supplier_id  String         @db.Uuid
+  reference    String?
+  amount_ttc   Decimal        @db.Decimal(10, 2)
+  amount_ht    Decimal?       @db.Decimal(10, 2)
+  issued_date  DateTime       @db.Date
+  due_date     DateTime?      @db.Date
+  payment_date DateTime?      @db.Date
+  status       invoice_status @default(PENDING)
+  pdf_url      String?
+  metadata     Json?
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+
+  company           companies         @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  supplier          suppliers         @relation(fields: [supplier_id], references: [id])
+  bank_transactions bank_transactions[]
+  payments          payments[]
+}
+
+model debts {
+  id               String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id       String      @db.Uuid
+  supplier_id      String      @db.Uuid
+  contract_ref     String?
+  total_amount     Decimal?    @db.Decimal(12, 2)
+  remaining_amount Decimal?    @db.Decimal(12, 2)
+  monthly_amount   Decimal?    @db.Decimal(10, 2)
+  start_date       DateTime?   @db.Date
+  end_date         DateTime?   @db.Date
+  interest_rate    Decimal?    @db.Decimal(5, 2)
+  status           debt_status @default(ACTIVE)
+  created_at       DateTime    @default(now()) @db.Timestamptz(6)
+
+  company  companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  supplier suppliers @relation(fields: [supplier_id], references: [id])
+}
+
+model current_debts {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id           String    @db.Uuid
+  supplier_id          String    @db.Uuid
+  status               String    @default("ACTIVE")
+  triggered_at         DateTime  @db.Timestamptz(6)
+  closed_at            DateTime? @db.Timestamptz(6)
+  initial_unpaid_count Int
+  initial_unpaid_total Decimal   @db.Decimal(10, 2)
+  total_amount         Decimal?  @db.Decimal(10, 2)
+  paid_amount          Decimal?  @db.Decimal(10, 2)
+  invoice_ids          String[]
+  created_at           DateTime  @default(now()) @db.Timestamptz(6)
+
+  company  companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  supplier suppliers @relation(fields: [supplier_id], references: [id])
+
+  @@index([company_id, supplier_id, status])
+  @@index([triggered_at(sort: Desc)])
+}
+
+model monthly_debt_snapshots {
+  id                       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id               String   @db.Uuid
+  month_key                String
+  snapshot_date            DateTime @db.Date
+  total_debt_balance       Decimal  @db.Decimal(10, 2)
+  structural_remaining     Decimal  @default(0) @db.Decimal(10, 2)
+  current_debt_remaining   Decimal  @default(0) @db.Decimal(10, 2)
+  constated_debt_remaining Decimal  @default(0) @db.Decimal(10, 2)
+  created_at               DateTime @default(now())
+
+  company companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+
+  @@unique([company_id, month_key])
+}
+
+model bank_accounts {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id   String?   @db.Uuid
+  name         String
+  bank_type    String?   @default("QONTO")
+  balance      Decimal?  @default(0) @db.Decimal(15, 2)
+  currency     String?   @default("EUR")
+  last_sync_at DateTime? @db.Timestamptz(6)
+  metadata     Json?
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  company      companies?          @relation(fields: [company_id], references: [id])
+  transactions bank_transactions[]
+}
+
+model bank_transactions {
+  id          String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  external_id String             @unique
+  company_id  String?            @db.Uuid
+  account_id  String?            @db.Uuid
+  date        DateTime           @db.Timestamptz(6)
+  amount      Decimal            @db.Decimal(12, 2)
+  label       String
+  side        transaction_side
+  status      transaction_status @default(RAW)
+  invoice_id  String?            @db.Uuid
+  supplier_id String?            @db.Uuid
+  raw_data    Json?
+  created_at  DateTime           @default(now()) @db.Timestamptz(6)
+
+  company  companies?     @relation(fields: [company_id], references: [id])
+  account  bank_accounts? @relation(fields: [account_id], references: [id])
+  invoice  invoices?      @relation(fields: [invoice_id], references: [id])
+  supplier suppliers?     @relation(fields: [supplier_id], references: [id])
+}
+
+model qonto_credentials {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id    String   @db.Uuid
+  access_token  String
+  refresh_token String
+  expires_at    DateTime @db.Timestamptz(6)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  company companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+}
+
+model ai_conversations {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  company_id String?  @db.Uuid
+  title      String   @default("Nouvelle conversation")
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  user     users      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  company  companies? @relation(fields: [company_id], references: [id])
+  messages ai_messages[]
+}
+
+model ai_messages {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  conversation_id String   @db.Uuid
+  role            String
+  content         String
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+
+  conversation ai_conversations @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
+}
+
+model import_logs {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id    String?  @db.Uuid
+  imported_at   DateTime @default(now()) @db.Timestamptz(6)
+  invoice_count Int      @default(0)
+  invoices      Json?
+  source        String?  @default("automation")
+  status        String?  @default("success")
+  error         String?
+
+  company companies? @relation(fields: [company_id], references: [id])
+}
+
+model payments {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id     String   @db.Uuid
+  supplier_id    String   @db.Uuid
+  invoice_id     String?  @db.Uuid
+  amount         Decimal  @db.Decimal(12, 2)
+  payment_date   DateTime @db.Date
+  payment_method String?
+  notes          String?
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  company  companies  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  supplier suppliers  @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  invoice  invoices?  @relation(fields: [invoice_id], references: [id])
+}
+
+model ai_knowledge {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key        String
+  value      String
+  type       String   @default("FACT")
+  confidence Float    @default(1.0)
+  context    String?
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+}
+
+model transaction_mapping_rules {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company_id  String   @db.Uuid
+  pattern     String
+  supplier_id String   @db.Uuid
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+
+  company  companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  supplier suppliers @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+}

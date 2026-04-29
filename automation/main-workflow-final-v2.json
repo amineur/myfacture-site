@@ -1,0 +1,240 @@
+[
+  {
+    "id": "6dn50NlGFPhiSADx",
+    "name": "Import Factures via Email",
+    "active": true,
+    "nodes": [
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "simple": false,
+          "filters": {
+            "includeSpamTrash": false,
+            "q": "is:unread has:attachment"
+          },
+          "options": {
+            "downloadAttachments": true,
+            "markAsRead": true
+          }
+        },
+        "id": "node1",
+        "name": "Gmail Trigger",
+        "type": "n8n-nodes-base.gmailTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          240,
+          304
+        ],
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "AUcQb13ek6zi1CQS",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "force-import",
+          "options": {}
+        },
+        "id": "force-trigger",
+        "name": "Force Import Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "returnAll": true,
+          "filters": {
+            "q": "is:unread has:attachment"
+          },
+          "options": {
+            "downloadAttachments": true
+          }
+        },
+        "id": "fetch-unread",
+        "name": "Fetch Unread Emails",
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.1,
+        "position": [
+          240,
+          104
+        ],
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "AUcQb13ek6zi1CQS",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// On parcourt tous les binaires pour trouver le PDF qui ressemble à une facture\nconst bin = $binary || {};\nlet invoiceKey = null;\n\n// 1. On cherche un PDF avec \"facture\", \"invoice\" ou \"vtconsult\" dans le nom\nfor (const key of Object.keys(bin)) {\n    const file = bin[key];\n    const name = (file.fileName || '').toLowerCase();\n    if (name.endsWith('.pdf') && (name.includes('facture') || name.includes('invoice') || name.includes('vtconsult'))) {\n        invoiceKey = key;\n        break;\n    }\n}\n\n// 2. Si pas trouvé, on prend le premier PDF qu'on trouve\nif (!invoiceKey) {\n    for (const key of Object.keys(bin)) {\n        if ((bin[key].fileName || '').toLowerCase().endsWith('.pdf')) {\n            invoiceKey = key;\n            break;\n        }\n    }\n}\n\nif (invoiceKey) {\n    return { \n        json: { ...$json, _invoiceKey: invoiceKey },\n        binary: { invoice_pdf: bin[invoiceKey] }\n    };\n}\n\n// Si vraiment aucun PDF, on ignore cet email\nreturn [];"
+        },
+        "id": "filter-invoice",
+        "name": "Isoler la Facture PDF",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          464,
+          304
+        ]
+      },
+      {
+        "parameters": {
+          "prompt": "=Tu es un assistant comptable. Analyse cet email pour extraire les informations de facturation au format JSON strict.\n\nSujet : {{$json[\"subject\"]}}\nContenu : {{$json[\"snippet\"]}}\nExpéditeur : {{$json[\"from\"]}}\n\n------- \n\nSORTIE JSON ATTENDUE (Pas de texte avant ou après) :\n\n{\n  \"company_handle\": \"@urban.hit\",\n  \"supplier_name\": \"...\",\n  \"amount_ttc\": 0.00,\n  \"amount_ht\": 0.00,\n  \"reference\": \"...\",\n  \"issued_date\": \"YYYY-MM-DD\",\n  \"due_date\": \"YYYY-MM-DD\"\n}",
+          "options": {},
+          "requestOptions": {}
+        },
+        "id": "node3",
+        "name": "Extraire Données (OpenAI)",
+        "type": "n8n-nodes-base.openAi",
+        "typeVersion": 1,
+        "position": [
+          688,
+          224
+        ],
+        "credentials": {
+          "openAiApi": {
+            "id": "eHYKX6ORTDabHUL7",
+            "name": "OpenAI account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://dashboard.urban-hit.fr/api/automation/invoice",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-automation-key",
+                "value": "yK3W9d7xzqrEMdKgEsw9166tvL4417F6DPmb1CRnB+w="
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "company_handle",
+                "value": "@urban.hit"
+              },
+              {
+                "name": "supplier_name",
+                "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).supplier_name}}"
+              },
+              {
+                "name": "amount_ttc",
+                "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).amount_ttc}}"
+              },
+              {
+                "name": "amount_ht",
+                "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).amount_ht}}"
+              },
+              {
+                "name": "reference",
+                "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).reference}}"
+              },
+              {
+                "name": "issued_date",
+                "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).issued_date}}"
+              },
+              {
+                "name": "due_date",
+                "value": "={{JSON.parse($node[\"Extraire Données (OpenAI)\"].json[\"message\"][\"content\"]).due_date}}"
+              },
+              {
+                "name": "pdf_base64",
+                "value": "={{$binary.invoice_pdf.data}}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "node4",
+        "name": "Envoyer vers Dashboard",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [
+          912,
+          224
+        ]
+      }
+    ],
+    "connections": {
+      "Gmail Trigger": {
+        "main": [
+          [
+            {
+              "node": "Isoler la Facture PDF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Force Import Webhook": {
+        "main": [
+          [
+            {
+              "node": "Fetch Unread Emails",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch Unread Emails": {
+        "main": [
+          [
+            {
+              "node": "Isoler la Facture PDF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Isoler la Facture PDF": {
+        "main": [
+          [
+            {
+              "node": "Extraire Données (OpenAI)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extraire Données (OpenAI)": {
+        "main": [
+          [
+            {
+              "node": "Envoyer vers Dashboard",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "binaryMode": "separate"
+    }
+  }
+]
