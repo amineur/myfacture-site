@@ -17,7 +17,18 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
-            cd /home/ubuntu/dashboard-media || exit 1
+            DEPLOY_DIR="/home/ubuntu/dashboard-media"
+            echo "=== Setup repo ==="
+            if [ ! -d "$DEPLOY_DIR/.git" ]; then
+              echo "No git repo found, cloning..."
+              rm -rf "$DEPLOY_DIR.bak"
+              [ -d "$DEPLOY_DIR" ] && mv "$DEPLOY_DIR" "$DEPLOY_DIR.bak"
+              git clone https://github.com/amineur/myfacture-site.git "$DEPLOY_DIR"
+              [ -d "$DEPLOY_DIR.bak/uploads" ] && cp -r "$DEPLOY_DIR.bak/uploads" "$DEPLOY_DIR/public/uploads"
+              [ -f "$DEPLOY_DIR.bak/.env" ] && cp "$DEPLOY_DIR.bak/.env" "$DEPLOY_DIR/.env"
+              [ -d "$DEPLOY_DIR.bak/node_modules" ] && mv "$DEPLOY_DIR.bak/node_modules" "$DEPLOY_DIR/node_modules"
+            fi
+            cd "$DEPLOY_DIR"
             echo "=== Git pull ==="
             git pull origin main || (git fetch origin main && git reset --hard origin/main)
             echo "=== Install deps ==="
