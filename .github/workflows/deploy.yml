@@ -1,0 +1,31 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: 83.228.217.205
+          username: ubuntu
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/dashboard-media
+            echo "=== Git pull ==="
+            git pull origin main
+            echo "=== Install deps ==="
+            npm install --production=false
+            echo "=== Prisma ==="
+            npx prisma db push --accept-data-loss
+            npx prisma generate
+            echo "=== Rebuild ==="
+            npm run build
+            echo "=== Restart ==="
+            docker compose restart dashboard-media || pm2 restart all || echo "Manual restart needed"
+            echo "=== Deploy done ==="
