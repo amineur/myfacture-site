@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/utils/auth'
 import { prisma } from '@/utils/db'
 import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
@@ -30,8 +32,9 @@ function findSectionById(items: IndesDocument[], id: string): IndesDocument | nu
 
 // ── PDF Text Extraction (pdf-parse v1.x) ────────────────────────────
 async function extractTextFromPdf(buffer: Buffer): Promise<string> {
-    // pdf-parse v1.x exports the function directly
-    const pdfParse = require('pdf-parse')
+    // pdf-parse v1.x has a bug where it tries to load a test PDF file on import.
+    // Workaround: import the inner module directly to skip the test file loading.
+    const pdfParse = require('pdf-parse/lib/pdf-parse')
     const data = await pdfParse(buffer)
     return data.text
 }
@@ -67,6 +70,9 @@ function parseInvoicePdfText(text: string) {
         isAvoir: false, paymentMode: null,
     }
 
+    // Normalize: replace ¤ with € (some old PDFs use ¤)
+    text = text.replace(/¤/g, '€')
+
     const parseFrenchNumber = (str: string): number =>
         parseFloat(str.replace(/\s/g, '').replace(',', '.'))
 
@@ -91,64 +97,136 @@ function parseInvoicePdfText(text: string) {
     }
     if (refMatch) result.reference = refMatch[1]
 
+
+
     // ── Dates ──
-    // New format: DATE : 19-04-2026
-    const dateMatch = text.match(/\bDATE\s*:\s*(\d{2}-\d{2}-\d{4})/i)
-    if (dateMatch) {
-        const [d, m, y] = dateMatch[1].split('-')
-        result.issuedDate = `${y}-${m}-${d}`
+    // Helper: parse DD/MM/YYYY or DD/MM/YY or DD-MM-YYYY → YYYY-MM-DD
+    const parseDMY = (d: string, m: string, y: string): string | null => {
+        if (y.length === 2) y = (parseInt(y) > 50 ? '19' : '20') + y
+        const day = d.padStart(2, '0')
+        const month = m.padStart(2, '0')
+        // Validate
+        const intM = parseInt(month), intD = parseInt(day), intY = parseInt(y)
+        if (intM < 1 || intM > 12 || intD < 1 || intD > 31 || intY < 2000 || intY > 2030) return null
+        return `${y}-${month}-${day}`
     }
 
-    // Old format: "15 déc. 2016" — use broad char class for accented month names
-    if (!result.issuedDate) {
-        const oldDateMatch = text.match(/(\d{1,2})\s+([a-zA-ZéèêëàâäùûüôöîïçÉÈÊÀÂÔÎÇ]+)\.?\s+(\d{4})/)
-        if (oldDateMatch) {
-            const day = oldDateMatch[1].padStart(2, '0')
-            const monthKey = oldDateMatch[2].toLowerCase().replace('.', '')
-            const month = MONTHS[monthKey] || '01'
-            result.issuedDate = `${oldDateMatch[3]}-${month}-${day}`
+    // Collect ALL dates found in PDF with their context/source
+    const foundDates: Array<{ date: string; source: string; priority: number }> = []
+
+    // Priority 1: "DATE :" label (new format)
+    const allDateLabel = [...text.matchAll(/\bDATE\s*:\s*(\d{2})-(\d{2})-(\d{4})/gi)]
+    for (const m of allDateLabel) {
+        const d = parseDMY(m[1], m[2], m[3])
+        if (d) foundDates.push({ date: d, source: 'DATE:', priority: 1 })
+    }
+
+    // Priority 1: "Date" followed by DD/MM/YYYY (old format header)
+    const allDateHeader = [...text.matchAll(/\bDate\b[^\n]{0,15}?(\d{1,2})\/(\d{2})\/(\d{2,4})/gi)]
+    for (const m of allDateHeader) {
+        const d = parseDMY(m[1], m[2], m[3])
+        if (d) foundDates.push({ date: d, source: 'Date header', priority: 1 })
+    }
+
+    // Priority 2: French written date "5 juin 2016", "15 déc. 2016"
+    const frenchDateMatches = [...text.matchAll(/(\d{1,2})\s+([a-zA-ZéèêëàâäùûüôöîïçÉÈÊÀÂÔÎÇ]{3,})\.?\s+(\d{4})/g)]
+    for (const m of frenchDateMatches) {
+        const monthKey = m[2].toLowerCase().replace('.', '')
+        const month = MONTHS[monthKey]
+        if (month) {
+            const d = parseDMY(m[1], month, m[3])
+            if (d) foundDates.push({ date: d, source: `French: ${m[0]}`, priority: 2 })
         }
     }
 
-    // Emission date: DATE D'ÉMISSION : 24-04-2026
-    const emissionMatch = text.match(/DATE\s+D['\u2019']?ÉMISSION\s*:\s*(\d{2}-\d{2}-\d{4})/i)
+    // Priority 3: DD/MM/YYYY or DD/MM/YY standalone (any in text)
+    const allSlashDates = [...text.matchAll(/(\d{1,2})\/(\d{2})\/(\d{2,4})/g)]
+    for (const m of allSlashDates) {
+        const d = parseDMY(m[1], m[2], m[3])
+        if (d) foundDates.push({ date: d, source: `slash: ${m[0]}`, priority: 3 })
+    }
+
+    // Sort by priority (lowest = best), then pick the earliest date as invoice date
+    foundDates.sort((a, b) => a.priority - b.priority || a.date.localeCompare(b.date))
+
+    if (foundDates.length > 0) {
+        // Use highest priority date as issued date
+        result.issuedDate = foundDates[0].date
+    }
+
+    // Emission date: DATE D'ÉMISSION : 24-04-2026 (new format only)
+    const emissionMatch = text.match(/DATE\s+D.*?MISSION\s*:\s*(\d{2})-(\d{2})-(\d{4})/i)
     if (emissionMatch) {
-        const [d, m, y] = emissionMatch[1].split('-')
-        result.emissionDate = `${y}-${m}-${d}`
+        result.emissionDate = parseDMY(emissionMatch[1], emissionMatch[2], emissionMatch[3])
     }
 
-    // Due date: DATE D'ÉCHÉANCE : 10-06-2026
-    const dueMatch = text.match(/DATE\s+D['\u2019']?ÉCHÉANCE\s*:\s*(\d{2}-\d{2}-\d{4})/i)
+    // Due date: DATE D'ÉCHÉANCE (new format)
+    const dueMatch = text.match(/DATE\s+D.*?CH.*?ANCE\s*:\s*(\d{2})-(\d{2})-(\d{4})/i)
     if (dueMatch) {
-        const [d, m, y] = dueMatch[1].split('-')
-        result.dueDate = `${y}-${m}-${d}`
+        result.dueDate = parseDMY(dueMatch[1], dueMatch[2], dueMatch[3])
     }
 
-    // Old format: "le 15/12/16" anywhere in text (PDF table columns get scrambled)
+    // Old format due date: "le 15/12/16"
     if (!result.dueDate) {
-        const oldDueMatch = text.match(/le\s+(\d{2})\/(\d{2})\/(\d{2,4})/i)
+        const oldDueMatch = text.match(/le\s+(\d{1,2})\/(\d{2})\/(\d{2,4})/i)
         if (oldDueMatch) {
-            const day = oldDueMatch[1]
-            const month = oldDueMatch[2]
-            let year = oldDueMatch[3]
-            if (year.length === 2) year = (parseInt(year) > 50 ? '19' : '20') + year
-            result.dueDate = `${year}-${month}-${day}`
+            result.dueDate = parseDMY(oldDueMatch[1], oldDueMatch[2], oldDueMatch[3])
         }
     }
 
     // ── Amounts ──
-    // TOTAL TTC / NET À PAYER (new format)
-    const ttcMatch = text.match(/(?:TOTAL\s+TTC|NET\s+[ÀA]\s+PAYER)\s*\n?\s*([\d\s]+,\d{2})/i)
+    // TOTAL TTC / NET À PAYER (new format — single value on its own line)
+    const ttcMatch = text.match(/(?:TOTAL\s+TTC|NET\s+[ÀA]\s+PAYER)\s*€?\s*\n\s*([\d\s]+,\d{2})/i)
     if (ttcMatch) {
         result.amountTTC = parseFrenchNumber(ttcMatch[1])
     }
 
-    // Old format: columns scrambled — headers on one line, amounts on next
-    // "Net à déduire €Total TVA 20%Total HT €"
-    // "55,13 €9,19 €45,94 €"
+    // Old format pattern 1: "Total TTC €Total TVA 20%Total HT €" on one line
+    // followed by "319,00 €53,17 €265,84 €" or "1 800,00     300,00     1 500,00"
     // First amount = TTC, last = HT
     if (!result.amountTTC) {
-        const amountsLineMatch = text.match(/(?:Net\s+[àa]\s+d[ée]duire|Montant\s+TTC)[^]*?\n([\d,.\s€]+€)/i)
+        const totalLineMatch = text.match(/Total\s+TTC\s*€[^\n]*Total\s+HT\s*€\s*\n\s*([\d,.\s€]+)/i)
+        if (totalLineMatch) {
+            const amountsLine = totalLineMatch[1]
+            // Try €-separated amounts first: "319,00 €53,17 €265,84 €"
+            let amounts = [...amountsLine.matchAll(/([\d\s]+,\d{2})\s*€/g)]
+                .map(m => parseFrenchNumber(m[1]))
+            // If no €, try space-separated: "1 800,00      300,00      1 500,00"
+            if (amounts.length === 0) {
+                amounts = [...amountsLine.matchAll(/([\d\s]+,\d{2})/g)]
+                    .map(m => parseFrenchNumber(m[1]))
+            }
+            if (amounts.length >= 1) result.amountTTC = amounts[0]
+            if (amounts.length >= 3) result.amountHT = amounts[2]
+            else if (amounts.length >= 2) result.amountHT = amounts[amounts.length - 1]
+        }
+    }
+
+    // Old format pattern 2: "Total HT € Total TVA € 20%  Total TTC €" (reversed order)
+    // followed by "1 500,00      300,00      1 800,00"
+    if (!result.amountTTC) {
+        const reversedMatch = text.match(/Total\s+HT\s*€[^\n]*Total\s+TTC\s*€\s*\n\s*([\d,.\s€]+)/i)
+        if (reversedMatch) {
+            const amountsLine = reversedMatch[1]
+            let amounts = [...amountsLine.matchAll(/([\d\s]+,\d{2})\s*€/g)]
+                .map(m => parseFrenchNumber(m[1]))
+            if (amounts.length === 0) {
+                amounts = [...amountsLine.matchAll(/([\d\s]+,\d{2})/g)]
+                    .map(m => parseFrenchNumber(m[1]))
+            }
+            // Reversed: first = HT, last = TTC
+            if (amounts.length >= 3) {
+                result.amountHT = amounts[0]
+                result.amountTTC = amounts[2]
+            } else if (amounts.length >= 1) {
+                result.amountTTC = amounts[amounts.length - 1]
+            }
+        }
+    }
+
+    // Old format pattern 3: "Net à déduire/payer €..." → next line has amounts
+    if (!result.amountTTC) {
+        const amountsLineMatch = text.match(/(?:Net\s+[àa]\s+(?:d[ée]duire|payer))\s*€[^\n]*\n\s*([\d,.\s€]+€)/i)
         if (amountsLineMatch) {
             const amountsLine = amountsLineMatch[1]
             const amounts = [...amountsLine.matchAll(/([\d\s]+,\d{2})\s*€/g)]
@@ -156,6 +234,14 @@ function parseInvoicePdfText(text: string) {
             if (amounts.length >= 1) result.amountTTC = amounts[0]
             if (amounts.length >= 3) result.amountHT = amounts[2]
             else if (amounts.length >= 2) result.amountHT = amounts[amounts.length - 1]
+        }
+    }
+
+    // Fallback: look for standalone amount before "le DD/MM/YY" (old format: "167,02 €\nle 10/11/16")
+    if (!result.amountTTC) {
+        const beforeEchMatch = text.match(/([\d\s]+,\d{2})\s*€?\s*\n\s*le\s+\d{2}\/\d{2}\/\d{2,4}/i)
+        if (beforeEchMatch) {
+            result.amountTTC = parseFrenchNumber(beforeEchMatch[1])
         }
     }
 
@@ -196,7 +282,7 @@ function parseInvoicePdfText(text: string) {
         if (desigIdx > 0) {
             for (let i = desigIdx - 1; i >= Math.max(0, desigIdx - 3); i--) {
                 const line = lines[i]
-                if (/(?:SIRET|TVA|France|Versailles|Chantiers|ADRESSE|FACTURATION|URBAN|EUROMEDMULTIMEDIA|Quantit)/i.test(line)) continue
+                if (/(?:SIRET|TVA|France|Versailles|Chantiers|ADRESSE|FACTURATION|URBAN|EUROMEDMULTIMEDIA|Quantit|Numéro|Num[ée]ro|Montant|R[ée]f[ée]rence|Facture|Date|P[ée]riode|D[ée]signation|Mode\s+de)/i.test(line)) continue
                 if (line.length > 5 && line.length < 80 && !/^\d/.test(line) && !/^N°/.test(line)) {
                     result.category = line
                     break
@@ -225,6 +311,20 @@ function parseInvoicePdfText(text: string) {
                     break
                 }
             }
+        }
+    }
+
+    // Fallback: if no category found, use the description as category
+    // Old format PDFs have the service name in the désignation line
+    if (!result.category && result.description) {
+        // Clean up: remove year/period suffixes like "2026", "janv./mars 2016"
+        let cat = result.description
+            .replace(/\s+\d{4}$/, '')                          // trailing year
+            .replace(/\s+(?:du\s+)?\d{2}\/\d{4}\s+au\s+\d{2}\/\d{4}/i, '')  // period ranges
+            .replace(/\s+(?:janv|févr|mars|avr|mai|juin|juil|août|sept|oct|nov|déc)[.\s/]+.*$/i, '') // month ranges
+            .trim()
+        if (cat.length > 3) {
+            result.category = cat
         }
     }
 
@@ -268,8 +368,10 @@ async function savePdf(buffer: Buffer, filename: string): Promise<string> {
 // ══════════════════════════════════════════════════════════════════════
 export async function POST(req: NextRequest) {
     try {
+        // Auth: either API key or NextAuth session (for UI calls)
         const apiKey = req.headers.get('x-automation-key')
-        if (!apiKey || apiKey !== process.env.AUTOMATION_API_KEY) {
+        const session = await getServerSession(authOptions)
+        if ((!apiKey || apiKey !== process.env.AUTOMATION_API_KEY) && !session?.user?.id) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
@@ -326,13 +428,84 @@ export async function POST(req: NextRequest) {
         const company = await prisma.companies.findFirst()
         if (!company) return NextResponse.json({ error: 'No company found' }, { status: 404 })
 
-        let supplier = await prisma.suppliers.findFirst({
-            where: { company_id: company.id, name: { contains: sectionConfig.supplier, mode: 'insensitive' } },
-        })
-        if (!supplier) {
-            supplier = await prisma.suppliers.findFirst({
-                where: { company_id: company.id, name: { contains: 'Indés', mode: 'insensitive' } },
+        // ── Keyword → supplier routing ──────────────────────────────────
+        // Each entry: [regex to test against full PDF text, supplier suffix]
+        // First match wins. Anything unmatched → "Divers"
+        const PDF_KEYWORD_ROUTES: Array<[RegExp, string]> = [
+            [/\bACPM\b/i, 'Acpm'],
+            [/\bInd[ée]s\s*Market\b/i, 'Market'],
+            [/\bRadio\s*Player\b/i, 'Radio Player'],
+            [/\bMuzicast\b/i, 'Muzicast'],
+            [/\bM[ée]diam[ée]trie\b/i, 'Médiamétrie'],
+            [/\bHab\.?\s*d[''']?\s*[EÉée]coute\b/i, 'Médiamétrie'],
+            [/\bEAR\b/, 'Médiamétrie'],
+            [/\bQuote-part\b/i, 'Médiamétrie'],
+            // Hébergement AVANT maintenance/site internet (priorité)
+            [/h[ée]bergement/i, 'Hébergement'],
+            [/\bScaleway\b/i, 'Hébergement'],
+            [/\b(?:maintenance|infrastructure\s+commune)\b/i, 'Maintenance'],
+            [/\bSite\s+Internet\b/i, 'Maintenance'],
+            [/\bCardiweb\b/i, 'Maintenance'],
+            [/\bMigration\b/i, 'Maintenance'],
+            [/\bProvision\s+cotisation\b/i, 'Cotisation'],
+            [/\bcotisation\b/i, 'Cotisation'],
+            [/\br[ée]mun[ée]ration\b/i, 'Cotisation'],
+            [/\berreur\s+de\s+diffusion\b/i, 'Incidents de diffusion'],
+            [/\bincident\b/i, 'Incidents de diffusion'],
+        ]
+
+        // Category normalization map (for parsed category text, not PDF content)
+        const CATEGORY_NORMALIZE: Record<string, string> = {
+            'rémunération': 'Cotisation',
+            'remuneration': 'Cotisation',
+            'cotisation acpm': 'Acpm',
+            'infrastructure commune': 'Maintenance',
+            'maintenance': 'Maintenance',
+        }
+
+        // Supplier cache: one supplier per category (e.g. "Indes - Hébergement Scaleway")
+        const supplierCache: Record<string, typeof company & { id: string; name: string }> = {}
+
+        async function getOrCreateSupplier(category: string | null) {
+            // Normalize category: trim, collapse spaces, then apply rename map
+            let cleanCategory = category?.replace(/\s+/g, ' ').trim() || null
+            if (cleanCategory) {
+                const normalized = CATEGORY_NORMALIZE[cleanCategory.toLowerCase()]
+                if (normalized) cleanCategory = normalized
+            }
+            const supplierName = cleanCategory
+                ? `Indes - ${cleanCategory}`
+                : 'Indes - Divers'
+
+            // Cache key is lowercase to avoid duplicates
+            const cacheKey = supplierName.toLowerCase()
+            if (supplierCache[cacheKey]) return supplierCache[cacheKey]
+
+            // Search existing supplier (case-insensitive + contains for flexibility)
+            let found = await prisma.suppliers.findFirst({
+                where: { company_id: company!.id, name: { equals: supplierName, mode: 'insensitive' } },
             })
+
+            // Fallback: search by category keyword alone
+            if (!found && cleanCategory) {
+                found = await prisma.suppliers.findFirst({
+                    where: { company_id: company!.id, name: { contains: cleanCategory, mode: 'insensitive' } },
+                })
+            }
+
+            // Auto-create if not found
+            if (!found) {
+                found = await prisma.suppliers.create({
+                    data: {
+                        company_id: company!.id,
+                        name: supplierName,
+                    },
+                })
+                console.log(`[Indés Sync] Created supplier: ${found.name} (${found.id})`)
+            }
+
+            supplierCache[cacheKey] = found as any
+            return found
         }
 
         // 4. Existing refs for dedup
@@ -364,9 +537,9 @@ export async function POST(req: NextRequest) {
         for (const doc of docsToProcess) {
             results.processed++
 
-            if (!supplier) {
-                results.skipped_no_supplier++
-                continue
+            // Throttle: 200ms pause between each PDF to avoid overloading Les Indés API
+            if (results.processed > 1) {
+                await new Promise(r => setTimeout(r, 200))
             }
 
             try {
@@ -377,6 +550,45 @@ export async function POST(req: NextRequest) {
                 const pdfText = await extractTextFromPdf(pdfBuffer)
                 const parsed = parseInvoicePdfText(pdfText)
 
+                // Debug: log PDFs where amount or date extraction fails
+                if (!parsed.amountTTC) {
+                    console.log(`[Indés Sync] ⚠ No amount for ${doc.title}:`)
+                    console.log(pdfText.substring(0, 500))
+                    console.log('---')
+                }
+                if (!parsed.issuedDate) {
+                    console.log(`[Indés Sync] ⚠ No date for ${doc.title}, trying filename...`)
+                    // Try to extract date from filename: _MMYYYY, _YYYYMM, _DDMMYYYY, _YYYYMMDD
+                    const fn = doc.title
+                    let fnDate: string | null = null
+                    // Pattern: _MMYYYY (e.g. _052016)
+                    const mmyyyyMatch = fn.match(/_(\d{2})(\d{4})(?:[._]|$)/)
+                    if (mmyyyyMatch && parseInt(mmyyyyMatch[1]) >= 1 && parseInt(mmyyyyMatch[1]) <= 12) {
+                        fnDate = `${mmyyyyMatch[2]}-${mmyyyyMatch[1]}-01`
+                    }
+                    // Pattern: _YYYYMMDD (e.g. _20160605)
+                    if (!fnDate) {
+                        const ymdMatch = fn.match(/_(\d{4})(\d{2})(\d{2})/)
+                        if (ymdMatch && parseInt(ymdMatch[2]) >= 1 && parseInt(ymdMatch[2]) <= 12) {
+                            fnDate = `${ymdMatch[1]}-${ymdMatch[2]}-${ymdMatch[3]}`
+                        }
+                    }
+                    // Pattern: _YYYY in filename (at least get the year)
+                    if (!fnDate) {
+                        const yearMatch = fn.match(/_(\d{4})/)
+                        if (yearMatch) {
+                            fnDate = `${yearMatch[1]}-01-01`
+                        }
+                    }
+                    if (fnDate) {
+                        parsed.issuedDate = fnDate
+                        console.log(`[Indés Sync]   → date from filename: ${fnDate}`)
+                    } else {
+                        console.log(`[Indés Sync]   → no date found anywhere, first 300 chars:`)
+                        console.log(pdfText.substring(0, 300))
+                    }
+                }
+
                 // Build reference for dedup
                 const ref = parsed.reference || doc.title.replace(/\.pdf$/i, '').split('_').slice(-1)[0]
                 const normalizedRef = ref.replace(/^F_?/i, '').replace(/^0+/, '')
@@ -386,12 +598,26 @@ export async function POST(req: NextRequest) {
                     continue
                 }
 
+                // Route by PDF keyword matching → supplier name suffix
+                let resolvedCategory = 'Divers' // default fallback
+                for (const [regex, supplierSuffix] of PDF_KEYWORD_ROUTES) {
+                    if (regex.test(pdfText)) {
+                        resolvedCategory = supplierSuffix
+                        break
+                    }
+                }
+                // If no keyword matched but parser found a category, normalize it
+                if (resolvedCategory === 'Divers' && parsed.category) {
+                    const norm = CATEGORY_NORMALIZE[parsed.category.toLowerCase()]
+                    resolvedCategory = norm || parsed.category
+                }
+
                 if (dryRun) {
-                    const needsReview = !parsed.category || !parsed.amountTTC || !parsed.issuedDate
+                    const needsReview = !resolvedCategory || !parsed.amountTTC || !parsed.issuedDate
                     if (needsReview) results.needs_review++
                     results.invoices.push({
                         reference: ref,
-                        category: parsed.category,
+                        category: resolvedCategory,
                         description: parsed.description,
                         issuedDate: parsed.issuedDate,
                         emissionDate: parsed.emissionDate,
@@ -412,14 +638,20 @@ export async function POST(req: NextRequest) {
                     continue
                 }
 
+                // Find or create supplier based on resolved category
+                const supplier = await getOrCreateSupplier(resolvedCategory)
+
                 // Save PDF
                 const pdfPath = await savePdf(pdfBuffer, doc.title)
 
-                // Dates
-                const issuedDate = parsed.emissionDate || parsed.issuedDate
-                    ? new Date(parsed.emissionDate || parsed.issuedDate!)
+                // Dates: use issuedDate (date facture) as primary, emissionDate as fallback
+                const rawIssuedDate = parsed.issuedDate || parsed.emissionDate
+                    ? new Date(parsed.issuedDate || parsed.emissionDate!)
                     : new Date()
-                const dueDate = parsed.dueDate ? new Date(parsed.dueDate) : (() => {
+                const issuedDate = isNaN(rawIssuedDate.getTime()) ? new Date() : rawIssuedDate
+
+                const rawDueDate = parsed.dueDate ? new Date(parsed.dueDate) : null
+                const dueDate = rawDueDate && !isNaN(rawDueDate.getTime()) ? rawDueDate : (() => {
                     const d = new Date(issuedDate)
                     d.setDate(d.getDate() + 30)
                     return d
@@ -432,7 +664,7 @@ export async function POST(req: NextRequest) {
                 const paymentDate = isPaid ? dueDate : null
 
                 // Flag needs_review si catégorie manquante, montant à 0, ou date manquante
-                const needsReview = !parsed.category || !parsed.amountTTC || !parsed.issuedDate
+                const needsReview = !resolvedCategory || !parsed.amountTTC || !parsed.issuedDate
                 if (needsReview) results.needs_review++
 
                 // Create invoice
@@ -450,7 +682,7 @@ export async function POST(req: NextRequest) {
                         pdf_url: pdfPath,
                         metadata: {
                             source: 'indes-sync',
-                            category: parsed.category,
+                            category: resolvedCategory,
                             description: parsed.description,
                             is_avoir: parsed.isAvoir,
                             payment_mode: parsed.paymentMode,
@@ -472,7 +704,7 @@ export async function POST(req: NextRequest) {
                 results.invoices.push({
                     id: invoice.id,
                     reference: ref,
-                    category: parsed.category,
+                    category: resolvedCategory,
                     amountTTC: parsed.amountTTC,
                     amountHT: parsed.amountHT,
                     issuedDate: parsed.issuedDate,
@@ -514,8 +746,10 @@ export async function POST(req: NextRequest) {
 // GET /api/automation/indes-sync — Status & token check
 // ══════════════════════════════════════════════════════════════════════
 export async function GET(req: NextRequest) {
+    // Auth: either API key or NextAuth session (for UI calls)
     const apiKey = req.headers.get('x-automation-key')
-    if (!apiKey || apiKey !== process.env.AUTOMATION_API_KEY) {
+    const session = await getServerSession(authOptions)
+    if ((!apiKey || apiKey !== process.env.AUTOMATION_API_KEY) && !session?.user?.id) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 

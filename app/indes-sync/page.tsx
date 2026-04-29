@@ -54,7 +54,7 @@ type SyncResult = {
 const formatMoney = (amount: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(amount);
 
-const API_KEY = 'dev-key'; // matches AUTOMATION_API_KEY in .env
+// Auth via session NextAuth (pas besoin de clé API)
 
 export default function IndesSyncPage() {
     const router = useRouter();
@@ -92,7 +92,7 @@ export default function IndesSyncPage() {
     const checkStatus = useCallback(async () => {
         try {
             const res = await fetch('/api/automation/indes-sync', {
-                headers: { 'x-automation-key': API_KEY },
+                // Session auth (no API key needed)
             });
             if (res.ok) {
                 const data = await res.json();
@@ -117,9 +117,9 @@ export default function IndesSyncPage() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-automation-key': API_KEY,
+                    // Session auth
                 },
-                body: JSON.stringify({ dryRun, limit: 50 }),
+                body: JSON.stringify({ dryRun, limit: 999 }),
             });
             const data = await res.json();
             setSyncResult(data);
@@ -247,14 +247,6 @@ export default function IndesSyncPage() {
                     <p className="text-sm font-bold text-gray-900">
                         {syncResult.created > 0 ? `${syncResult.created} facture(s) importée(s)` : 'Aucune nouvelle facture'}
                     </p>
-                    <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
-                        <span>Total section : {syncResult.total_in_section}</span>
-                        <span>Traitées : {syncResult.processed}</span>
-                        <span>Déjà existantes : {syncResult.skipped_existing}</span>
-                        <span className={cn(syncResult.needs_review > 0 && "text-amber-600 font-medium")}>
-                            À revoir : {syncResult.needs_review}
-                        </span>
-                    </div>
                     {syncResult.errors.length > 0 && (
                         <div className="text-xs text-red-600 space-y-1 mt-2">
                             {syncResult.errors.slice(0, 3).map((err, i) => (
@@ -267,14 +259,20 @@ export default function IndesSyncPage() {
             )}
 
             {/* Stats */}
-            <section className="grid grid-cols-3 gap-3">
+            <section className="grid grid-cols-2 gap-3">
                 <Card className="p-3 text-center">
-                    <p className="text-2xl font-bold text-gray-900">{invoices.length}</p>
-                    <p className="text-[10px] text-gray-500">Factures importées</p>
+                    <p className="text-2xl font-bold text-emerald-600">{invoices.length}</p>
+                    <p className="text-[10px] text-gray-500">Importées</p>
+                </Card>
+                <Card className={cn("p-3 text-center", syncResult && syncResult.errors.length > 0 && "border-red-200 bg-red-50/50")}>
+                    <p className={cn("text-2xl font-bold", syncResult && syncResult.errors.length > 0 ? "text-red-600" : "text-gray-900")}>
+                        {syncResult ? syncResult.errors.length : 0}
+                    </p>
+                    <p className="text-[10px] text-gray-500">Échouées</p>
                 </Card>
                 <Card className={cn("p-3 text-center", reviewCount > 0 && "border-amber-200 bg-amber-50/50")}>
                     <p className={cn("text-2xl font-bold", reviewCount > 0 ? "text-amber-600" : "text-gray-900")}>{reviewCount}</p>
-                    <p className="text-[10px] text-gray-500">À revoir</p>
+                    <p className="text-[10px] text-gray-500">À corriger</p>
                 </Card>
                 <Card className="p-3 text-center">
                     <p className="text-lg font-bold text-gray-900">{formatMoney(totalAmount)}</p>
@@ -286,8 +284,8 @@ export default function IndesSyncPage() {
             <div className="flex items-center gap-2">
                 <div className="flex bg-gray-100 rounded-lg p-0.5 text-xs">
                     {([
-                        ['all', 'Toutes'],
-                        ['review', `À revoir (${reviewCount})`],
+                        ['all', `Toutes (${invoices.length})`],
+                        ['review', `À corriger (${reviewCount})`],
                         ['ok', 'OK'],
                     ] as const).map(([key, label]) => (
                         <button
