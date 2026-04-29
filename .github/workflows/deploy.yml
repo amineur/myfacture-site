@@ -33,11 +33,14 @@ jobs:
             git pull origin main || (git fetch origin main && git reset --hard origin/main)
             echo "=== Install deps ==="
             npm install --production=false
-            echo "=== Prisma ==="
-            npx prisma db push --accept-data-loss
+            echo "=== Prisma generate ==="
             npx prisma generate
             echo "=== Rebuild ==="
             npm run build
-            echo "=== Restart ==="
-            docker compose restart dashboard-media || pm2 restart all || echo "Manual restart needed"
+            echo "=== Restart container ==="
+            docker compose down dashboard-media || true
+            docker compose up -d dashboard-media
+            echo "=== Prisma db push (inside container) ==="
+            sleep 5
+            docker exec dashboard-media npx prisma db push --accept-data-loss || echo "Prisma db push skipped"
             echo "=== Deploy done ==="
