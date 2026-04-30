@@ -37,8 +37,9 @@ jobs:
             npx prisma generate
             echo "=== Rebuild ==="
             npm run build
-            echo "=== Restart container ==="
+            echo "=== Rebuild & restart container ==="
             docker compose down dashboard-media || true
+            docker compose build --no-cache dashboard-media
             docker compose up -d dashboard-media
             echo "=== Prisma db push (inside container) ==="
             sleep 5
