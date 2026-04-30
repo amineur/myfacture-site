@@ -35,10 +35,17 @@ type DebtsContextType = {
 
 const DebtsContext = createContext<DebtsContextType | undefined>(undefined);
 
+// Module-level cache: instant data on navigation, background refresh
+const debtsCache: { data: Debt[] | null; companyId: string | null; timestamp: number } = {
+    data: null, companyId: null, timestamp: 0,
+};
+const DEBTS_CACHE_TTL = 30_000; // 30 seconds
+
 export function DebtsProvider({ children }: { children: React.ReactNode }) {
-    const [debts, setDebts] = useState<Debt[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [lastCompanyId, setLastCompanyId] = useState<string | null>(null);
+    const cached = debtsCache.companyId !== null && debtsCache.data;
+    const [debts, setDebts] = useState<Debt[]>(cached ? debtsCache.data! : []);
+    const [isLoading, setIsLoading] = useState(!cached);
+    const [lastCompanyId, setLastCompanyId] = useState<string | null>(debtsCache.companyId);
 
     const isFetchingRef = React.useRef(false);
     const lastCompanyIdRef = React.useRef(lastCompanyId);
@@ -50,6 +57,17 @@ export function DebtsProvider({ children }: { children: React.ReactNode }) {
     const fetchDebts = useCallback(async (companyId: string, force = false) => {
         if (!companyId) return;
         if (isFetchingRef.current) return;
+
+        // Return cached data if fresh
+        const isCacheFresh = debtsCache.companyId === companyId && (Date.now() - debtsCache.timestamp) < DEBTS_CACHE_TTL;
+        if (!force && isCacheFresh && debtsCache.data) {
+            if (lastCompanyIdRef.current !== companyId || debtsRef.current.length === 0) {
+                setDebts(debtsCache.data);
+                setLastCompanyId(companyId);
+                setIsLoading(false);
+            }
+            return;
+        }
         if (!force && lastCompanyIdRef.current === companyId && debtsRef.current.length > 0) return;
 
         isFetchingRef.current = true;
@@ -112,6 +130,9 @@ export function DebtsProvider({ children }: { children: React.ReactNode }) {
                 }
             });
 
+            debtsCache.data = formattedDebts;
+            debtsCache.companyId = companyId;
+            debtsCache.timestamp = Date.now();
             setDebts(formattedDebts);
         } catch (e) {
             console.error('[fetchDebts] error:', e);

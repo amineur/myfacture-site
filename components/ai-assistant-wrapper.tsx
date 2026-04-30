@@ -1,7 +1,12 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useCompanies } from '@/components/providers/companies-provider';
-import AIAssistant from './ai-assistant';
+
+const AIAssistant = dynamic(() => import('./ai-assistant'), {
+    ssr: false,
+    loading: () => null,
+});
 
 export default function AIAssistantWrapper() {
     const { companies } = useCompanies();

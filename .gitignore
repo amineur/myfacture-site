@@ -43,3 +43,9 @@ next-env.d.ts
 
 /lib/generated/prisma
 .env*.local
+
+# uploaded PDFs (mounted as Docker volume on VPS)
+public/uploads/
+
+# database backups
+prisma/prod_backup.sql

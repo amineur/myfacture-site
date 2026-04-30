@@ -22,9 +22,16 @@ type CompaniesContextType = {
 
 const CompaniesContext = createContext<CompaniesContextType | undefined>(undefined)
 
+// Module-level cache: companies rarely change
+const companiesCache: { data: Company[] | null; timestamp: number } = {
+    data: null, timestamp: 0,
+}
+const COMPANIES_CACHE_TTL = 120_000 // 2 minutes
+
 export function CompaniesProvider({ children }: { children: React.ReactNode }) {
-    const [companies, setCompanies] = useState<Company[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const cached = companiesCache.data
+    const [companies, setCompanies] = useState<Company[]>(cached || [])
+    const [isLoading, setIsLoading] = useState(!cached)
     const { data: session, status } = useSession()
 
     const fetchCompanies = useCallback(async () => {
@@ -34,11 +41,22 @@ export function CompaniesProvider({ children }: { children: React.ReactNode }) {
             setIsLoading(false)
             return
         }
+
+        // Return cached data if fresh
+        const isCacheFresh = (Date.now() - companiesCache.timestamp) < COMPANIES_CACHE_TTL
+        if (isCacheFresh && companiesCache.data) {
+            setCompanies(companiesCache.data)
+            setIsLoading(false)
+            return
+        }
+
         try {
             setIsLoading(true)
             const res = await fetch('/api/companies')
             if (res.ok) {
                 const data = await res.json()
+                companiesCache.data = data || []
+                companiesCache.timestamp = Date.now()
                 setCompanies(data || [])
             }
         } catch (err) {

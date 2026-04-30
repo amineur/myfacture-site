@@ -14,11 +14,18 @@ type PaymentsContextType = {
 
 const PaymentsContext = createContext<PaymentsContextType | undefined>(undefined);
 
+// Module-level cache: instant data on navigation, background refresh
+const invoicesCache: { data: Invoice[] | null; companyId: string | null; timestamp: number } = {
+    data: null, companyId: null, timestamp: 0,
+};
+const INVOICES_CACHE_TTL = 30_000; // 30 seconds
+
 export function PaymentsProvider({ children }: { children: React.ReactNode }) {
-    const [invoices, setInvoices] = useState<Invoice[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const cached = invoicesCache.companyId !== null && invoicesCache.data;
+    const [invoices, setInvoices] = useState<Invoice[]>(cached ? invoicesCache.data! : []);
+    const [isLoading, setIsLoading] = useState(!cached);
     const [error, setError] = useState<string | null>(null);
-    const [lastCompanyId, setLastCompanyId] = useState<string | null>(null);
+    const [lastCompanyId, setLastCompanyId] = useState<string | null>(invoicesCache.companyId);
 
     const isFetchingRef = React.useRef(false);
     const lastCompanyIdRef = React.useRef(lastCompanyId);
@@ -30,6 +37,17 @@ export function PaymentsProvider({ children }: { children: React.ReactNode }) {
     const fetchInvoices = useCallback(async (companyId: string, force = false) => {
         if (!companyId) return;
         if (isFetchingRef.current) return;
+
+        // Return cached data if fresh
+        const isCacheFresh = invoicesCache.companyId === companyId && (Date.now() - invoicesCache.timestamp) < INVOICES_CACHE_TTL;
+        if (!force && isCacheFresh && invoicesCache.data) {
+            if (lastCompanyIdRef.current !== companyId || invoicesRef.current.length === 0) {
+                setInvoices(invoicesCache.data);
+                setLastCompanyId(companyId);
+                setIsLoading(false);
+            }
+            return;
+        }
         if (!force && lastCompanyIdRef.current === companyId && invoicesRef.current.length > 0) return;
 
         isFetchingRef.current = true;
@@ -41,6 +59,9 @@ export function PaymentsProvider({ children }: { children: React.ReactNode }) {
             const res = await fetch(`/api/invoices?companyId=${companyId}`);
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
+            invoicesCache.data = data || [];
+            invoicesCache.companyId = companyId;
+            invoicesCache.timestamp = Date.now();
             setInvoices(data || []);
         } catch (err: any) {
             setError(`Erreur chargement factures: ${err.message}`);

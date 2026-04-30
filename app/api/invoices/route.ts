@@ -14,7 +14,17 @@ export async function GET(req: NextRequest) {
 
     const invoices = await prisma.invoices.findMany({
         where: { company_id: companyId },
-        include: {
+        select: {
+            id: true,
+            company_id: true,
+            reference: true,
+            amount_ttc: true,
+            amount_ht: true,
+            status: true,
+            issued_date: true,
+            due_date: true,
+            payment_date: true,
+            pdf_url: true,
             supplier: {
                 select: { id: true, name: true, logo_url: true, iban: true, bic: true },
             },
@@ -32,7 +42,9 @@ export async function GET(req: NextRequest) {
         payment_date: inv.payment_date?.toISOString().split('T')[0] ?? null,
     }))
 
-    return NextResponse.json(serialized)
+    const res = NextResponse.json(serialized)
+    res.headers.set('Cache-Control', 'private, max-age=15, stale-while-revalidate=30')
+    return res
 }
 
 export async function PATCH(req: NextRequest) {

@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
     if (!invoice) return NextResponse.json({ error: 'Invoice not found' }, { status: 404 })
 
-    return NextResponse.json({
+    const res = NextResponse.json({
         ...invoice,
         amount_ttc: Number(invoice.amount_ttc),
         amount_ht: invoice.amount_ht ? Number(invoice.amount_ht) : null,
@@ -26,6 +26,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         due_date: invoice.due_date?.toISOString().split('T')[0] ?? null,
         payment_date: invoice.payment_date?.toISOString().split('T')[0] ?? null,
     })
+    res.headers.set('Cache-Control', 'private, max-age=30, stale-while-revalidate=60')
+    return res
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

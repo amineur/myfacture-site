@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo, useCallback } from "react";
 import { useInstantNavigation } from "@/hooks/use-instant-navigation";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -250,8 +250,8 @@ export default function PaymentsPage() {
         setShowSummary(false);
     };
 
-    // FILTERING LOGIC
-    const filteredPayments = invoices.filter((p) => {
+    // FILTERING LOGIC (memoized)
+    const filteredPayments = useMemo(() => invoices.filter((p) => {
         if (searchTerm) {
             const cleanSearch = searchTerm.toLowerCase().replace(/\s/g, '');
             const supplierMatch = p.supplier?.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -266,10 +266,10 @@ export default function PaymentsPage() {
         if (filter === "todo") return ['PENDING', 'OPEN', 'LATE'].includes(p.status);
         if (filter === "paid") return p.status === 'PAID';
         return true;
-    });
+    }), [invoices, searchTerm, filter]);
 
-    // GROUPING LOGIC (By Month of Due Date)
-    const groupedPayments = filteredPayments.reduce((groups, invoice) => {
+    // GROUPING LOGIC (By Month of Due Date - memoized)
+    const groupedPayments = useMemo(() => filteredPayments.reduce((groups, invoice) => {
         if (!invoice.due_date) {
             // Invoices without due_date go into a "Sans échéance" group
             const monthKey = 'Sans échéance';
@@ -310,9 +310,9 @@ export default function PaymentsPage() {
         groups[monthKey].items.push(invoice);
         groups[monthKey].total += (invoice.amount_ttc || 0);
         return groups;
-    }, {} as Record<string, { items: Invoice[], total: number }>);
+    }, {} as Record<string, { items: Invoice[], total: number }>), [filteredPayments, showFuture, searchTerm]);
 
-    // STATS LOGIC
+    // STATS LOGIC (memoized)
     const now = new Date();
     const isOverdue = (inv: Invoice) => {
         if (inv.status === 'PAID') return false;
@@ -325,7 +325,7 @@ export default function PaymentsPage() {
 
     const currentMonthKey = format(now, 'MMMM yyyy', { locale: fr });
 
-    const stats = {
+    const stats = useMemo(() => ({
         currentMonthRemaining: invoices
             .filter(p => {
                 if (!p.due_date) return false;
@@ -341,8 +341,6 @@ export default function PaymentsPage() {
         totalRemaining: invoices
             .filter(p => {
                 if (!['PENDING', 'OPEN', 'LATE'].includes(p.status)) return false;
-
-                // Sync visibility with groupedPayments: Skip future months if not toggled + not searching
                 if (!showFuture && !searchTerm && p.due_date) {
                     const pDue = parseISO(p.due_date);
                     if (!isNaN(pDue.getTime())) {
@@ -354,7 +352,7 @@ export default function PaymentsPage() {
                 return true;
             })
             .reduce((acc, curr) => acc + (curr.amount_ttc || 0), 0),
-    };
+    }), [invoices, showFuture, searchTerm, currentMonthKey]);
 
     const fmt = (n: number) => n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
 

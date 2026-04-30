@@ -2,13 +2,12 @@
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Download, FileText, Calendar, Building2, Hash, AlertCircle, CreditCard, Loader2, Eye } from "lucide-react";
+import { ArrowLeft, Download, FileText, Calendar, Building2, Hash, AlertCircle, CreditCard, Loader2, Eye, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { format, parseISO, differenceInDays } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { PaymentDialog } from "@/components/payments/payment-dialog";
 // ... imports
 
@@ -344,26 +343,26 @@ export default function PaymentDetailPage({ params }: { params: Promise<{ id: st
                 />
             )}
 
-            {/* PDF Preview Dialog */}
-            {payment && (
-                <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-
-                    <DialogContent className="max-w-4xl h-[90vh] p-0 flex flex-col bg-gray-900 border-gray-800">
-                        <div className="flex-1 w-full bg-gray-800 relative">
-                            {payment.pdfUrl ? (
-                                <iframe
-                                    src={payment.pdfUrl}
-                                    className="w-full h-full border-0"
-                                    title="Aperçu PDF"
-                                />
-                            ) : (
-                                <div className="flex items-center justify-center h-full text-gray-400">
-                                    Impossible de charger l'aperçu
-                                </div>
-                            )}
+            {/* PDF Preview - Full screen overlay */}
+            {isPreviewOpen && payment?.pdfUrl && (
+                <div className="fixed inset-0 z-50 bg-black/80 flex flex-col" onClick={() => setIsPreviewOpen(false)}>
+                    <div className="flex items-center justify-between px-4 py-3 bg-black/40 shrink-0">
+                        <p className="text-sm font-medium text-white/80">Aperçu PDF</p>
+                        <div className="flex items-center gap-2">
+                            <a href={payment.pdfUrl} download onClick={(e) => e.stopPropagation()}>
+                                <Button size="icon" variant="ghost" className="h-8 w-8 text-white/80 hover:text-white hover:bg-white/10 rounded-full" title="Télécharger">
+                                    <Download className="h-4 w-4" />
+                                </Button>
+                            </a>
+                            <Button size="icon" variant="ghost" className="h-8 w-8 text-white/80 hover:text-white hover:bg-white/10 rounded-full" onClick={() => setIsPreviewOpen(false)} title="Fermer">
+                                <X className="h-4 w-4" />
+                            </Button>
                         </div>
-                    </DialogContent>
-                </Dialog>
+                    </div>
+                    <div className="flex-1 overflow-auto" onClick={(e) => e.stopPropagation()}>
+                        <embed src={payment.pdfUrl + '#toolbar=0&navpanes=0&scrollbar=0'} type="application/pdf" className="w-full h-full" />
+                    </div>
+                </div>
             )}
         </main>
     );

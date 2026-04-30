@@ -17,12 +17,28 @@ export type Transaction = {
     raw_data?: any
 }
 
-export function useTransactions(accountId: string | 'all') {
-    const [transactions, setTransactions] = useState<Transaction[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [balance, setBalance] = useState(0)
+// Module-level cache
+const txCache: { data: Transaction[] | null; balance: number; accountId: string | null; timestamp: number } = {
+    data: null, balance: 0, accountId: null, timestamp: 0,
+}
+const TX_CACHE_TTL = 30_000 // 30 seconds
 
-    const fetchTransactions = useCallback(async () => {
+export function useTransactions(accountId: string | 'all') {
+    const cached = txCache.accountId === accountId && txCache.data
+    const [transactions, setTransactions] = useState<Transaction[]>(cached ? txCache.data! : [])
+    const [isLoading, setIsLoading] = useState(!cached)
+    const [balance, setBalance] = useState(cached ? txCache.balance : 0)
+
+    const fetchTransactions = useCallback(async (force = false) => {
+        // Return cached data if fresh
+        const isCacheFresh = txCache.accountId === accountId && (Date.now() - txCache.timestamp) < TX_CACHE_TTL
+        if (!force && isCacheFresh && txCache.data) {
+            setTransactions(txCache.data)
+            setBalance(txCache.balance)
+            setIsLoading(false)
+            return
+        }
+
         setIsLoading(true)
         try {
             const params = new URLSearchParams()
@@ -33,8 +49,11 @@ export function useTransactions(accountId: string | 'all') {
                 fetch(`/api/bank-accounts${accountId && accountId !== 'all' ? `?accountId=${accountId}` : ''}`),
             ])
 
+            let txs: Transaction[] = []
+            let bal = 0
+
             if (txRes.ok) {
-                const txs = await txRes.json()
+                txs = await txRes.json()
                 setTransactions(txs)
             }
 
@@ -42,12 +61,18 @@ export function useTransactions(accountId: string | 'all') {
                 const accounts = await accountsRes.json()
                 if (accountId && accountId !== 'all') {
                     const account = accounts.find((a: any) => a.id === accountId)
-                    setBalance(Number(account?.balance || 0))
+                    bal = Number(account?.balance || 0)
                 } else {
-                    const total = accounts.reduce((sum: number, acc: any) => sum + Number(acc.balance || 0), 0)
-                    setBalance(total)
+                    bal = accounts.reduce((sum: number, acc: any) => sum + Number(acc.balance || 0), 0)
                 }
+                setBalance(bal)
             }
+
+            // Update cache
+            txCache.data = txs
+            txCache.balance = bal
+            txCache.accountId = accountId
+            txCache.timestamp = Date.now()
         } catch (error) {
             console.error("Error fetching transactions:", error)
         } finally {

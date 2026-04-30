@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Search, ChevronRight, Loader2, AlertCircle } from "lucide-react";
 import { useCompanies } from "@/components/providers/companies-provider";
@@ -69,32 +69,24 @@ export default function SuppliersPage() {
         return colors[category] || 'bg-gray-100 text-gray-700';
     };
 
-    // Filter Logic
-    const filteredSuppliers = suppliers.filter(s =>
-        (s.supplier_name || "").toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    // Sort Logic
-    const sortedSuppliers = [...filteredSuppliers].sort((a, b) => {
-        switch (sortOption) {
-            case "spend_desc":
-                return (b.total_spend || 0) - (a.total_spend || 0);
-            case "spend_asc":
-                return (a.total_spend || 0) - (b.total_spend || 0);
-            case "delay_desc":
-                return (b.average_delay || 0) - (a.average_delay || 0);
-            case "delay_asc":
-                return (a.average_delay || 0) - (b.average_delay || 0);
-            case "count_desc":
-                return (b.invoices_count || 0) - (a.invoices_count || 0);
-            case "unpaid_desc":
-                return (b.total_unpaid || 0) - (a.total_unpaid || 0);
-            case "unpaid_asc":
-                return (a.total_unpaid || 0) - (b.total_unpaid || 0);
-            default:
-                return (b.total_spend || 0) - (a.total_spend || 0);
-        }
-    });
+    // Filter + Sort Logic (memoized)
+    const sortedSuppliers = useMemo(() => {
+        const filtered = suppliers.filter(s =>
+            (s.supplier_name || "").toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        return [...filtered].sort((a, b) => {
+            switch (sortOption) {
+                case "spend_desc": return (b.total_spend || 0) - (a.total_spend || 0);
+                case "spend_asc": return (a.total_spend || 0) - (b.total_spend || 0);
+                case "delay_desc": return (b.average_delay || 0) - (a.average_delay || 0);
+                case "delay_asc": return (a.average_delay || 0) - (b.average_delay || 0);
+                case "count_desc": return (b.invoices_count || 0) - (a.invoices_count || 0);
+                case "unpaid_desc": return (b.total_unpaid || 0) - (a.total_unpaid || 0);
+                case "unpaid_asc": return (a.total_unpaid || 0) - (b.total_unpaid || 0);
+                default: return (b.total_spend || 0) - (a.total_spend || 0);
+            }
+        });
+    }, [suppliers, searchQuery, sortOption]);
 
     const formatMoney = (amount: number) => {
         return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(amount);

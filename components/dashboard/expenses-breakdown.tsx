@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { startOfMonth, endOfMonth, subMonths, format, startOfYear, endOfYear } from "date-fns"
@@ -39,11 +39,44 @@ const CATEGORY_COLORS: Record<string, string> = {
     "Autre": "#9CA3AF" // Gray
 };
 
+// Pre-computed donut chart to avoid O(n^2) calculations on every render
+const CIRCUMFERENCE = 2 * Math.PI * 40;
+
+const DonutChart = React.memo(function DonutChart({ data }: { data: BreakdownItem[] }) {
+    const segments = useMemo(() => {
+        let cumulative = 0;
+        return data.map((item) => {
+            const dashArray = `${(item.percentage / 100) * CIRCUMFERENCE} ${CIRCUMFERENCE}`;
+            const dashOffset = -1 * (cumulative / 100) * CIRCUMFERENCE;
+            cumulative += item.percentage;
+            return { key: item.category, dashArray, dashOffset, color: CATEGORY_COLORS[item.category] || CATEGORY_COLORS["Autre"] };
+        });
+    }, [data]);
+
+    return (
+        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+            {segments.map(seg => (
+                <circle
+                    key={seg.key}
+                    cx="50" cy="50" r="40"
+                    fill="transparent"
+                    stroke={seg.color}
+                    strokeWidth="20"
+                    strokeDasharray={seg.dashArray}
+                    strokeDashoffset={seg.dashOffset}
+                    className="transition-all duration-500 hover:opacity-80"
+                />
+            ))}
+        </svg>
+    );
+});
+
 export function ExpensesBreakdown({ companyId }: { companyId?: string }) {
     const [period, setPeriod] = useState<Period>("12M")
     const [customStart, setCustomStart] = useState<string>("")
     const [customEnd, setCustomEnd] = useState<string>("")
     const [data, setData] = useState<BreakdownItem[]>([])
+    const [totalSpend, setTotalSpend] = useState(0)
     const [isLoading, setIsLoading] = useState(true)
     const [isEmpty, setIsEmpty] = useState(false)
     const [isCustomDateDialogOpen, setIsCustomDateDialogOpen] = useState(false)
@@ -88,8 +121,9 @@ export function ExpensesBreakdown({ companyId }: { companyId?: string }) {
                 })
                 const res = await fetch(`/api/expenses-breakdown?${params}`)
                 if (res.ok) {
-                    const { breakdown } = await res.json()
+                    const { breakdown, totalSpend: total } = await res.json()
                     setData(breakdown)
+                    setTotalSpend(total || 0)
                     setIsEmpty(breakdown.length === 0)
                 }
             } catch (error) {
@@ -196,39 +230,12 @@ export function ExpensesBreakdown({ companyId }: { companyId?: string }) {
                     <div className="flex flex-col sm:flex-row items-center gap-6">
                         {/* Donut Chart */}
                         <div className="relative h-48 w-48 shrink-0">
-                            <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                                {data.map((item, index) => {
-                                    // Calculate dash array for SVG circle
-                                    // 2 * Pi * R (R=40) ≈ 251.3
-                                    const circumference = 2 * Math.PI * 40;
-                                    const strokeDasharray = `${(item.percentage / 100) * circumference} ${circumference}`;
-
-                                    // Calculate offset based on previous segments
-                                    let cumulativePercentage = 0;
-                                    for (let i = 0; i < index; i++) cumulativePercentage += data[i].percentage;
-                                    const strokeDashoffset = -1 * (cumulativePercentage / 100) * circumference;
-
-                                    return (
-                                        <circle
-                                            key={item.category}
-                                            cx="50"
-                                            cy="50"
-                                            r="40"
-                                            fill="transparent"
-                                            stroke={CATEGORY_COLORS[item.category] || CATEGORY_COLORS["Autre"]}
-                                            strokeWidth="20"
-                                            strokeDasharray={strokeDasharray}
-                                            strokeDashoffset={strokeDashoffset}
-                                            className="transition-all duration-500 hover:opacity-80"
-                                        />
-                                    );
-                                })}
-                            </svg>
+                            <DonutChart data={data} />
                             {/* Center Text */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
                                 <span className="text-xs text-gray-500 font-medium">Total</span>
                                 <span className="text-sm font-bold text-gray-900">
-                                    {formatMoney(data.reduce((acc: number, cur: any) => acc + cur.amount, 0))}
+                                    {formatMoney(totalSpend)}
                                 </span>
                             </div>
                         </div>

@@ -38,8 +38,10 @@ export async function GET(req: NextRequest) {
         return obj
     }
 
-    return NextResponse.json({
+    const res = NextResponse.json({
         debts: serialize(debts),
         currentDebts: serialize(currentDebts),
     })
+    res.headers.set('Cache-Control', 'private, max-age=30, stale-while-revalidate=60')
+    return res
 }

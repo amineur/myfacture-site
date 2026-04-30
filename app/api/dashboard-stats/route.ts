@@ -83,7 +83,7 @@ export async function GET(req: NextRequest) {
     const supplierAvgs = Object.values(supplierDelays).filter(s => s.count > 0).map(s => s.total / s.count)
     const avgDelay = supplierAvgs.length > 0 ? Math.round(supplierAvgs.reduce((a, b) => a + b, 0) / supplierAvgs.length) : 0
 
-    return NextResponse.json({
+    const res = NextResponse.json({
         cashBalance: cash,
         unpaidInvoicesCount: unpaidCount,
         unpaidInvoicesAmount: unpaidAmount,
@@ -91,4 +91,6 @@ export async function GET(req: NextRequest) {
         totalDue,
         averagePaymentDelay: avgDelay,
     })
+    res.headers.set('Cache-Control', 'private, max-age=30, stale-while-revalidate=60')
+    return res
 }

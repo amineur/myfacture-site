@@ -55,11 +55,13 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         return obj
     }
 
-    return NextResponse.json({
+    const res = NextResponse.json({
         supplier: serialize(supplier),
         invoices: serialize(invoices),
         debtId: debt?.id || null,
     })
+    res.headers.set('Cache-Control', 'private, max-age=30, stale-while-revalidate=60')
+    return res
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

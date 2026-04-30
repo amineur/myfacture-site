@@ -9,6 +9,8 @@ import { useCompanies } from "@/components/providers/companies-provider";
 import { useDashboardStats } from "@/hooks/use-dashboard-stats";
 import { PriceDisplay } from "@/components/ui/price-display";
 import { ExpensesBreakdown } from "@/components/dashboard/expenses-breakdown";
+import { useSuppliersContext } from "@/components/providers/suppliers-provider";
+import { usePayments } from "@/components/providers/payments-provider";
 // import { formatCurrency } from "@/lib/utils";
 
 const formatMoney = (amount: number) => {
@@ -19,6 +21,25 @@ const formatMoney = (amount: number) => {
 export default function Dashboard() {
     const { companies, isLoading: loadingCompanies } = useCompanies();
     const activeCompany = companies[0];
+    const { fetchSuppliers } = useSuppliersContext();
+    const { fetchInvoices } = usePayments();
+
+    // Prefetch suppliers & invoices data in background for instant navigation
+    useEffect(() => {
+        if (activeCompany?.id) {
+            // Use requestIdleCallback to avoid blocking the main thread
+            const prefetch = () => {
+                fetchSuppliers(activeCompany.id);
+                fetchInvoices(activeCompany.id);
+            };
+            if ('requestIdleCallback' in window) {
+                (window as any).requestIdleCallback(prefetch);
+            } else {
+                setTimeout(prefetch, 100);
+            }
+        }
+    }, [activeCompany?.id, fetchSuppliers, fetchInvoices]);
+
     const {
         cashBalance,
         unpaidInvoicesCount,
@@ -32,20 +53,29 @@ export default function Dashboard() {
 
     // 1. Hydration Safety (Flicker-free)
     const [isMounted, setIsMounted] = useState(() => typeof window !== "undefined" && (window as any).__HYDRATED);
-    const [userName, setUserName] = useState("");
+    const [userName, setUserName] = useState(() => {
+        if (typeof window !== 'undefined') return (window as any).__CACHED_USERNAME || '';
+        return '';
+    });
     useEffect(() => {
         setIsMounted(true);
         (window as any).__HYDRATED = true;
     }, []);
 
-    // Fetch user name from profile
+    // Fetch user name from profile (with cache)
     useEffect(() => {
+        if ((window as any).__CACHED_USERNAME) {
+            setUserName((window as any).__CACHED_USERNAME);
+            return;
+        }
         const fetchUserName = async () => {
             try {
                 const res = await fetch('/api/profile');
                 if (res.ok) {
                     const profile = await res.json();
-                    setUserName(profile?.first_name || profile?.email?.split('@')[0] || '');
+                    const name = profile?.first_name || profile?.email?.split('@')[0] || '';
+                    setUserName(name);
+                    (window as any).__CACHED_USERNAME = name;
                 }
             } catch (e) {
                 console.error('Failed to fetch user name:', e);

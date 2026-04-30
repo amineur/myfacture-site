@@ -48,5 +48,7 @@ export async function GET(req: NextRequest) {
         }))
         .sort((a, b) => b.amount - a.amount)
 
-    return NextResponse.json({ breakdown, totalSpend })
+    const res = NextResponse.json({ breakdown, totalSpend })
+    res.headers.set('Cache-Control', 'private, max-age=60, stale-while-revalidate=120')
+    return res
 }

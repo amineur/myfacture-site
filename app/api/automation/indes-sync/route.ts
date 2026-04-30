@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/utils/auth'
 import { prisma } from '@/utils/db'
-import { writeFile, mkdir } from 'fs/promises'
+import { writeFile, mkdir, access } from 'fs/promises'
 import path from 'path'
 import { runFullReconciliation } from '@/lib/reconciliation'
 
@@ -385,6 +385,7 @@ export async function POST(req: NextRequest) {
         const body = await req.json().catch(() => ({}))
         const limit = body.limit || 50
         const dryRun = body.dryRun === true
+        const redownloadMissing = body.redownloadMissing === true
         const sectionKey = body.section || 'factures'
 
         const SECTION_MAP: Record<string, { id: string; supplier: string }> = {
@@ -511,7 +512,7 @@ export async function POST(req: NextRequest) {
         // 4. Existing refs for dedup
         const existingInvoices = await prisma.invoices.findMany({
             where: { company_id: company.id },
-            select: { reference: true, pdf_url: true },
+            select: { id: true, reference: true, pdf_url: true },
         })
         const existingRefs = new Set(existingInvoices.map(i => i.reference).filter(Boolean))
         // Also normalize: strip leading zeros and F_ prefix for matching
@@ -520,6 +521,15 @@ export async function POST(req: NextRequest) {
                 .map(i => i.reference?.replace(/^F_?/i, '').replace(/^0+/, ''))
                 .filter(Boolean)
         )
+        // Build a map ref → invoice for redownload mode
+        const existingByRef = new Map<string, { id: string; pdf_url: string | null }>()
+        for (const inv of existingInvoices) {
+            if (inv.reference) {
+                existingByRef.set(inv.reference, inv)
+                const norm = inv.reference.replace(/^F_?/i, '').replace(/^0+/, '')
+                existingByRef.set(norm, inv)
+            }
+        }
 
         // 5. Process
         const docsToProcess = allDocs.slice(0, limit)
@@ -527,6 +537,7 @@ export async function POST(req: NextRequest) {
             total_in_section: allDocs.length,
             processed: 0,
             created: 0,
+            redownloaded: 0,
             needs_review: 0,
             skipped_existing: 0,
             skipped_no_supplier: 0,
@@ -593,7 +604,57 @@ export async function POST(req: NextRequest) {
                 const ref = parsed.reference || doc.title.replace(/\.pdf$/i, '').split('_').slice(-1)[0]
                 const normalizedRef = ref.replace(/^F_?/i, '').replace(/^0+/, '')
 
-                if (existingRefs.has(ref) || existingRefs.has(`F_${ref}`) || normalizedExistingRefs.has(normalizedRef)) {
+                const isExisting = existingRefs.has(ref) || existingRefs.has(`F_${ref}`) || normalizedExistingRefs.has(normalizedRef)
+                if (isExisting) {
+                    if (redownloadMissing) {
+                        // Check if PDF file actually exists on disk
+                        const existingInv = existingByRef.get(ref) || existingByRef.get(normalizedRef)
+                        if (existingInv?.pdf_url) {
+                            const pdfFullPath = path.join(process.cwd(), 'public', existingInv.pdf_url)
+                            try {
+                                await access(pdfFullPath)
+                                // PDF exists, skip
+                                results.skipped_existing++
+                                continue
+                            } catch {
+                                // PDF missing on disk, re-download it
+                                console.log(`[Indés Sync] Re-downloading missing PDF: ${doc.title}`)
+                                const pdfPath = await savePdf(pdfBuffer, doc.title)
+                                await prisma.invoices.update({
+                                    where: { id: existingInv.id },
+                                    data: { pdf_url: pdfPath },
+                                })
+                                results.redownloaded++
+                                results.invoices.push({
+                                    id: existingInv.id,
+                                    reference: ref,
+                                    filename: doc.title,
+                                    pdf_url: pdfPath,
+                                    status: 'redownloaded',
+                                })
+                                continue
+                            }
+                        } else {
+                            // No pdf_url at all, save the PDF and update the record
+                            console.log(`[Indés Sync] Downloading PDF for existing invoice: ${doc.title}`)
+                            const pdfPath = await savePdf(pdfBuffer, doc.title)
+                            if (existingInv) {
+                                await prisma.invoices.update({
+                                    where: { id: existingInv.id },
+                                    data: { pdf_url: pdfPath },
+                                })
+                            }
+                            results.redownloaded++
+                            results.invoices.push({
+                                id: existingInv?.id,
+                                reference: ref,
+                                filename: doc.title,
+                                pdf_url: pdfPath,
+                                status: 'redownloaded',
+                            })
+                            continue
+                        }
+                    }
                     results.skipped_existing++
                     continue
                 }

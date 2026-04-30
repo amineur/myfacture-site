@@ -66,7 +66,9 @@ export async function GET(req: NextRequest) {
         }
     })
 
-    return NextResponse.json(serialized)
+    const res = NextResponse.json(serialized)
+    res.headers.set('Cache-Control', 'private, max-age=15, stale-while-revalidate=30')
+    return res
 }
 
 /**

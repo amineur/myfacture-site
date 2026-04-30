@@ -17,8 +17,9 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - INDES_JWT_TOKEN=${INDES_JWT_TOKEN}
     volumes:
-      - ./uploads:/app/public/uploads
+      - ./public/uploads:/app/public/uploads
     networks:
       - proxy_net
       - core_new_core_net

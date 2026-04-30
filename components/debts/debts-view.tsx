@@ -116,36 +116,36 @@ export default function DebtsView({ initialDebts }: DebtsViewProps) {
     // SCROLL RESTORATION HOOK
     const { saveScrollPosition } = useScrollRestoration("debts_scroll", isLoading, debts);
 
-    // STATS CALCULATIONS
-    const processedSuppliers = new Set<string>();
+    // STATS CALCULATIONS (memoized to avoid recomputing on every render)
+    const { totalOriginal, totalRemaining, totalPaid, progressPercentage } = useMemo(() => {
+        const processedSuppliers = new Set<string>();
 
-    const { totalOriginal, totalRemaining } = debts.reduce((acc, d) => {
-        const scheduleInitial = Math.max(d.initial_amount || 0, d.remaining_amount || 0);
-        const scheduleRemaining = d.remaining_amount || 0;
+        const { totalOriginal, totalRemaining } = debts.reduce((acc, d) => {
+            const scheduleInitial = Math.max(d.initial_amount || 0, d.remaining_amount || 0);
+            const scheduleRemaining = d.remaining_amount || 0;
 
-        let currentInitial = 0;
-        let currentRemaining = 0;
+            let currentInitial = 0;
+            let currentRemaining = 0;
 
-        const supplierId = d.supplier?.id;
-        if (supplierId && !processedSuppliers.has(supplierId)) {
-            processedSuppliers.add(supplierId);
-            currentInitial = (d.current_debt?.total_amount || 0) + (d.remaining_amount || 0); // Include fixed debt in header?
-            // Wait, logic in body separates them.
-            // Let's match body logic:
-            const isStructured = (d.monthly_amount || 0) > 0;
-            const fixedDebt = !isStructured ? (d.remaining_amount || 0) : 0;
-            currentInitial = (d.current_debt?.total_amount || 0) + fixedDebt;
-            currentRemaining = ((d.current_debt?.total_amount || 0) - (d.current_debt?.paid_amount || 0)) + fixedDebt;
-        }
+            const supplierId = d.supplier?.id;
+            if (supplierId && !processedSuppliers.has(supplierId)) {
+                processedSuppliers.add(supplierId);
+                const isStructured = (d.monthly_amount || 0) > 0;
+                const fixedDebt = !isStructured ? (d.remaining_amount || 0) : 0;
+                currentInitial = (d.current_debt?.total_amount || 0) + fixedDebt;
+                currentRemaining = ((d.current_debt?.total_amount || 0) - (d.current_debt?.paid_amount || 0)) + fixedDebt;
+            }
 
-        return {
-            totalOriginal: acc.totalOriginal + scheduleInitial + currentInitial,
-            totalRemaining: acc.totalRemaining + scheduleRemaining + currentRemaining
-        };
-    }, { totalOriginal: 0, totalRemaining: 0 });
+            return {
+                totalOriginal: acc.totalOriginal + scheduleInitial + currentInitial,
+                totalRemaining: acc.totalRemaining + scheduleRemaining + currentRemaining
+            };
+        }, { totalOriginal: 0, totalRemaining: 0 });
 
-    const totalPaid = totalOriginal - totalRemaining;
-    const progressPercentage = totalOriginal > 0 ? (totalPaid / totalOriginal) * 100 : 0;
+        const totalPaid = totalOriginal - totalRemaining;
+        const progressPercentage = totalOriginal > 0 ? (totalPaid / totalOriginal) * 100 : 0;
+        return { totalOriginal, totalRemaining, totalPaid, progressPercentage };
+    }, [debts]);
 
     // --- GLOBAL AVERAGE CALCULATION ---
     // Average of last 3 months paid invoices
@@ -204,9 +204,8 @@ export default function DebtsView({ initialDebts }: DebtsViewProps) {
 
     const displayedMonthlyValue = viewMode === 'SCHEDULE' ? structuralMonthlySum : globalMonthlyDebt;
 
-    // Filter Logic
-    // Filter Logic
-    const filteredDebts = debts
+    // Filter Logic (memoized)
+    const filteredDebts = useMemo(() => debts
         .filter(d => {
             // Calculate effective remaining including Smart Current Debt
             const smartTotal = d.current_debt?.total_amount || 0;
@@ -263,7 +262,7 @@ export default function DebtsView({ initialDebts }: DebtsViewProps) {
                 case "amount-asc": return getRemaining(a) - getRemaining(b);
                 default: return 0;
             }
-        });
+        }), [debts, searchQuery, filterType, showPaid, sortOption]);
 
     return (
         <main className={cn(

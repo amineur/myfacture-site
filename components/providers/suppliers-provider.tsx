@@ -28,22 +28,39 @@ type SuppliersContextType = {
 
 const SuppliersContext = createContext<SuppliersContextType | undefined>(undefined);
 
-export function SuppliersProvider({ children }: { children: React.ReactNode }) {
-    const [suppliers, setSuppliers] = useState<SupplierSpend[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [lastCompanyId, setLastCompanyId] = useState<string | null>(null);
+// Module-level cache: instant data on navigation, background refresh
+const suppliersCache: { data: SupplierSpend[] | null; companyId: string | null; timestamp: number } = {
+    data: null, companyId: null, timestamp: 0,
+};
+const SUPPLIERS_CACHE_TTL = 30_000; // 30 seconds
 
-    const isLoadingRef = React.useRef(isLoading);
+export function SuppliersProvider({ children }: { children: React.ReactNode }) {
+    const cached = suppliersCache.companyId !== null && suppliersCache.data;
+    const [suppliers, setSuppliers] = useState<SupplierSpend[]>(cached ? suppliersCache.data! : []);
+    const [isLoading, setIsLoading] = useState(!cached);
+    const [lastCompanyId, setLastCompanyId] = useState<string | null>(suppliersCache.companyId);
+
+    const isFetchingRef = React.useRef(false);
     const lastCompanyIdRef = React.useRef(lastCompanyId);
 
-    React.useEffect(() => { isLoadingRef.current = isLoading; }, [isLoading]);
     React.useEffect(() => { lastCompanyIdRef.current = lastCompanyId; }, [lastCompanyId]);
 
     const fetchSuppliers = useCallback(async (companyId: string, force = false) => {
         if (!companyId) return;
-        if (isLoadingRef.current) return;
-        if (!force && lastCompanyIdRef.current === companyId) return;
+        if (isFetchingRef.current) return;
 
+        // Return cached data if fresh
+        const isCacheFresh = suppliersCache.companyId === companyId && (Date.now() - suppliersCache.timestamp) < SUPPLIERS_CACHE_TTL;
+        if (!force && isCacheFresh && suppliersCache.data) {
+            if (lastCompanyIdRef.current !== companyId) {
+                setSuppliers(suppliersCache.data);
+                setLastCompanyId(companyId);
+            }
+            return;
+        }
+        if (!force && lastCompanyIdRef.current === companyId && suppliersCache.data) return;
+
+        isFetchingRef.current = true;
         setIsLoading(true);
         setLastCompanyId(companyId);
 
@@ -98,10 +115,14 @@ export function SuppliersProvider({ children }: { children: React.ReactNode }) {
             });
 
             processed.sort((a, b) => b.total_spend - a.total_spend);
+            suppliersCache.data = processed;
+            suppliersCache.companyId = companyId;
+            suppliersCache.timestamp = Date.now();
             setSuppliers(processed);
         } catch (err) {
             console.error('[fetchSuppliers] error:', err);
         } finally {
+            isFetchingRef.current = false;
             setIsLoading(false);
         }
     }, []);

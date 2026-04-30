@@ -11,10 +11,13 @@ jobs:
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
+        env:
+          INDES_JWT_TOKEN: ${{ secrets.INDES_JWT_TOKEN }}
         with:
           host: 83.228.217.205
           username: ubuntu
           key: ${{ secrets.VPS_SSH_KEY }}
+          envs: INDES_JWT_TOKEN
           script: |
             set -e
             DEPLOY_DIR="/home/ubuntu/dashboard-media"
@@ -24,13 +27,38 @@ jobs:
               rm -rf "$DEPLOY_DIR.bak"
               [ -d "$DEPLOY_DIR" ] && mv "$DEPLOY_DIR" "$DEPLOY_DIR.bak"
               git clone https://github.com/amineur/myfacture-site.git "$DEPLOY_DIR"
-              [ -d "$DEPLOY_DIR.bak/uploads" ] && cp -r "$DEPLOY_DIR.bak/uploads" "$DEPLOY_DIR/public/uploads"
+              [ -d "$DEPLOY_DIR.bak/uploads" ] && cp -r "$DEPLOY_DIR.bak/uploads" "$DEPLOY_DIR/uploads"
+              [ -d "$DEPLOY_DIR.bak/public/uploads" ] && cp -r "$DEPLOY_DIR.bak/public/uploads/"* "$DEPLOY_DIR/uploads/" 2>/dev/null || true
               [ -f "$DEPLOY_DIR.bak/.env" ] && cp "$DEPLOY_DIR.bak/.env" "$DEPLOY_DIR/.env"
               [ -d "$DEPLOY_DIR.bak/node_modules" ] && mv "$DEPLOY_DIR.bak/node_modules" "$DEPLOY_DIR/node_modules"
+            fi
+            # Fix: ensure uploads dir exists and recover from backup if needed
+            mkdir -p "$DEPLOY_DIR/uploads"
+            if [ -d "$DEPLOY_DIR.bak/uploads" ] && [ -z "$(ls -A $DEPLOY_DIR/uploads 2>/dev/null)" ]; then
+              echo "Recovering uploads from backup..."
+              cp -r "$DEPLOY_DIR.bak/uploads/"* "$DEPLOY_DIR/uploads/" 2>/dev/null || true
             fi
             cd "$DEPLOY_DIR"
             echo "=== Git pull ==="
             git pull origin main || (git fetch origin main && git reset --hard origin/main)
+            echo "=== Sync public/uploads to volume mount ==="
+            # After git pull, copy repo's public/uploads/ into the host's ./uploads/ (Docker volume mount target)
+            # -n = no-clobber (don't overwrite existing files), -r = recursive
+            if [ -d "$DEPLOY_DIR/public/uploads" ] && [ ! -L "$DEPLOY_DIR/public/uploads" ]; then
+              echo "Syncing public/uploads content to uploads/ volume..."
+              cp -rn "$DEPLOY_DIR/public/uploads/"* "$DEPLOY_DIR/uploads/" 2>/dev/null || true
+              echo "Upload sync complete. Files in uploads/:"
+              find "$DEPLOY_DIR/uploads" -type f | head -20
+            fi
+            echo "=== Update .env with INDES_JWT_TOKEN ==="
+            if [ -n "$INDES_JWT_TOKEN" ]; then
+              if grep -q "^INDES_JWT_TOKEN=" "$DEPLOY_DIR/.env" 2>/dev/null; then
+                sed -i "s|^INDES_JWT_TOKEN=.*|INDES_JWT_TOKEN=$INDES_JWT_TOKEN|" "$DEPLOY_DIR/.env"
+              else
+                echo "INDES_JWT_TOKEN=$INDES_JWT_TOKEN" >> "$DEPLOY_DIR/.env"
+              fi
+              echo "INDES_JWT_TOKEN updated in .env"
+            fi
             echo "=== Install deps ==="
             npm install --production=false
             echo "=== Prisma generate ==="
